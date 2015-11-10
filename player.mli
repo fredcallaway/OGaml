@@ -1,20 +1,16 @@
 type abil
 type item
+open Stats
 
-
-type stats = {health: float;
-              attack: float}
-
-(* type equip = {head: item;
+type equip = {head: item;
 				body: item;
 				legs: item;
 				feet: item;
 				special: item;
-				weapon: item} *)
+				weapon: item}
 
-type t = {stats: stats;
+type t = {stats: Stats.t;
           abilities: abil list;
           inventory: item list;
-          (* equipped: equip *)
+          equipped: equip
           }
-
