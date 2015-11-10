@@ -6,3 +6,5 @@ type t = {
 }
 
 val buy: t -> player -> player
+
+val sell: t -> player -> player

@@ -3,14 +3,14 @@ type stats
 
 type equip_stats = {name: string;
 					description: string;
-					value: string;
+					value: int;
 					ability: abil list;
 					boost: stats;
 					(* eq_slot: } *)}
 
 type consume_stats = {name: string;
 					  description: string;
-					  value: string}
+					  value: int}
 
 
 (*
