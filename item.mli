@@ -1,3 +1,4 @@
+type abil
 
 type equip_stats = {name: string;
 					description: string;
@@ -20,4 +21,3 @@ type consume_stats = {name: string;
 type item = 
 | Equipable of equip_stats
 | Consumable of consume_stats
-

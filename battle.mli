@@ -1,14 +1,9 @@
-open Player
-open Item
-
 
 type t = {opponent: Player.t;
           xp: int;
           treasure: Item.t list;
-          money: int
+          money: int;
 }
-
-
 val enter_battle: (t * Player.t) -> Player.t option
 
 
