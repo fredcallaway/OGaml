@@ -5,10 +5,12 @@ type t = {
 	supply: item list
 }
 
-val buy: string -> t -> player -> player
+val buy: item -> t -> player -> player
 
-val sell: string -> t -> player -> player
+val sell: item -> t -> player -> player
 
-val equip: string -> player -> player
+val equip: item -> player -> player
 
-val remove: string -> player -> player
+val remove: item -> player -> player
+
+val shop_repl: player -> player

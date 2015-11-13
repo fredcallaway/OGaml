@@ -1,23 +1,56 @@
 
+type stats = {health: int;
+              strength: int;
+              speed: int;
+              dexterity: int;
+              magic: int}
+
+type effect = {immediate: stats -> int;
+               over_time: stats -> int;
+               ot_duration: int}
+
+
+type ability = {self: effect;
+			    opponent: effect}
+
+type equip_slot = 
+  | Head 
+  | Body
+  | Legs
+  | Feet
+  | Hands
+  | Primary
+  | Secondary
+  | Special 
+
 type equip_stats = {name: string;
 					description: string;
 					value: int;
-					ability: abil list;
-					boost: Stats.t;
-					(* eq_slot: } *)}
+					ability: ability list;
+					boost: stats;
+					slot: equip_slot}
 
 type consume_stats = {name: string;
 					  description: string;
-					  value: int}
+					  value: int;
+					  duration: int;
+					  action: ability;
+					  boost: stats}
 
-
-(* let add_health n stats = {stats with health = stats.health + n} *)
 
 (*
- *
- *
  *)
 type item = 
-| Equipable of equip_stats
-| Consumable of consume_stats
+  | Equipable of equip_stats
+  | Consumable of consume_stats
+
+
+
+
+
+
+
+
+
+
 

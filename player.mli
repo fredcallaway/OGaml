@@ -1,16 +1,19 @@
-type abil
-type item
-open Stats
+type item 
 
-type equip = {head: item;
-				body: item;
-				legs: item;
-				feet: item;
-				special: item;
-				weapon: item}
 
-type t = {stats: Stats.t;
-          abilities: abil list;
+
+type t = {stats: stats;
           inventory: item list;
-          equipped: equip
-          }
+          equipped: item list;
+          money: int;
+          expereience: int;
+          level: int}
+
+(* must keep track of level up schedule.. maybe in state? *)
+
+val get_abilities: unit -> ability list
+
+val level_up: unit -> t
+
+
+
