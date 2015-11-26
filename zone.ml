@@ -1,6 +1,3 @@
-open Battle
-open Shop
-open Player
 
 type t = {
   battles : Battle.t list;

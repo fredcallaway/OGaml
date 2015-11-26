@@ -1,8 +1,5 @@
-open Player
-open Zone
-open Json
 
-
+(* the full game state *)
 type t = {
   zones : Zone.t list;
   player : Player.t;
