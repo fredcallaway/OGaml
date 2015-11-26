@@ -42,13 +42,8 @@ let do_action (state: state) (act: action) : state =
     end
 
 
-type turn = 
-  | PlayerTurn
-  | AITurn
-  | Win
-  | Lose
-
 let rec loop (turn, state) : bool * state = 
+  (* turn being true means it is players turn *)
   let switch turn (a,b) = (not turn), (b,a) in
   let action = (if turn then get_user_action else get_ai_action) state in
   let state = do_action state action in
