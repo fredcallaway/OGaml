@@ -1,7 +1,5 @@
 
-type t = {stats: Item.stats;
-          inventory: Item.t list;
-          equipped: Item.equip;
+type t = {fighter: Fighter.fighter;
           money: int;
           expereience: int;
           level: int}
