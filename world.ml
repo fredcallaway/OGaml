@@ -24,7 +24,6 @@ let to_file path world =
 type command = Enter | Exit | Map | Score | Help
 let cmds = [  "Enter";"Exit";"Map";"Score"]
 exception InvalidCommand of string
-exception InvalidZone of string
 
 let str_to_command str : command =
   match str with
@@ -54,7 +53,8 @@ let print_help (arg: string) =
 
 let print_commands () =
   printf "Availible commands: (type 'Help [cmd]' to get more info)\n";
-  List.iter (printf "%s\n") (cmds)
+  List.iter (printf "%s\n") (cmds);
+  printf "\n"
 
 let print_welcome (world: t) =
   printf "Welcome to %s\n" world.id
@@ -64,14 +64,15 @@ let print_return (world: t) =
 
 let print_map (world: t) =
   printf "Map:\n";
-  List.iter (Zone.print_zone) (world.zones)
+  List.iter (Zone.print_zone) (world.zones);
+  printf "\n"
 
 (* precondition: all zones in world must have unique ids *)
 (* postcondition: world with updated zone and next zone unlocked if zone was completed *)
 let update_zones (world: t) (zone: Zone.t) : t =
   let rec update_and_unlock (zone_list: Zone.t list) (zone: Zone.t) (a: Zone.t list) =
     match zone_list with
-    | [] -> raise (InvalidZone (Zone.get_id zone))
+    | [] -> raise (Zone.InvalidZone (Zone.get_id zone))
     | z::t ->
       if Zone.get_id z = Zone.get_id zone
       then
@@ -127,13 +128,17 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
 
     | Enter ->
       let z = Zone.str_to_zone world.zones arg in
-      printf "Entering %s\n" arg;
-      let new_state = Zone.enter_zone z player in
-      let new_zone = (fst new_state) in
-      let new_player = (snd new_state) in
-      let new_world = update_zones world new_zone in
-      print_return new_world;
-      world_repl new_world new_player
+      let res = match Zone.get_unlocked z with
+      | false -> raise (Zone.InvalidZone ((Zone.get_id z)^" locked."))
+      | true ->
+        printf "Entering %s\n\n" arg;
+        let new_state = Zone.enter_zone z player in
+        let new_zone = (fst new_state) in
+        let new_player = (snd new_state) in
+        let new_world = update_zones world new_zone in
+        print_return new_world;
+        world_repl new_world new_player
+      in res
 
     | Exit ->
       printf "Exiting world\n";
@@ -144,8 +149,12 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
       printf "\nInvalid command: %s\n" str;
       world_repl world player
 
-    | InvalidZone str ->
+    | Zone.InvalidZone str ->
       printf "\nInvalid zone: %s\n" str;
+      world_repl world player
+
+    | Failure str ->
+      printf "\nFailure: %s\n" str;
       world_repl world player
 
 (* enter the world with the player *)
@@ -153,4 +162,5 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
 let enter_world (world: t) (player: Player.t) : (t * Player.t) =
   print_welcome world;
   print_commands();
+  print_map world;
   world_repl world player

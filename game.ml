@@ -119,7 +119,7 @@ let rec game_repl (gameop: t option) : t option =
       game_repl gameop
 
     | Enter, Some game ->
-      printf "Entering %s\n" game.id;
+      printf "Entering %s\n\n" game.id;
       let updated_state = World.enter_world game.world game.player in
       let updated_world = (fst updated_state) in
       let updated_player = (snd updated_state) in
@@ -172,12 +172,21 @@ let rec game_repl (gameop: t option) : t option =
       printf "Please load a valid game file.\n";
       game_repl gameop
 
+    | Sys_error str ->
+      printf "\n%s\n" str;
+      printf "Please load a valid game file.\n";
+      game_repl gameop
+
+    | Failure str ->
+      printf "\nFailure: %s\n" str;
+      game_repl gameop
+
 (* start the game with no game state *)
 (* postcondition: the updated game on exit *)
 let enter_game () =
   print_welcome();
   print_commands();
-  ignore (game_repl None)
+  ignore (game_repl None);
 in
 
 enter_game()

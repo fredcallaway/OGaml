@@ -32,13 +32,14 @@ let unlock z =
 
 let get_completed z =
   z.completed
+let get_unlocked z =
+  z.unlocked
 let get_id z =
   z.id
 
 type command = Enter | Shop | Exit | Map | Score | Help
 let cmds = [  "Enter";"Shop";"Exit";"Map";"Score"]
 exception InvalidCommand of string
-exception InvalidBattle of string
 exception InvalidZone of string
 
 let str_to_command str : command =
@@ -71,7 +72,8 @@ let print_help (arg: string) =
 
 let print_commands () =
   printf "Availible commands: (type 'Help [cmd]' to get more info)\n";
-  List.iter (printf "%s\n") (cmds)
+  List.iter (printf "%s\n") (cmds);
+  printf "\n"
 
 let print_welcome (zone: t) =
   printf "Welcome to %s\n" zone.id
@@ -93,9 +95,11 @@ let print_map (zone: t) =
 
   printf "Battles:\n";
   List.iter Battle.print_battle zone.battles;
+  printf "\n";
 
   printf "Shop:\n";
-  Shop.print_shop zone.shop
+  Shop.print_shop zone.shop;
+  printf "\n"
 
 let update_shop (zone: t) (shop: Shop.t) : t =
   failwith "TODO"
@@ -105,7 +109,7 @@ let update_shop (zone: t) (shop: Shop.t) : t =
 let update_battles (zone: t) (battle: Battle.t) : t =
   let rec update_and_unlock (battle_list: Battle.t list) (battle: Battle.t) (a: Battle.t list) =
     match battle_list with
-    | [] -> raise (InvalidBattle (Battle.get_id battle))
+    | [] -> raise (Battle.InvalidBattle (Battle.get_id battle))
     | b::t ->
       if Battle.get_id b = Battle.get_id battle
       then
@@ -161,7 +165,7 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
 
     | Enter ->
       let b = Battle.str_to_battle zone.battles arg in
-      printf "Entering %s\n" arg;
+      printf "Entering %s\n\n" arg;
       let new_state = Battle.enter_battle b player in
       let new_battle = (fst new_state) in
       let new_player = (snd new_state) in
@@ -170,7 +174,7 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       zone_repl new_zone new_player
 
     | Shop ->
-      printf "Entering shop\n";
+      printf "Entering shop\n\n";
       let new_state = Shop.enter_shop zone.shop player in
       let new_shop = (fst new_state) in
       let new_player = (snd new_state) in
@@ -187,8 +191,16 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       printf "\nInvalid command: %s\n" str;
       zone_repl zone player
 
-    | InvalidBattle str ->
+    | Battle.InvalidBattle str ->
       printf "\nInvalid battle: %s\n" str;
+      zone_repl zone player
+
+    | InvalidZone str ->
+      printf "\nInvalid zone: %s\n" str;
+      zone_repl zone player
+
+    | Failure str ->
+      printf "\nFailure: %s\n" str;
       zone_repl zone player
 
 (* enter the zone with the player *)
@@ -196,4 +208,5 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
 let enter_zone (zone: t) (player: Player.t) : (t * Player.t) =
   print_welcome zone;
   print_commands();
+  print_map zone;
   zone_repl zone player
