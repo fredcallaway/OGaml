@@ -1,13 +1,11 @@
 open Yojson.Basic.Util
 
-type t = {
-  world : World.t;
-  player : Player.t;
-}
+(* initializes the game with the given json filename *)
+val load: string -> Game.t
 
-(* initializes the world and player state with the given Json object *)
-val load: string -> t
+(* save the game state into a json file *)
+val save: Game.t -> unit
 
-(* save the current world and player state into a json file *)
-val save: string -> t -> unit
+(* create a new json file for a new game *)
+val new_game: unit -> string
 

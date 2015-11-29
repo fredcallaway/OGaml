@@ -1,16 +1,13 @@
-
-(* the full game state *)
 type t = {
+  id : string;
+  completed : bool;
   zones : Zone.t list;
-  player : Player.t;
 }
 
-(* initializes the world state with the given Json object *)
-val init_world: Json.t -> Player.t -> t
-
 (* enter the world with the player *)
-(* return:
- * the new player and true if the player completes the game
- * the new player and false if the player did not complete the game
- *)
-val enter_world: t -> Player.t -> (Player.t * bool)
+(* postcondition: the new player and the updated world on exit *)
+val enter_world: t -> Player.t -> (t * Player.t)
+
+(* precondition: all zones in world must have unique ids *)
+(* postcondition: world with updated zone and next zone unlocked if zone was completed*)
+val update_zones: t -> Zone.t -> t

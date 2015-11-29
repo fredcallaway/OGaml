@@ -1,15 +1,15 @@
-
 type t = {
+  id : string;
+  unlocked : bool;
+  completed : bool;
   battles : Battle.t list;
   shop : Shop.t;
 }
 
-(* enter the specified zone with the player *)
-(* return:
- * the new player and true if the player unlocks the next zone
- * the new player and false if the player did not unlock the next zone
- *)
-val enter_zone: t -> Player.t -> (Player.t * bool)
+(* enter the zone with the player *)
+(* postcondition: the new player and the updated zone on exit *)
+val enter_zone: t -> Player.t -> (t * Player.t)
 
-(* return: state with zone unlocked *)
-val unlock_zone: t -> Zone.t -> t
+(* precondition: all battles in zone must have unique ids *)
+(* postcondition: zone with updated battle and next battle unlocked if battle was completed*)
+val update_battles: t -> Battle.t -> t
