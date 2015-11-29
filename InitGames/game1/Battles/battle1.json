@@ -1,0 +1,11 @@
+{
+  "id": "battle1",
+  "opponent": "fighter1.json",
+  // "ai": "ai.json",
+  "xp": 50,
+  "treasure":
+  [
+    "Health Potion.json"
+  ],
+  "money": 40
+}

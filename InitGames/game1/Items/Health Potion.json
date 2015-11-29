@@ -1,0 +1,6 @@
+{
+  "name": "Health Potion",
+  "description": "This is a health potion",
+  "value": 70,
+  "slot": "Consumable"
+}

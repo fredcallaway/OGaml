@@ -1,0 +1,6 @@
+{
+  "name": "Sword",
+  "description": "This is a sword",
+  "value": 50,
+  "slot": "Primary"
+}

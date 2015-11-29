@@ -1,0 +1,11 @@
+{
+  "id": "zone2",
+  "unlocked": false,
+  "completed": false,
+  "battles":
+  [
+    "battle3.json",
+    "battle4.json"
+  ],
+  "shop": "shop2.json"
+}

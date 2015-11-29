@@ -1,0 +1,9 @@
+{
+  "id": "world1",
+  "completed": false,
+  "zones":
+  [
+    "zone1.json",
+    "zone2.json"
+  ],
+}
