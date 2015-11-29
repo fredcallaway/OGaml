@@ -56,6 +56,12 @@ let print_return (game: t) =
 let print_score (player: Player.t) =
   failwith "TODO"
 
+let print_list () =
+  let dir = "SavedGames/" in
+  let games = Sys.readdir dir in
+  printf "Availible games:\n(type 'Load [game]' to load game.)\n";
+  Array.iter print_endline games
+
 
 let rec game_repl (gameop: t option) : t option =
   try
@@ -87,12 +93,12 @@ let rec game_repl (gameop: t option) : t option =
 
     | Enter, Some game ->
       printf "Entering %s\n" game.id;
-      let new_state = World.enter_world game.world game.player in
-      let new_world = (fst new_state) in
-      let new_player = (snd new_state) in
-      let new_game = {game with world = new_world; player = new_player} in
-      print_return new_game;
-      game_repl (Some new_game)
+      let updated_state = World.enter_world game.world game.player in
+      let updated_world = (fst updated_state) in
+      let updated_player = (snd updated_state) in
+      let updated_game = {game with world = updated_world; player = updated_player} in
+      print_return updated_game;
+      game_repl (Some updated_game)
 
     | Save, Some game ->
       Json.save game;
@@ -100,18 +106,27 @@ let rec game_repl (gameop: t option) : t option =
 
     | Load, _ ->
       let filename = arg in
-      let new_game = Json.load filename in
+      let path = "SavedGames/" ^ filename ^ "/" in
+      let load_game = Json.load path (filename^".json") in
       printf "Game loaded successfully.\n";
       printf "Type 'Enter' to continue game.\n";
-      game_repl (Some new_game)
+      game_repl (Some load_game)
+
+    | List, _ ->
+      print_list();
+      game_repl gameop
 
     | New, _ ->
-      let filename = Json.new_game() in
-      printf "New game created in file %s\n" filename;
-      let new_game = Json.load filename in
-      printf "Game loaded successfully.\n";
-      printf "Type 'Enter' to start game.\n";
-      game_repl (Some new_game)
+      let filename = arg in
+      let path = "InitGames/" ^ filename ^ "/" in
+      let new_filename = Json.new_game path filename in
+      printf "New game created in folder %s\n" new_filename;
+      (* let new_path = "SavedGames/" ^ filename ^ "/" in *)
+      (* let new_game = Json.load new_path new_filename in *)
+      (* printf "Game loaded successfully.\n"; *)
+      (* printf "Type 'Enter' to start game.\n"; *)
+      (* game_repl (Some new_game) *)
+      game_repl gameop
 
     | Quit, _ ->
       printf "Quitting\n";
