@@ -25,7 +25,7 @@ let from_file path filename =
   (* effects *)
   }
 
-let to_file path game =
+let to_file path fighter =
   failwith "TODO"
 
 let alive f : bool = Stats.get_health f.stats > 0

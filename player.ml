@@ -24,7 +24,7 @@ let from_file path filename =
   level
   }
 
-let to_file path game =
+let to_file path player =
   failwith "TODO"
 
 let print_score p =

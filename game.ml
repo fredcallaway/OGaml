@@ -21,12 +21,22 @@ let from_file path filename =
   }
 
 let to_file path game =
-  (* TODO *)
-  ()
+  let world = game.world |> World.to_file path in
+  let player = game.player |> Player.to_file path in
+  let json = `Assoc [
+    ("world", `String world);
+    ("player", `String player)
+  ] in
+  Yojson.Basic.to_file (path^game.id^".json") json;
+  printf "Game saved successfully.\n"
 
-let new_game path game =
-  (* TODO *)
-  ()
+let new_game path filename =
+  let game = from_file path filename in
+  printf "Initial game %s loaded.\n" game.id;
+  let new_game = {game with id="test1"} in
+  let new_path = "SavedGames/" ^ new_game.id ^ "/" in
+  to_file new_path new_game;
+  printf "New game created as %s.\n" new_game.id
 
 type command = Enter | New | Save | Load | List | Quit | Score | Help
 let cmds = [  "Enter";"New";"Save";"Load";"List";"Quit";"Score"]
@@ -68,7 +78,7 @@ let print_commands () =
   List.iter (printf "%s\n") (cmds)
 
 let print_welcome () =
-  printf "Welcome to OGaml!\n"
+  printf "\n\nWelcome to OGaml!\n"
 
 let print_return (game: t) =
   printf "You've returned to the main menu.\n"
@@ -76,7 +86,7 @@ let print_return (game: t) =
 let print_list () =
   let dir = "SavedGames/" in
   let games = Sys.readdir dir in
-  printf "Availible games:\n(type 'Load [game]' to load game.)\n";
+  printf "Availible games: (type 'Load [game]' to load game)\n";
   Array.iter print_endline games
 
 
@@ -121,7 +131,6 @@ let rec game_repl (gameop: t option) : t option =
       let filename = game.id in
       let path = "SavedGames/" ^ filename ^ "/" in
       to_file path game;
-      printf "Game saved successfully.\n";
       game_repl gameop
 
     | Load, _ ->
@@ -139,8 +148,7 @@ let rec game_repl (gameop: t option) : t option =
     | New, _ ->
       let filename = arg in
       let path = "InitGames/" ^ filename ^ "/" in
-      new_game path filename;
-      printf "New game created\n";
+      new_game path (filename^".json");
       (* let new_path = "SavedGames/" ^ filename ^ "/" in *)
       (* let new_game = from_file new_path new_filename in *)
       (* printf "Game loaded successfully.\n"; *)

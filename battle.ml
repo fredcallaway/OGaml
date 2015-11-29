@@ -35,7 +35,7 @@ let from_file path filename =
   money
   }
 
-let to_file path game =
+let to_file path battle =
   failwith "TODO"
 
 exception InvalidBattle of string

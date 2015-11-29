@@ -24,7 +24,7 @@ let from_file path filename =
   shop
   }
 
-let to_file path game =
+let to_file path zone =
   failwith "TODO"
 
 let unlock z =

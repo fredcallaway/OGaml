@@ -18,7 +18,7 @@ let from_file path filename =
   zones
   }
 
-let to_file path game =
+let to_file path world =
   failwith "TODO"
 
 type command = Enter | Exit | Map | Score | Help

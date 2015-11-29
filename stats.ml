@@ -29,7 +29,7 @@ let from_file path filename =
   let id = String.sub filename 0 (String.length filename - 5) in
   from_json id json
 
-let to_file path game =
+let to_file path stats =
   failwith "TODO"
 
 let get_health s =

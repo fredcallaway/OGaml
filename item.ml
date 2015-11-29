@@ -59,7 +59,7 @@ let from_file path filename =
   slot
   }
 
-let to_file path game =
+let to_file path item =
   failwith "TODO"
 
 (* a set of equipped armor and weapons *)

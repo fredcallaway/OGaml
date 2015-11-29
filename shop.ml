@@ -19,7 +19,7 @@ let from_file path filename =
 let print_shop s =
   printf "%s\n" s.id
 
-let to_file path game =
+let to_file path shop =
   failwith "TODO"
 
 let enter_shop (shop: t) (player: Player.t) : (t * Player.t) =
