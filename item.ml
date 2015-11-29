@@ -1,4 +1,4 @@
-open Stats
+open Yojson.Basic.Util
 
 
 (* Fred: I simplified things a lot. Feel free to add stuff back,
@@ -18,21 +18,59 @@ type slot =
   | Secondary
   | Special
 
-type t = {id: string;
-          description: string;
-          self_effect: stats;
-          opponent_effect: stats;
-          value: int;
-          slot: slot}
+exception InvalidSlot of string
+
+let str_to_slot str =
+  match str with
+  | "Consumable" -> Consumable
+  | "Head" -> Head
+  | "Body" -> Body
+  | "Legs" -> Legs
+  | "Feet" -> Feet
+  | "Hands" -> Hands
+  | "Primary" -> Primary
+  | "Secondary" -> Secondary
+  | "Special" -> Special
+  | _ -> raise (InvalidSlot str)
+
+type t = {
+  id: string;
+  description: string;
+  self_effect: Stats.t;
+  opponent_effect: Stats.t;
+  value: int;
+  slot: slot;
+}
+
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^"Items/"^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  let description = json |> member "description" |> to_string in
+  let self_effect = json |> member "self_effect" |> to_string |> Stats.from_file path in
+  let opponent_effect = json |> member "opponent_effect" |> to_string |> Stats.from_file path in
+  let value = json |> member "points" |> to_int in
+  let slot = json |> member "slot" |> to_string |> str_to_slot in
+  {
+  id;
+  description;
+  self_effect;
+  opponent_effect;
+  value;
+  slot
+  }
+
+let to_file path game =
+  failwith "TODO"
 
 (* a set of equipped armor and weapons *)
-type equip = t list
+(* type equip = t list *)
 
-let get_effects item : effect * effect =
+let get_effects item : Stats.effect * Stats.effect =
+  failwith "TODO"
   (* Many ways this function could be implemented. The simplest would be
    * to match on every possible item id. A better option would be to
    * get the information from the json somehow. *)
-  match item.id with
-  | "health potion" -> health_effect 10, null_effect
-  | "frighten" -> null_effect, strength_effect (-5)
-  | _ -> null_effect, null_effect
+  (* match item.id with *)
+  (* | "health potion" -> health_effect 10, null_effect *)
+  (* | "frighten" -> null_effect, strength_effect (-5) *)
+  (* | _ -> null_effect, null_effect *)

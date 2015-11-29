@@ -1,8 +1,25 @@
+open Yojson.Basic.Util
+open Printf
+
 type t = {
   id : string;
   completed : bool;
   zones : Zone.t list;
 }
+
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^"Worlds/"^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  let completed = json |> member "completed" |> to_bool in
+  let zones = json |> member "zones" |> to_list |> List.map to_string |> List.map (Zone.from_file path) in
+  {
+  id;
+  completed;
+  zones
+  }
+
+let to_file path game =
+  failwith "TODO"
 
 type command = Enter | Exit | Map | Score | Help
 let cmds = [  "Enter";"Exit";"Map";"Score"]
@@ -35,11 +52,6 @@ let print_help (arg: string) =
   then List.iter print_helper cmds
   else print_helper arg
 
-let rec str_to_zone zs str =
-  match zs with
-  | [] -> raise (InvalidZone str)
-  | z::t -> if z.id = str then z else str_to_zone t str
-
 let print_commands () =
   printf "Availible commands: (type 'Help [cmd]' to get more info)\n";
   List.iter (printf "%s\n") (cmds)
@@ -52,22 +64,16 @@ let print_return (world: t) =
 
 let print_map (world: t) =
   printf "Map:\n";
-  let print_zone z =
-    let lockstr = if z.unlocked then "" else " (locked)" in
-    printf "%s%s\n" z.id lockstr;
-  in List.iter (print_zone) (world.zones)
-
-let print_score (player: Player.t) =
-  failwith "TODO"
+  List.iter (Zone.print_zone) (world.zones)
 
 (* precondition: all zones in world must have unique ids *)
 (* postcondition: world with updated zone and next zone unlocked if zone was completed *)
 let update_zones (world: t) (zone: Zone.t) : t =
   let rec update_and_unlock (zone_list: Zone.t list) (zone: Zone.t) (a: Zone.t list) =
     match zone_list with
-    | [] -> raise (InvalidZone zone.id)
+    | [] -> raise (InvalidZone (Zone.get_id zone))
     | z::t ->
-      if z.id = zone.id
+      if Zone.get_id z = Zone.get_id zone
       then
         match t with
         | [] ->
@@ -75,9 +81,9 @@ let update_zones (world: t) (zone: Zone.t) : t =
           (* then print_win; *)
           a@[zone]@t
         | z_next::t_next ->
-          if zone.completed
+          if Zone.get_completed zone
           then
-            let z_next_unlocked = {z_next with unlocked = true} in
+            let z_next_unlocked = Zone.unlock z_next in
             a@[zone;z_next_unlocked]@t_next
           else a@[zone;z_next]@t_next
       else
@@ -116,11 +122,11 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
       world_repl world player
 
     | Score ->
-      print_score player;
+      Player.print_score player;
       world_repl world player
 
     | Enter ->
-      let z = str_to_zone world.zones arg in
+      let z = Zone.str_to_zone world.zones arg in
       printf "Entering %s\n" arg;
       let new_state = Zone.enter_zone z player in
       let new_zone = (fst new_state) in
@@ -130,7 +136,7 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
       world_repl new_world new_player
 
     | Exit ->
-      printf "Exiting\n";
+      printf "Exiting world\n";
       (world, player)
 
   with

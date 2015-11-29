@@ -1,3 +1,6 @@
+open Yojson.Basic.Util
+open Printf
+
 type t = {
   id : string;
   unlocked : bool;
@@ -6,10 +9,37 @@ type t = {
   shop : Shop.t;
 }
 
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^"Zones/"^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  let unlocked = json |> member "unlocked" |> to_bool in
+  let completed = json |> member "completed" |> to_bool in
+  let battles = json |> member "battles" |> to_list |> List.map to_string |> List.map (Battle.from_file path) in
+  let shop = json |> member "shop" |> to_string |> Shop.from_file path in
+  {
+  id;
+  unlocked;
+  completed;
+  battles;
+  shop
+  }
+
+let to_file path game =
+  failwith "TODO"
+
+let unlock z =
+  {z with unlocked = true}
+
+let get_completed z =
+  z.completed
+let get_id z =
+  z.id
+
 type command = Enter | Shop | Exit | Map | Score | Help
 let cmds = [  "Enter";"Shop";"Exit";"Map";"Score"]
 exception InvalidCommand of string
 exception InvalidBattle of string
+exception InvalidZone of string
 
 let str_to_command str : command =
   match str with
@@ -39,11 +69,6 @@ let print_help (arg: string) =
   then List.iter print_helper cmds
   else print_helper arg
 
-let rec str_to_battle bs str =
-  match bs with
-  | [] -> raise (InvalidBattle str)
-  | b::t -> if b.id = str then b else str_to_battle t str
-
 let print_commands () =
   printf "Availible commands: (type 'Help [cmd]' to get more info)\n";
   List.iter (printf "%s\n") (cmds)
@@ -54,23 +79,25 @@ let print_welcome (zone: t) =
 let print_return (zone: t) =
   printf "You're now in %s\n" zone.id
 
+let print_zone z =
+  let lockstr = if z.unlocked then "" else " (locked)" in
+  printf "%s%s\n" z.id lockstr
+
+let rec str_to_zone zs str =
+  match zs with
+  | [] -> raise (InvalidZone str)
+  | z::t -> if z.id = str then z else str_to_zone t str
+
 let print_map (zone: t) =
   printf "Map:\n";
 
   printf "Battles:\n";
-  let print_battle b =
-    let lockstr = if b.unlocked then "" else " (locked)" in
-    printf "%s%s\n" b.id lockstr;
-  in
-  List.iter print_battle zone.battles;
+  List.iter Battle.print_battle zone.battles;
 
   printf "Shop:\n";
-  let print_shop s =
-    printf "%s\n" s.id;
-  in
-  print_shop zone.shop
+  Shop.print_shop zone.shop
 
-let print_score (player: Player.t) =
+let update_shop (zone: t) (shop: Shop.t) : t =
   failwith "TODO"
 
 (* precondition: all battles in zone must have unique ids *)
@@ -78,9 +105,9 @@ let print_score (player: Player.t) =
 let update_battles (zone: t) (battle: Battle.t) : t =
   let rec update_and_unlock (battle_list: Battle.t list) (battle: Battle.t) (a: Battle.t list) =
     match battle_list with
-    | [] -> raise (InvalidBattle battle.id)
+    | [] -> raise (InvalidBattle (Battle.get_id battle))
     | b::t ->
-      if b.id = battle.id
+      if Battle.get_id b = Battle.get_id battle
       then
         match t with
         | [] ->
@@ -88,9 +115,9 @@ let update_battles (zone: t) (battle: Battle.t) : t =
           (* then print_win; *)
           a@[battle]@t
         | b_next::t_next ->
-          if battle.completed
+          if Battle.get_completed battle
           then
-            let b_next_unlocked = {b_next with unlocked = true} in
+            let b_next_unlocked = Battle.unlock b_next in
             a@[battle;b_next_unlocked]@t_next
           else a@[battle;b_next]@t_next
       else
@@ -129,11 +156,11 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       zone_repl zone player
 
     | Score ->
-      print_score player;
+      Player.print_score player;
       zone_repl zone player
 
     | Enter ->
-      let b = str_to_battle zone.battles arg in
+      let b = Battle.str_to_battle zone.battles arg in
       printf "Entering %s\n" arg;
       let new_state = Battle.enter_battle b player in
       let new_battle = (fst new_state) in
@@ -152,7 +179,7 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       zone_repl new_zone new_player
 
     | Exit ->
-      printf "Exiting %s\n";
+      printf "Exiting zone\n";
       (zone, player)
 
   with

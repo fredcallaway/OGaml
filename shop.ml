@@ -1,16 +1,37 @@
+open Yojson.Basic.Util
+open Printf
 
 type t = {
-	supply: Item.t list
+  id: string;
+	supply: Item.t list;
 }
 
-val enter_shop: t -> Player.t -> Player.t
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^"Shops/"^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  let supply = json |> member "supply" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
+  {
+  id;
+  supply
+  }
 
+let print_shop s =
+  printf "%s\n" s.id
 
+let to_file path game =
+  failwith "TODO"
 
-val buy: Item.t -> t -> Player.t -> Player.t
+let enter_shop (shop: t) (player: Player.t) : (t * Player.t) =
+  failwith "TODO"
 
-val sell: Item.t -> t -> Player.t -> Player.t
+let buy (item: Item.t) (shop: t) (player: Player.t) : Player.t =
+  failwith "TODO"
 
-val equip: Item.t -> Player.t -> Player.t
+let sell (item: Item.t) (shop: t) (player: Player.t) : Player.t =
+  failwith "TODO"
 
-val remove: Item.t -> Player.t -> Player.t
+let equip (item: Item.t) (player: Player.t) : Player.t =
+  failwith "TODO"
+
+let remove (item: Item.t) (player: Player.t) : Player.t =
+  failwith "TODO"

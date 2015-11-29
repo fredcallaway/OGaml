@@ -1,3 +1,4 @@
+open Yojson.Basic.Util
 open Printf
 
 type t = {
@@ -5,11 +6,30 @@ type t = {
   world : World.t;
   player : Player.t;
 }
+exception InvalidCommand of string
+exception InvalidGame of string
+
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  let world = json |> member "world" |> to_string |> World.from_file path in
+  let player = json |> member "player" |> to_string |> Player.from_file path in
+  {
+  id;
+  world;
+  player
+  }
+
+let to_file path game =
+  (* TODO *)
+  ()
+
+let new_game path game =
+  (* TODO *)
+  ()
 
 type command = Enter | New | Save | Load | List | Quit | Score | Help
 let cmds = [  "Enter";"New";"Save";"Load";"List";"Quit";"Score"]
-exception InvalidCommand of string
-exception InvalidGame of string
 
 let str_to_command str : command =
   match str with
@@ -47,14 +67,11 @@ let print_commands () =
   printf "Availible commands: (type 'Help [cmd]' to get more info)\n";
   List.iter (printf "%s\n") (cmds)
 
-let print_welcome (game: t) =
+let print_welcome () =
   printf "Welcome to OGaml!\n"
 
 let print_return (game: t) =
   printf "You've returned to the main menu.\n"
-
-let print_score (player: Player.t) =
-  failwith "TODO"
 
 let print_list () =
   let dir = "SavedGames/" in
@@ -88,7 +105,7 @@ let rec game_repl (gameop: t option) : t option =
       game_repl gameop
 
     | Score, Some game ->
-      print_score game.player;
+      Player.print_score game.player;
       game_repl gameop
 
     | Enter, Some game ->
@@ -101,13 +118,16 @@ let rec game_repl (gameop: t option) : t option =
       game_repl (Some updated_game)
 
     | Save, Some game ->
-      Json.save game;
+      let filename = game.id in
+      let path = "SavedGames/" ^ filename ^ "/" in
+      to_file path game;
+      printf "Game saved successfully.\n";
       game_repl gameop
 
     | Load, _ ->
       let filename = arg in
       let path = "SavedGames/" ^ filename ^ "/" in
-      let load_game = Json.load path (filename^".json") in
+      let load_game = from_file path (filename^".json") in
       printf "Game loaded successfully.\n";
       printf "Type 'Enter' to continue game.\n";
       game_repl (Some load_game)
@@ -119,10 +139,10 @@ let rec game_repl (gameop: t option) : t option =
     | New, _ ->
       let filename = arg in
       let path = "InitGames/" ^ filename ^ "/" in
-      let new_filename = Json.new_game path filename in
-      printf "New game created in folder %s\n" new_filename;
+      new_game path filename;
+      printf "New game created\n";
       (* let new_path = "SavedGames/" ^ filename ^ "/" in *)
-      (* let new_game = Json.load new_path new_filename in *)
+      (* let new_game = from_file new_path new_filename in *)
       (* printf "Game loaded successfully.\n"; *)
       (* printf "Type 'Enter' to start game.\n"; *)
       (* game_repl (Some new_game) *)
@@ -147,7 +167,7 @@ let rec game_repl (gameop: t option) : t option =
 (* start the game with no game state *)
 (* postcondition: the updated game on exit *)
 let enter_game () =
-  print_welcome game;
+  print_welcome();
   print_commands();
   ignore (game_repl None)
 
