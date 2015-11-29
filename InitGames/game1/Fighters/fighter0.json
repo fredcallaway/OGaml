@@ -1,7 +1,12 @@
 {
   "stats": "stats0.json",
+  "inventory":
+  [
+    "Health Potion.json"
+  ],
   "equipped":
   [
     "Sword.json"
-  ]
+  ],
+  "hp": 100
 }

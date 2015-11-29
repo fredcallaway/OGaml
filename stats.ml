@@ -9,9 +9,7 @@ type t = {
   magic: int;
 }
 
-let from_file path filename =
-  let json = Yojson.Basic.from_file (path^"Stats/"^filename) in
-  let id = String.sub filename 0 (String.length filename - 5) in
+let from_json id json =
   let health = json |> member "health" |> to_int in
   let strength = json |> member "strength" |> to_int in
   let speed = json |> member "speed" |> to_int in
@@ -25,6 +23,11 @@ let from_file path filename =
   dexterity;
   magic
   }
+
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^"Stats/"^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  from_json id json
 
 let to_file path game =
   failwith "TODO"

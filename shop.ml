@@ -7,6 +7,7 @@ type t = {
 }
 
 let from_file path filename =
+  (* printf "path/Shops/filename: %s\n" (path^"Shops/"^filename); *)
   let json = Yojson.Basic.from_file (path^"Shops/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
   let supply = json |> member "supply" |> to_list |> List.map to_string |> List.map (Item.from_file path) in

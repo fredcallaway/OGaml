@@ -170,5 +170,6 @@ let enter_game () =
   print_welcome();
   print_commands();
   ignore (game_repl None)
+in
 
-(* enter_game(); *)
+enter_game()

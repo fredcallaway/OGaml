@@ -46,9 +46,9 @@ let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Items/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
   let description = json |> member "description" |> to_string in
-  let self_effect = json |> member "self_effect" |> to_string |> Stats.from_file path in
-  let opponent_effect = json |> member "opponent_effect" |> to_string |> Stats.from_file path in
-  let value = json |> member "points" |> to_int in
+  let self_effect = json |> member "self_effect" |> Stats.from_json (id^" self_effect") in
+  let opponent_effect = json |> member "opponent_effect" |> Stats.from_json (id^" opponent_effect") in
+  let value = json |> member "value" |> to_int in
   let slot = json |> member "slot" |> to_string |> str_to_slot in
   {
   id;

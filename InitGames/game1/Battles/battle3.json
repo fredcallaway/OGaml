@@ -1,4 +1,6 @@
 {
+  "unlocked": true,
+  "completed": false,
   "opponent": "fighter3.json",
   // "ai": "ai.json",
   "xp": 80,
