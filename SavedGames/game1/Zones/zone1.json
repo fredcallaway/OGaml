@@ -1,0 +1,10 @@
+{
+  "unlocked": true,
+  "completed": false,
+  "battles":
+  [
+    "battle1.json",
+    "battle2.json"
+  ],
+  "shop": "shop1.json"
+}
