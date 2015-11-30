@@ -17,5 +17,6 @@
   },
   "description": "This is a bow",
   "value": 40,
-  "slot": "Primary"
+  "slot": "Primary",
+  "quantity": 1
 }

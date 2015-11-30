@@ -17,5 +17,6 @@
   },
   "description": "This is a helmet",
   "value": 80,
-  "slot": "Head"
+  "slot": "Head",
+  "quantity": 1
 }

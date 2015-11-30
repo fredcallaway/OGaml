@@ -1,11 +1,8 @@
 {
   "stats": "stats1.json",
-  "inventory":
-  [
-    "Health Potion.json"
-  ],
   "equipped":
   [
+    "Health Potion.json",
     "Sword.json"
   ],
   "hp": 100

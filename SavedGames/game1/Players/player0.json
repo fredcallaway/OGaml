@@ -1,6 +1,11 @@
 {
   "fighter": "fighter0.json",
-  "money": 50,
-  "expereience": 40,
+  "stats": "stats0.json",
+  "inventory":
+  [
+    "Health Potion.json"
+  ],
+  "money": 0,
+  "expereience": 0,
   "level": 1
 }

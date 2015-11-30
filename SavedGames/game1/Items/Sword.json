@@ -17,5 +17,6 @@
   },
   "description": "This is a sword",
   "value": 50,
-  "slot": "Primary"
+  "slot": "Primary",
+  "quantity": 1
 }

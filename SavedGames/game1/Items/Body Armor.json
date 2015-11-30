@@ -17,5 +17,6 @@
   },
   "description": "This is body armor",
   "value": 100,
-  "slot": "Body"
+  "slot": "Body",
+  "quantity": 1
 }
