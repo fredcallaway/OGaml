@@ -114,19 +114,9 @@ let print_welcome (battle: t) =
 let rec get_user_action state : action =
   try
 
-    let user = (fst state) in
-    let opp = (snd state) in
-    print_endline "\nWhats your move?";
-    let input = String.lowercase (input_line stdin) in
-    print_endline "\n";
-    if String.length input = 0 then raise (InvalidCommand input) else ();
-    let inlist = Str.bounded_split (Str.regexp(" ")) (String.lowercase input) 2 in
-
-    let has_arg = List.length inlist > 1 in
-
-    let cmd = str_to_command (List.nth inlist 0) in
-    let arg = if has_arg then List.nth inlist 1 else "" in
-
+    let user, opp = state in
+    let cmd, arg = Io.get_input () in 
+    let cmd = str_to_command cmd in
     match cmd with
 
     | Help ->
@@ -180,8 +170,7 @@ let remove_item f i =
   Fighter.set_equipped f new_equipped
 
 let do_action (turn: bool) (state: state) (act: action) : state option =
-  let user = (fst state) in
-  let opp = (snd state) in
+  let user, opp = state in
   match act with
   | Use it -> let res = match Item.is_consumable it with
                         | true -> if turn then Some (apply_effects it (remove_item user it) opp)

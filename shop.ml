@@ -84,22 +84,9 @@ let enter_shop (shop: t) (player: Player.t) : (t * Player.t) =
 
 let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
   try
-    (* prompt user for command *)
-    print_endline "\nWhats Next?";
-    (* get input line *)
-    let line = String.lowercase (input_line stdin) in
-    print_endline "\n";
-
-    if String.length line = 0 then raise (InvalidCommand line) else ();
-
-    (* split the input into command and args *)
-    let split = Str.bounded_split (Str.regexp " ") line 2 in
-    let has_arg = List.length split > 1 in
-
-    let cmd = str_to_command (List.nth split 0) in
-    let arg = if has_arg then List.nth split 1 else "" in
-
-    (* Command Switch *)
+    let user, opp = state in
+    let cmd, arg = Io.get_input () in 
+    let cmd = str_to_command cmd in
     match cmd with
 
     | Help ->
