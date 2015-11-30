@@ -34,6 +34,18 @@ let str_to_slot str =
   | "Special" -> Special
   | _ -> raise (InvalidSlot str)
 
+let slot_to_str slot =
+  match slot with
+  | Consumable -> "Consumable"
+  | Head -> "Head"
+  | Body -> "Body"
+  | Legs -> "Legs"
+  | Feet -> "Feet"
+  | Hands -> "Hands"
+  | Primary -> "Primary"
+  | Secondary -> "Secondary"
+  | Special -> "Special"
+
 type t = {
   id: string;
   description: string;
@@ -41,6 +53,7 @@ type t = {
   opponent_effect: Stats.t;
   value: int;
   slot: slot;
+  quantity: int;
 }
 
 let from_file path filename =
@@ -51,13 +64,15 @@ let from_file path filename =
   let opponent_effect = json |> member "opponent_effect" |> Stats.from_json (id^" opponent_effect") in
   let value = json |> member "value" |> to_int in
   let slot = json |> member "slot" |> to_string |> str_to_slot in
+  let quantity = json |> member "quantity" |> to_int in
   {
   id;
   description;
   self_effect;
   opponent_effect;
   value;
-  slot
+  slot;
+  quantity
   }
 
 let to_file path item =
@@ -66,7 +81,21 @@ let to_file path item =
 (* a set of equipped armor and weapons *)
 (* type equip = t list *)
 
+let get_id (i: t) = i.id
+
 let get_description (i: t) = i.description
+
+let get_self_effect (i: t) = i.self_effect
+
+let get_opponent_effect (i: t) = i.opponent_effect
+
+let rec remove (lst: t list) (i: t) =
+  match lst with
+  |[] -> []
+  |hd::tl -> if hd.id = i.id then match hd.quantity with
+                                  |1 -> tl
+                                  |_ -> {hd with quantity = hd.quantity - 1}::tl
+              else hd:: remove tl i
 
 let is_consumable (i: t) =
   match i.slot with
@@ -79,11 +108,20 @@ let rec str_to_item is str =
   | hd::tl -> if String.lowercase hd.id = str then hd else str_to_item tl str
 
 let print_double_item_list (ulst: t list) (olst: t list) =
-  let f it = it.id in
-  let user_equip = List.map f ulst in
-  let opp_equip = List.map f olst in
-  let g str1 str2 = printf "%s\t\t\t\t\t%s\n" str1 str2 in
-  List.iter2 g user_equip opp_equip
+  let nth_catch l n = try List.nth l n with |Failure str -> "___________" in
+  let slot_list = [(Consumable, 3); (Head, 1); (Body, 1); (Legs, 1); (Feet, 1); (Hands, 1); (Primary, 1); (Secondary, 1); (Special, 1)] in
+  let get_all_slot sl is = List.filter (fun x -> x.slot = sl) is in
+  let g it = it.id in
+  let f (s, m) = (s, m, List.map g (get_all_slot s ulst), List.map g (get_all_slot s olst)) in
+  let big_list = List.map f slot_list in
+  let create_slot_block sl max l1 l2 =
+    printf "\n%s:\n" (slot_to_str sl);
+    for i = 0 to max-1 do
+      printf "\t%s\t\t\t\t\t%s\n" (nth_catch l1 i) (nth_catch l2 i);
+    done
+  in
+  printf "User Inventory:\t\t\t\t\tOpponent Inventory:\n";
+  List.iter (fun (s, m, l1, l2) -> create_slot_block s m l1 l2) big_list
 
 let get_effects item : Stats.effect * Stats.effect =
   failwith "TODO"

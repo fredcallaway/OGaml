@@ -57,7 +57,7 @@ let get_completed b =
 let get_id b =
   b.id
 
-(* The player whose turn it is is first. *)
+(* User is always first, ai always second *)
 type state = Fighter.t * Fighter.t
 
 
@@ -82,7 +82,7 @@ let str_to_command str : command =
   | "details" -> Details
   | "exit" -> Exit
   | "equipped" -> Equipped
-  | "Help" -> Help
+  | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
 let str_to_help str : string =
@@ -116,9 +116,9 @@ let rec get_user_action state : action =
 
     let user = (fst state) in
     let opp = (snd state) in
-    Stats.print_battle_stats (Fighter.get_stats user) (Fighter.get_stats opp);
-    print_endline "Whats your move?\n";
+    print_endline "\nWhats your move?";
     let input = String.lowercase (input_line stdin) in
+    print_endline "\n";
     if String.length input = 0 then raise (InvalidCommand input) else ();
     let inlist = Str.bounded_split (Str.regexp(" ")) (String.lowercase input) 2 in
 
@@ -142,7 +142,7 @@ let rec get_user_action state : action =
       Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
       get_user_action state
 
-    | Use -> Use(Item.str_to_item (Fighter.get_equipped user) arg)
+    | Use -> printf "User used %s!\n" arg; Use(Item.str_to_item (Fighter.get_equipped user) arg)
     | Exit -> Exit
 
   with
@@ -158,14 +158,26 @@ let rec get_user_action state : action =
       printf "\nFailure: %s\n" str;
       get_user_action state
 
-let get_ai_action state : action = failwith "unimplemented"
+(* naive AI, uses whatever item is first in its equipped list. *)
+let get_ai_action state : action =
+  let ai = (snd state) in
+  let ai_equipped = Fighter.get_equipped ai in
+  printf "Opponent used %s!\n" (Item.get_id (List.hd ai_equipped));
+  Use (List.hd ai_equipped)
 
-let apply_effect e f : Fighter.t = failwith "unimplemented"
+let apply_effect f istats fstats : Fighter.t =
+  Fighter.set_stats f (Stats.combine istats fstats)
 
+(* items self effects are always applied to f1, thus the user of the item
+ * should always be f1. *)
 let apply_effects (item: Item.t) f1 f2 : Fighter.t * Fighter.t =
-  apply_effect item f1, apply_effect item f2
+  let new_f1 = apply_effect f1 (Item.get_self_effect item) (Fighter.get_stats f1) in
+  let new_f2 = apply_effect f2 (Item.get_opponent_effect item) (Fighter.get_stats f2) in
+  (new_f1, new_f2)
 
-let remove_item f i = failwith "unimplemented"
+let remove_item f i =
+  let new_equipped = Item.remove (Fighter.get_equipped f) i in
+  Fighter.set_equipped f new_equipped
 
 let do_action (turn: bool) (state: state) (act: action) : state option =
   let user = (fst state) in
@@ -188,9 +200,12 @@ let rec loop (turn, state) : result * state =
   match new_state with
   | None -> (Exit, state)
   | Some (f1, f2) ->  match Fighter.alive f1, Fighter.alive f2 with
-                      | true, true -> loop (switch turn (f1, f2))
-                      | true, false -> (Win, (f1, f2))
-                      | false, true -> (Lose, (f1, f2))
+                      | true, true -> Stats.print_battle_stats (Fighter.get_stats f1) (Fighter.get_stats f2);
+                      loop (switch turn (f1, f2))
+                      | true, false -> Stats.print_battle_stats (Fighter.get_stats f1) (Fighter.get_stats f2);
+                      (Win, (f1, f2))
+                      | false, true -> Stats.print_battle_stats (Fighter.get_stats f1) (Fighter.get_stats f2);
+                      (Lose, (f1, f2))
                       | false, false -> failwith "????"
 
 (* Give the player the reward, and update the players inventory *)
@@ -205,6 +220,7 @@ let enter_battle battle player : (t * Player.t) =
   let opp = battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
+  Stats.print_battle_stats (Fighter.get_stats user) (Fighter.get_stats opp);
   match loop (true, (user, opp)) with
   | (Win, (fighter, _)) ->
     let new_battle = {battle with completed = true} in

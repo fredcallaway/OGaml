@@ -27,11 +27,14 @@ let to_file path fighter =
 
 let get_equipped (f: t) = f.equipped
 
+let set_equipped (f: t) (eq: Item.t list) =
+  {f with equipped = eq}
+
 let get_stats (f: t) = f.stats
 
-let alive f : bool = Stats.get_health f.stats > 0
+let set_stats (f: t) (newstats: Stats.t)= {f with stats = newstats}
 
-let remove_item f item : t = failwith "unimplemented"
+let alive f : bool = Stats.get_health f.stats > 0
 
 let apply_effect effect (f : t) =
   {f with stats = (effect f.stats)}
