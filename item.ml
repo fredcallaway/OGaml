@@ -1,5 +1,5 @@
 open Yojson.Basic.Util
-
+open Printf
 
 (* Fred: I simplified things a lot. Feel free to add stuff back,
  * as long as you keep the get_effects function. I think the
@@ -19,6 +19,7 @@ type slot =
   | Special
 
 exception InvalidSlot of string
+exception InvalidItem of string
 
 let str_to_slot str =
   match str with
@@ -64,6 +65,25 @@ let to_file path item =
 
 (* a set of equipped armor and weapons *)
 (* type equip = t list *)
+
+let get_description (i: t) = i.description
+
+let is_consumable (i: t) =
+  match i.slot with
+  | Consumable -> true
+  | _ -> false
+
+let rec str_to_item is str =
+  match is with
+  | [] -> raise (InvalidItem str)
+  | hd::tl -> if String.lowercase hd.id = str then hd else str_to_item tl str
+
+let print_double_item_list (ulst: t list) (olst: t list) =
+  let f it = it.id in
+  let user_equip = List.map f ulst in
+  let opp_equip = List.map f olst in
+  let g str1 str2 = printf "%s\t\t\t\t\t%s\n" str1 str2 in
+  List.iter2 g user_equip opp_equip
 
 let get_effects item : Stats.effect * Stats.effect =
   failwith "TODO"

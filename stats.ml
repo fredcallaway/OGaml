@@ -1,4 +1,5 @@
 open Yojson.Basic.Util
+open Printf
 
 type t = {
   id: string;
@@ -35,6 +36,16 @@ let to_file path stats =
 let get_health s =
   s.health
 
+let get_stats_list (st: t): string list =
+  ["health: " ^ string_of_int st.health; "strength: " ^ string_of_int st.strength;
+  "speed: " ^ string_of_int st.speed; "dexterity: " ^ string_of_int st.dexterity;
+  "magic: " ^ string_of_int st.magic]
+
+let print_battle_stats (ustats: t) (ostats: t) =
+  let user_stats = get_stats_list ustats in
+  let opp_stats = get_stats_list ostats in
+  let f str1 str2 = printf "%s\t\t\t\t\t%s\n" str1 str2 in
+  List.iter2 f user_stats opp_stats
 
 type effect = t -> t
 let null_effect : effect = (fun x -> x)
