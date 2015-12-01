@@ -86,13 +86,30 @@ let sell (id: string) (shop: t) (player: Player.t) : Player.t =
               {player with inventory = new_inventory; money = new_money} 
 
 let equip (id: string) (player: Player.t) : Player.t =
-  failwith "TODO"
+  match (Item.get_item id player.Player.inventory) with 
+  | None -> player
+  | Some i -> 
+    let old = Item.get_slot_item i player.Player.inventory in 
+    begin
+      match old with 
+      | Some ol -> 
+        let new_eqipped = i::(Item.remove player.Player.equipped ol) in 
+        let new_inventory = ol::(Item.remove player.Player.inventory i) in 
+        {player with inventory = new_inventory; equipped = new_equipped}
+      | None -> 
+        let new_equipped = i::player.Player.equipped in
+        let new_inventory = Item.remove player.Player.inventory i in
+        {player with inventory = new_inventory; equipped = new_equipped}
+    end
 
 let remove (id: string) (player: Player.t) : Player.t =
-  failwith "TODO"
-
-let enter_shop (shop: t) (player: Player.t) : (t * Player.t) =
-  failwith "TODO"
+  match (Item.get_item id player.Player.equipped) with 
+  | None -> player
+  | Some i -> 
+    let new_inventory = i::player.Player.inventory in
+    let new_equipped = Item.remove player.Player.equipped i in 
+    {player with inventory = new_inventory; equipped = new_equipped}
+    
 
 let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
   try

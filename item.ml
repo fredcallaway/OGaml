@@ -51,7 +51,7 @@ type t = {
   description: string;
   self_effect: Stats.t;
   opponent_effect: Stats.t;
-  (* base_effect: Stats.t; *)
+  base_effect: Stats.t; 
   value: int;
   slot: slot;
   quantity: int;
@@ -92,11 +92,35 @@ let get_self_effect (i: t) = i.self_effect
 let get_opponent_effect (i: t) = i.opponent_effect
 
 
-let rec get_item (id: string) (selection: Item.t list): Item Option =
+let rec get_item (id: string) (selection: Item.t list): t Option =
   match selection with 
   | h::t -> if (String.lowercase id) = (String.lowercase h.id) then Some h
             else get_item id t 
   | [] -> None
+
+
+let same_slot (i1: t) (i2: t ): bool =
+  match i1.slot, i2.slot with
+  | Consumable, Consumable -> true
+  | Head, Head -> true
+  | Body, Body -> true
+  | Legs, Legs -> true
+  | Feet, Feet -> true
+  | Hands, Hands -> true
+  | Primary, Primary -> true
+  | Secondary, Secondary -> true
+  | Special, Special -> true
+  | _, _ -> false
+
+let get_slot_item (i: t) (equipped: t list): t Option = 
+  let results = List.filter (let f x = same_slot i x) equipped in 
+  if (is_consumable i) then 
+    if ((List.length results) < 3) then None
+    else Some (List.hd results) 
+  else 
+    if (List.length results = 1) then some (List.hd results)
+    else None
+
 
 let rec remove (lst: t list) (i: t) =
   match lst with

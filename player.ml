@@ -27,7 +27,9 @@ let to_file path player =
 
 
 let stats (p: t) = 
-  List.fold_left (let f acc i = (Stats.combine acc i.Item.))
+  let blank_stats = 
+  {id = "Total Stats"; health = 0; strength: = 0; speed: = 0; dexterity: = 0; magic: = 0} in
+  List.fold_left (let f acc i = Stats.combine i.Item.base_effect acc) blank_stats p.equipped
 
 let print_score p =
   printf "money: %d\n" p.money;
