@@ -72,6 +72,34 @@ type action = | Use of Item.t | Exit
 
 type result = | Win | Lose | Exit
 
+
+let apply_effect f istats fstats : Fighter.t =
+  Fighter.set_stats f (Stats.combine istats fstats)
+
+(* items self effects are always applied to f1, thus the user of the item
+ * should always be f1. *)
+let apply_effects (item: Item.t) f1 f2 : Fighter.t * Fighter.t =
+  let new_f1 = apply_effect f1 (Item.get_self_effect item) (Fighter.get_stats f1) in
+  let new_f2 = apply_effect f2 (Item.get_opponent_effect item) (Fighter.get_stats f2) in
+  (new_f1, new_f2)
+
+let remove_item f i =
+  let new_equipped = Item.remove (Fighter.get_equipped f) i in
+  Fighter.set_equipped f new_equipped
+
+let do_action (turn: bool) (state: state) (act: action) : state option =
+  let user, opp = state in
+  match act with
+  | Use it -> let res = match Item.is_consumable it with
+                        | true -> if turn then Some (apply_effects it (remove_item user it) opp)
+                                  else let a,b = apply_effects it (remove_item opp it) user in Some (b,a)
+                        | false ->  if turn then Some (apply_effects it user opp)
+                                    else let a,b = apply_effects it opp user in Some (b,a)
+              in res
+  | Exit -> None
+
+
+
 let cmds = ["Use"; "Details"; "Exit"; "Equipped"]
 
 exception InvalidCommand of string
@@ -114,19 +142,9 @@ let print_welcome (battle: t) =
 let rec get_user_action state : action =
   try
 
-    let user = (fst state) in
-    let opp = (snd state) in
-    print_endline "\nWhats your move?";
-    let input = String.lowercase (input_line stdin) in
-    print_endline "\n";
-    if String.length input = 0 then raise (InvalidCommand input) else ();
-    let inlist = Str.bounded_split (Str.regexp(" ")) (String.lowercase input) 2 in
-
-    let has_arg = List.length inlist > 1 in
-
-    let cmd = str_to_command (List.nth inlist 0) in
-    let arg = if has_arg then List.nth inlist 1 else "" in
-
+    let user, opp = state in
+    let cmd, arg = Io.get_input () in 
+    let cmd = str_to_command cmd in
     match cmd with
 
     | Help ->
@@ -158,54 +176,37 @@ let rec get_user_action state : action =
       printf "\nFailure: %s\n" str;
       get_user_action state
 
+
+let get_value state : int = failwith "unimplemented"
+
+
 (* naive AI, uses whatever item is first in its equipped list. *)
 let get_ai_action state : action =
   let ai = (snd state) in
   let ai_equipped = Fighter.get_equipped ai in
+  let options = List.map (fun it -> Use it) ai_equipped in
+  List.hd options
+(* 
+  let result act = do_action false state act) options in
+  Utils.list_max (get_value @@ do_action false state)
+
   printf "Opponent used %s!\n" (Item.get_id (List.hd ai_equipped));
   Use (List.hd ai_equipped)
-
-let apply_effect f istats fstats : Fighter.t =
-  Fighter.set_stats f (Stats.combine istats fstats)
-
-(* items self effects are always applied to f1, thus the user of the item
- * should always be f1. *)
-let apply_effects (item: Item.t) f1 f2 : Fighter.t * Fighter.t =
-  let new_f1 = apply_effect f1 (Item.get_self_effect item) (Fighter.get_stats f1) in
-  let new_f2 = apply_effect f2 (Item.get_opponent_effect item) (Fighter.get_stats f2) in
-  (new_f1, new_f2)
-
-let remove_item f i =
-  let new_equipped = Item.remove (Fighter.get_equipped f) i in
-  Fighter.set_equipped f new_equipped
-
-let do_action (turn: bool) (state: state) (act: action) : state option =
-  let user = (fst state) in
-  let opp = (snd state) in
-  match act with
-  | Use it -> let res = match Item.is_consumable it with
-                        | true -> if turn then Some (apply_effects it (remove_item user it) opp)
-                                  else let a,b = apply_effects it (remove_item opp it) user in Some (b,a)
-                        | false ->  if turn then Some (apply_effects it user opp)
-                                    else let a,b = apply_effects it opp user in Some (b,a)
-              in res
-  | Exit -> None
+ *)
 
 (* main loop of battle, called once for each turn *)
 let rec loop (turn, state) : result * state =
+  let user, opp = state in
+  Stats.print_battle_stats (Fighter.get_stats user) (Fighter.get_stats opp);
   (* turn being true means it is players turn *)
-  let switch turn (a,b) = (not turn), (a,b) in
   let action = (if turn then get_user_action else get_ai_action) state in
   let new_state = do_action turn state action in
   match new_state with
   | None -> (Exit, state)
   | Some (f1, f2) ->  match Fighter.alive f1, Fighter.alive f2 with
-                      | true, true -> Stats.print_battle_stats (Fighter.get_stats f1) (Fighter.get_stats f2);
-                      loop (switch turn (f1, f2))
-                      | true, false -> Stats.print_battle_stats (Fighter.get_stats f1) (Fighter.get_stats f2);
-                      (Win, (f1, f2))
-                      | false, true -> Stats.print_battle_stats (Fighter.get_stats f1) (Fighter.get_stats f2);
-                      (Lose, (f1, f2))
+                      | true, true -> loop (not turn, (f1, f2))
+                      | true, false -> (Win, (f1, f2))
+                      | false, true -> (Lose, (f1, f2))
                       | false, false -> failwith "????"
 
 (* Give the player the reward, and update the players inventory *)
@@ -216,11 +217,10 @@ let clean_up player fighter battle : Player.t =
 let enter_battle battle player : (t * Player.t) =
   print_welcome battle ;
   print_commands ();
-  let user = Player.get_fighter player in
+  let user = Fighter.make player in
   let opp = battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
-  Stats.print_battle_stats (Fighter.get_stats user) (Fighter.get_stats opp);
   match loop (true, (user, opp)) with
   | (Win, (fighter, _)) ->
     let new_battle = {battle with completed = true} in
