@@ -75,7 +75,6 @@ type result = | Win | Lose | Exit
    * type of item based on equip slot
   Fighter.set_stats user (Stats.combine istats fstats) *)
 
-(* A function that de*)
 let apply_item item user target : Fighter.t =
   failwith "unimplemented"
 
@@ -178,15 +177,15 @@ let rec get_user_action state : Item.t =
       get_user_action state
 
 
-let get_value state : int =
-  0
+let ai_value_heuristic (f1, f2) : int =
+  Stats.difference (Fighter.get_stats f2) (Fighter.get_stats f1)
 
 
 (* naive AI, uses whatever item is first in its equipped list. *)
-let get_ai_action state : Item.t =
-  let ai = (snd state) in
+let get_ai_action player_slot state : Item.t =
+  let ai = if player_slot then (fst state) else (snd state) in
   Fighter.get_equipped ai
-  |> Utils.list_max (fun it -> get_value @@ use_item false state it)
+  |> Utils.list_max (fun it -> ai_value_heuristic @@ use_item false state it)
 (* 
   let result act = do_action false state act) options in
   Utils.list_max (get_value @@ do_action false state)
@@ -195,18 +194,22 @@ let get_ai_action state : Item.t =
   Use (List.hd ai_equipped)
  *)
 
-(* main loop of battle, called once for each turn *)
-let rec loop (turn, state) : result * state =
-  let user, opp = state in
-  Stats.print_battle_stats (Fighter.get_stats user) (Fighter.get_stats opp);
-  (* turn being true means it is players turn *)
-  let item = (if turn then get_user_action else get_ai_action) state in
-  let f1, f2 = use_item turn state item in
-  match Fighter.alive f1, Fighter.alive f2 with
-  | true, true -> loop (not turn, (f1, f2))
-  | true, false -> (Win, (f1, f2))
-  | false, true -> (Lose, (f1, f2))
-  | false, false -> failwith "????"
+
+let run_battle init_state get_p1_action get_p2_action : result * state =
+  (* main loop of battle, called once for each turn *)
+  let rec loop turn state : result * state =
+    let user, opp = state in
+    Stats.print_battle_stats (Fighter.get_stats user) (Fighter.get_stats opp);
+    (* turn being true means it is players turn *)
+    let item = (if turn then get_p1_action else get_p2_action) state in
+    let f1, f2 = use_item turn state item in
+    match Fighter.alive f1, Fighter.alive f2 with
+    | true, true -> loop (not turn) (f1, f2)
+    | true, false -> (Win, (f1, f2))
+    | false, true -> (Lose, (f1, f2))
+    | false, false -> failwith "????"
+
+  in loop true init_state
 
 (* Give the player the reward, and update the players inventory *)
 let clean_up player fighter battle : Player.t =
@@ -220,7 +223,7 @@ let enter_battle battle player : (t * Player.t) =
   let opp = battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
-  match loop (true, (user, opp)) with
+  match run_battle (user, opp) get_user_action (get_ai_action false) with
   | (Win, (fighter, _)) ->
     let new_battle = {battle with completed = true} in
     let new_player = clean_up player fighter battle in

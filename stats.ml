@@ -46,6 +46,17 @@ let combine (st1: t) (st2: t) : t =
   magic = st1.magic + st2.magic
   }
 
+
+let difference (st1: t) (st2: t) : int =
+  (st1.health - st2.health) +
+  (st1.strength - st2.strength) +
+  (st1.speed - st2.speed) +
+  (st1.dexterity - st2.dexterity) +
+  (st1.magic - st2.magic)
+   
+
+  
+
 let get_stats_list (st: t): string list =
   ["health: " ^ string_of_int st.health; "strength: " ^ string_of_int st.strength;
   "speed: " ^ string_of_int st.speed; "dexterity: " ^ string_of_int st.dexterity;
