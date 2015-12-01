@@ -67,16 +67,28 @@ let to_file path shop =
   failwith "TODO"
 
 
-let buy (item: Item.t) (shop: t) (player: Player.t) : (t * Player.t) =
+let buy (id: string) (shop: t) (player: Player.t) : Player.t =
+  match (Item.get_item id shop.supply) with
+  | None -> player
+  | Some i -> if (player.Player.money >= i.Item.value) then 
+                let new_money = player.Player.money - i.Item.value in
+                let new_inventory = i::player.Player.inventory in 
+                {player with inventory = new_inventory; money = new_money}
+              else
+                player
+
+
+let sell (id: string) (shop: t) (player: Player.t) : Player.t =
+  match (Item.get_item id player.inventory) with
+  | None -> player
+  | Some i -> let new_money = player.Player.money + (i.Item.value/2) in
+              let new_inventory = (Item.remove player.Player.inventory i) in
+              {player with inventory = new_inventory; money = new_money} 
+
+let equip (id: string) (player: Player.t) : Player.t =
   failwith "TODO"
 
-let sell (item: Item.t) (shop: t) (player: Player.t) : (t * Player.t) =
-  failwith "TODO"
-
-let equip (item: Item.t) (player: Player.t) : Player.t =
-  failwith "TODO"
-
-let remove (item: Item.t) (player: Player.t) : Player.t =
+let remove (id: string) (player: Player.t) : Player.t =
   failwith "TODO"
 
 let enter_shop (shop: t) (player: Player.t) : (t * Player.t) =
@@ -96,14 +108,15 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       shop_repl shop player
 
     | Buy ->
-      let i = Item.str_to_item player.equipped arg in
-      let new_shop, new_player = buy i shop player in
-      shop_repl new_shop new_player
+      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let new_player = buy i shop player in
+      shop_repl shop new_player
 
     | Sell ->
-      let i = Item.str_to_item player.equipped arg in
-      let new_shop, new_player = sell i shop player in
-      shop_repl new_shop new_player
+      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let new_player = sell i shop player in
+      shop_repl shop new_player
+
 
     | Equip ->
       let i = Item.str_to_item player.equipped arg in

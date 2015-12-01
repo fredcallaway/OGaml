@@ -10,7 +10,8 @@ type effect = {immediate: stats -> stats;
                ot_duration: int}
 
 
-type ability = {self: effect;
+type ability = {id: string;
+                self: effect;
                 opponent: effect}
 
 type equip_slot = 
@@ -43,3 +44,4 @@ type t =
 
 (* a set of equipped armor and weapons *)
 type equip
+
