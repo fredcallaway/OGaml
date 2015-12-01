@@ -40,3 +40,15 @@ let alive f : bool = Stats.get_health f.stats > 0
 
 let apply_effect effect (f : t) =
   {f with stats = (effect f.stats)}
+
+
+let health (f:t): int =
+  f.stats.Stats.health
+let strength (f:t): int =
+  f.stats.Stats.strength
+let speed (f:t): int =
+  f.stats.Stats.speed
+let dexterity (f:t): int =
+  f.stats.Stats.dexterity
+let magic (f:t): int =
+  f.stats.Stats.magic

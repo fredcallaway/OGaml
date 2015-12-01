@@ -76,7 +76,7 @@ type result = | Win | Lose | Exit
   Fighter.set_stats user (Stats.combine istats fstats) *)
 
 let apply_item item user target : Fighter.t =
-  failwith "unimplemented"
+  target
 
 (* items self effects are always applied to f1, thus the user of the item
  * should always be f1. *)
