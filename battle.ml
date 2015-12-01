@@ -106,6 +106,17 @@ let do_action (turn: bool) (state: state) (act: action) : state option =
   | Exit -> None
 
 
+let use_item (turn: bool) (state: state) (it: Item.t) : state =
+  failwith "unimplemented"
+(*   let switch (a,b) = (b,a) in
+  let user, opp = state in
+  match turn, Item.is_consumable it with
+  | true -> if turn then (apply_effects it (remove_item user it) opp)
+            else let a,b = apply_effects it (remove_item opp it) user in (b,a)
+  | false ->  if turn then (apply_effects it user opp)
+              else let a,b = apply_effects it opp user in (b,a)
+ *)
+
 
 let cmds = ["Use"; "Details"; "Exit"; "Equipped"]
 
@@ -184,15 +195,18 @@ let rec get_user_action state : action =
       get_user_action state
 
 
-let get_value state : int = failwith "unimplemented"
+let get_value state : int =
+  0
 
 
 (* naive AI, uses whatever item is first in its equipped list. *)
 let get_ai_action state : action =
-  let ai = (snd state) in
-  let ai_equipped = Fighter.get_equipped ai in
-  let options = List.map (fun it -> Use it) ai_equipped in
-  List.hd options
+  failwith "unimplemented"
+(*   let ai = (snd state) in
+  Fighter.get_equipped ai
+  |> List.map (fun it -> Use it)
+  |> Utils.list_max get_value @@ do_action false state
+  List.hd options *)
 (* 
   let result act = do_action false state act) options in
   Utils.list_max (get_value @@ do_action false state)

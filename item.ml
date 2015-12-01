@@ -51,7 +51,7 @@ type t = {
   description: string;
   self_effect: Stats.t;
   opponent_effect: Stats.t;
-  base_effect: Stats.t; 
+  (* base_effect: Stats.t; *)
   value: int;
   slot: slot;
   quantity: int;
@@ -91,41 +91,21 @@ let get_self_effect (i: t) = i.self_effect
 
 let get_opponent_effect (i: t) = i.opponent_effect
 
+let get_slot_item x y = failwith "unimplemented"
 
-let rec get_item (id: string) (selection: t list): t Option =
+
+let rec get_item (id: string) (selection: t list): t option =
   match selection with 
   | h::t -> if (String.lowercase id) = (String.lowercase h.id) then Some h
-            else Some (get_item id t)
+            else get_item id t
   | [] -> None
-
-
-let same_slot (i1: t) (i2: t ): bool =
-  match i1.slot, i2.slot with
-  | Consumable, Consumable -> true
-  | Head, Head -> true
-  | Body, Body -> true
-  | Legs, Legs -> true
-  | Feet, Feet -> true
-  | Hands, Hands -> true
-  | Primary, Primary -> true
-  | Secondary, Secondary -> true
-  | Special, Special -> true
-  | _, _ -> false
-
-let get_slot_item (i: t) (equipped: t list): t Option = 
-  let results = List.filter (let f x = same_slot i x) equipped in 
-  if (is_consumable i) then 
-    if ((List.length results) < 3) then None
-    else Some (List.hd results) 
-  else 
-    if (List.length results = 1) then some (List.hd results)
-    else None
-
 
 let rec remove (lst: t list) (i: t) =
   match lst with
   |[] -> []
-  |hd::tl -> if hd.id = i.id then tl
+  |hd::tl -> if hd.id = i.id then match hd.quantity with
+                                  |1 -> tl
+                                  |_ -> {hd with quantity = hd.quantity - 1}::tl
               else hd:: remove tl i
 
 let is_consumable (i: t) =

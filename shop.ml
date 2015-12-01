@@ -17,8 +17,8 @@ let from_file path filename =
   }
 
 
-type command = Exit | Buy | Sell | Equip | Score | Help
-let cmds = [  "Exit";"Buy";"Sell";"Equip";"Score"]
+type command = Exit | Buy | Sell | Equip | Remove | Score | Help
+let cmds = [  "Exit";"Buy";"Sell";"Equip";"Remove";"Score"]
 exception InvalidCommand of string
 
 let str_to_command str : command =
@@ -27,6 +27,7 @@ let str_to_command str : command =
   | "buy" -> Buy
   | "sell" -> Sell
   | "equip" -> Equip
+  | "remove" -> Remove
   | "score" -> Score
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
@@ -37,6 +38,7 @@ let str_to_help str : string =
   | "buy" -> "Buy an item."
   | "sell" -> "Sell an item."
   | "equip" -> "Equip an item."
+  | "remove" -> "Remove an equipped item."
   | "score" -> "Display the score."
   | _ -> raise (InvalidCommand str)
 
@@ -93,7 +95,7 @@ let equip (id: string) (player: Player.t) : Player.t =
     begin
       match old with 
       | Some ol -> 
-        let new_eqipped = i::(Item.remove player.Player.equipped ol) in 
+        let new_equipped = i::(Item.remove player.Player.equipped ol) in 
         let new_inventory = ol::(Item.remove player.Player.inventory i) in 
         {player with inventory = new_inventory; equipped = new_equipped}
       | None -> 
@@ -125,20 +127,25 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       shop_repl shop player
 
     | Buy ->
-      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let i =  arg in
       let new_player = buy i shop player in
       shop_repl shop new_player
 
     | Sell ->
-      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let i = arg in
       let new_player = sell i shop player in
       shop_repl shop new_player
 
 
     | Equip ->
-      let i = Item.str_to_item player.equipped arg in
+      let i = arg in
       let new_player = equip i player in
       shop_repl shop new_player
+
+    | Remove ->
+      let i = arg in
+      let new_player = remove i player in
+      shop_repl shop new_player  
 
     | Exit ->
       printf "Exiting shop\n";
