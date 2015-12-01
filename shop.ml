@@ -84,7 +84,6 @@ let enter_shop (shop: t) (player: Player.t) : (t * Player.t) =
 
 let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
   try
-    let user, opp = state in
     let cmd, arg = Io.get_input () in 
     let cmd = str_to_command cmd in
     match cmd with
@@ -97,17 +96,17 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       shop_repl shop player
 
     | Buy ->
-      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let i = Item.str_to_item (Fighter.get_equipped player.Player.fighter) arg in
       let new_shop, new_player = buy i shop player in
       shop_repl new_shop new_player
 
     | Sell ->
-      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let i = Item.str_to_item (Fighter.get_equipped player.Player.fighter) arg in
       let new_shop, new_player = sell i shop player in
       shop_repl new_shop new_player
 
     | Equip ->
-      let i = Item.str_to_item (Fighter.get_equipped player.fighter) arg in
+      let i = Item.str_to_item (Fighter.get_equipped player.Player.fighter) arg in
       let new_player = equip i player in
       shop_repl shop new_player
 

@@ -11,6 +11,7 @@ type t = {
   level: int;
 }
 
+
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Players/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in

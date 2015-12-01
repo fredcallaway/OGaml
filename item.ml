@@ -51,6 +51,7 @@ type t = {
   description: string;
   self_effect: Stats.t;
   opponent_effect: Stats.t;
+  (* base_effect: Stats.t; *)
   value: int;
   slot: slot;
   quantity: int;
