@@ -7,8 +7,6 @@ type t = {
   money: int;
   stats: Stats.t;
   inventory: Item.t list;
-  expereience: int;
-  level: int;
 }
 
 let from_file path filename =
@@ -18,16 +16,11 @@ let from_file path filename =
   let money = json |> member "money" |> to_int in
   let stats = json |> member "stats" |> to_string |> Stats.from_file path in
   let inventory = json |> member "inventory" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
-  let expereience = json |> member "expereience" |> to_int in
-  let level = json |> member "level" |> to_int in
   {
   id;
   fighter;
   money;
-  stats;
-  inventory;
-  expereience;
-  level
+  inventory
   }
 
 let to_file path player =
@@ -35,9 +28,10 @@ let to_file path player =
 
 let get_fighter (p: t) = p.fighter
 
+let stats (p: t) = 
+  List.fold_left (let f acc i = (Stats.combine acc i.Item.))
+
 let print_score p =
   printf "money: %d\n" p.money;
-  printf "expereience: %d\n" p.expereience;
-  printf "level: %d\n" p.level
 
-(* must keep track of level up schedule.. maybe in state? *)
+
