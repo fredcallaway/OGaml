@@ -1,0 +1,22 @@
+{
+  "self_effect":
+  {
+    "health": 5,
+    "strength": 5,
+    "speed": -2,
+    "dexterity": -2,
+    "magic": 0
+  },
+  "opponent_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
+  "description": "This is a helmet",
+  "value": 80,
+  "slot": "Head",
+  "quantity": 1
+}
