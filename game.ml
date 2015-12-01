@@ -177,9 +177,9 @@ let rec game_repl (gameop: t option) : t option =
       printf "Please load a valid game file.\n";
       game_repl gameop
 
-    | Failure str ->
-      printf "\nFailure: %s\n" str;
-      game_repl gameop
+    (* | Failure str -> *)
+      (* printf "\nFailure: %s\n" str; *)
+      (* game_repl gameop *)
 
 (* start the game with no game state *)
 (* postcondition: the updated game on exit *)

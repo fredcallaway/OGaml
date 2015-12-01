@@ -1,4 +1,12 @@
 {
+  "base_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
   "self_effect":
   {
     "health": 20,
@@ -17,6 +25,5 @@
   },
   "description": "This is a health potion",
   "value": 70,
-  "slot": "Consumable",
-  "quantity": 1
+  "slot": "Consumable"
 }

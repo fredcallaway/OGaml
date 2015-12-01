@@ -1,4 +1,12 @@
 {
+  "base_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
   "self_effect":
   {
     "health": 0,
@@ -17,6 +25,5 @@
   },
   "description": "This is a sword",
   "value": 50,
-  "slot": "Primary",
-  "quantity": 1
+  "slot": "Primary"
 }

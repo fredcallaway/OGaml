@@ -49,32 +49,30 @@ let slot_to_str slot =
 type t = {
   id: string;
   description: string;
+  base_effect: Stats.t;
   self_effect: Stats.t;
   opponent_effect: Stats.t;
-  (* base_effect: Stats.t; *)
   value: int;
   slot: slot;
-  quantity: int;
-  (* TODO: eliminate quantity *)
 }
 
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Items/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
   let description = json |> member "description" |> to_string in
+  let base_effect = json |> member "base_effect" |> Stats.from_json (id^" base_effect") in
   let self_effect = json |> member "self_effect" |> Stats.from_json (id^" self_effect") in
   let opponent_effect = json |> member "opponent_effect" |> Stats.from_json (id^" opponent_effect") in
   let value = json |> member "value" |> to_int in
   let slot = json |> member "slot" |> to_string |> str_to_slot in
-  let quantity = json |> member "quantity" |> to_int in
   {
   id;
   description;
+  base_effect;
   self_effect;
   opponent_effect;
   value;
-  slot;
-  quantity
+  slot
   }
 
 let to_file path item =
@@ -95,18 +93,15 @@ let get_slot_item x y = failwith "unimplemented"
 
 
 let rec get_item (id: string) (selection: t list): t option =
-  match selection with 
+  match selection with
   | h::t -> if (String.lowercase id) = (String.lowercase h.id) then Some h
             else get_item id t
   | [] -> None
 
 let rec remove (lst: t list) (i: t) =
   match lst with
-  |[] -> []
-  |hd::tl -> if hd.id = i.id then match hd.quantity with
-                                  |1 -> tl
-                                  |_ -> {hd with quantity = hd.quantity - 1}::tl
-              else hd:: remove tl i
+  |[] -> raise (InvalidItem i.id)
+  |hd::tl -> if hd.id = i.id then tl else hd::(remove tl i)
 
 let is_consumable (i: t) =
   match i.slot with
