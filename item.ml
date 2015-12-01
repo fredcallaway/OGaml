@@ -100,9 +100,7 @@ let rec get_item (id: string) (selection: Item.t list): Item Option =
 let rec remove (lst: t list) (i: t) =
   match lst with
   |[] -> []
-  |hd::tl -> if hd.id = i.id then match hd.quantity with
-                                  |1 -> tl
-                                  |_ -> {hd with quantity = hd.quantity - 1}::tl
+  |hd::tl -> if hd.id = i.id then tl
               else hd:: remove tl i
 
 let is_consumable (i: t) =
