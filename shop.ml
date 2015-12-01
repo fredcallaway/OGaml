@@ -93,7 +93,7 @@ let equip (id: string) (player: Player.t) : Player.t =
     begin
       match old with 
       | Some ol -> 
-        let new_eqipped = i::(Item.remove player.Player.equipped ol) in 
+        let new_equipped = i::(Item.remove player.Player.equipped ol) in 
         let new_inventory = ol::(Item.remove player.Player.inventory i) in 
         {player with inventory = new_inventory; equipped = new_equipped}
       | None -> 
