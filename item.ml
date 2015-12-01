@@ -92,10 +92,10 @@ let get_self_effect (i: t) = i.self_effect
 let get_opponent_effect (i: t) = i.opponent_effect
 
 
-let rec get_item (id: string) (selection: Item.t list): t Option =
+let rec get_item (id: string) (selection: t list): t Option =
   match selection with 
   | h::t -> if (String.lowercase id) = (String.lowercase h.id) then Some h
-            else get_item id t 
+            else Some (get_item id t)
   | [] -> None
 
 
