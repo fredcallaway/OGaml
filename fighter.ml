@@ -4,21 +4,23 @@ type t = {
   id: string;
   stats: Stats.t;
   equipped: Item.t list;
-  hp: int;
 }
+
+let make (player: Player.t) : t =
+  {id="foo";
+   stats=Player.stats player;
+   equipped=player.Player.equipped}
 
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Fighters/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
   let stats = json |> member "stats" |> to_string |> Stats.from_file path in
   let equipped = json |> member "equipped" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
-  let hp = json |> member "hp" |> to_int in
   (* let effects = json |> member "effects" |> to_list |> List.map effect_obj path in *)
   {
   id;
   stats;
   equipped;
-  hp
   (* effects *)
   }
 

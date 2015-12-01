@@ -217,7 +217,7 @@ let clean_up player fighter battle : Player.t =
 let enter_battle battle player : (t * Player.t) =
   print_welcome battle ;
   print_commands ();
-  let user = Player.get_fighter player in
+  let user = Fighter.make player in
   let opp = battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
