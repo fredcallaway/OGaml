@@ -55,6 +55,7 @@ type t = {
   value: int;
   slot: slot;
   quantity: int;
+  (* TODO: eliminate quantity *)
 }
 
 let from_file path filename =
