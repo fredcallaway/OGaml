@@ -94,7 +94,7 @@ let remove_item f i =
 
 
 let use_item (turn: bool) (state: state) (it: Item.t) : state =
-  let switch (a,b) = (b,a) in
+let switch (a,b) = (b,a) in
   let user, opp = state in
   match turn, Item.is_consumable it with
   | true, true -> apply_effects it (remove_item user it) opp
@@ -178,16 +178,31 @@ let rec get_user_action state : Item.t =
       printf "\nFailure: %s\n" str;
       get_user_action state
 
+(* how much better off the ai is *)
+let ai_value_heuristic turn (f1, f2) : int =
+  let self, opp = if turn then f1, f2 else f2, f1 in
+  Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp)
 
-let ai_value_heuristic (f1, f2) : int =
-  Stats.difference (Fighter.get_stats f2) (Fighter.get_stats f1)
 
+(* the value of a state for the fighter whose turn it is *)
+let rec ai_value turn depth (state: state) : int =
+  let ai = (if turn then fst else snd) state in
+  match depth with
+  | 0 -> ai_value_heuristic turn state
+  | _ -> 
+    let child_states = List.map (use_item false state) (Fighter.get_equipped ai) in
+    let child_ai = (ai_value (not turn) (depth-1)) in
+    let child_values = List.map child_ai child_states in
+    Utils.list_max (~-) child_values
 
-(* naive AI, uses whatever item is first in its equipped list. *)
-let get_ai_action player_slot state : Item.t =
-  let ai = if player_slot then (fst state) else (snd state) in
+let get_ai_action turn depth state : Item.t =
+  let ai = (if turn then fst else snd) state in
+  let child_ai_value = (ai_value (not turn) (depth-1)) in
   Fighter.get_equipped ai
-  |> Utils.list_max (fun it -> ai_value_heuristic @@ use_item false state it)
+  |> Utils.list_max (fun it -> (use_item false state it) 
+                               |> child_ai_value
+                               |> (~-))
+
 (* 
   let result act = do_action false state act) options in
   Utils.list_max (get_value @@ do_action false state)
@@ -225,7 +240,7 @@ let enter_battle battle player : (t * Player.t) =
   let opp = battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
-  match run_battle (user, opp) get_user_action (get_ai_action false) with
+  match run_battle (user, opp) get_user_action (get_ai_action true 3) with
   | (Win, (fighter, _)) ->
     let new_battle = {battle with completed = true} in
     let new_player = clean_up player fighter battle in
