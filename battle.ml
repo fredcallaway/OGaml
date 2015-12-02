@@ -70,20 +70,22 @@ type command =
 type result = | Win | Lose | Exit
 
 
-(* let apply_effect user target item : Fighter.t =
-  TODO: account for player stats 
-   * type of item based on equip slot
-  Fighter.set_stats user (Stats.combine istats fstats) *)
-
-let apply_item item user target : Fighter.t =
-  target
 
 (* items self effects are always applied to f1, thus the user of the item
  * should always be f1. *)
 let apply_effects (item: Item.t) f1 f2 : Fighter.t * Fighter.t =
-  (* TOOD: Polosky *)
-  let new_f1 = apply_item item f1 f2 in
-  let new_f2 = apply_item item f2 f1 in
+  (* TOOD: Polosky
+   * make these functions smarter. *)
+  let self_effect it f =
+    Fighter.set_stats f (Stats.combine (Item.get_self_effect it)
+                                       (Fighter.get_stats f))
+  in
+  let opponent_effect it f1 f2 =
+    Fighter.set_stats f2 (Stats.combine (Item.get_opponent_effect it)
+                                        (Fighter.get_stats f2))
+  in
+  let new_f1 = self_effect item f1 in
+  let new_f2 = opponent_effect item f1 f2 in
   (new_f1, new_f2)
 
 let remove_item f i =
