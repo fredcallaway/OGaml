@@ -1,18 +1,17 @@
 open Battle
 open Assertions
 
-let testdir = "SavedGames/TestGame/"
+let testdir = "SavedGames/game1/"
 
 let test_get_ai_action () =
   let f1 = Fighter.from_file testdir "fighter2.json" in
   let f2 = Fighter.from_file testdir "fighter3.json" in
   let item = get_ai_action true (f1, f2) in
   Item.get_id item === "Health Potion";
-  4 === 3;
   ()
 
 let test_apply_effects () = 
-  let bow = Item.from_file testdir "Bow" in
+  let bow = Item.from_file testdir "Bow.json" in
   let f1 = Fighter.from_file testdir "fighter2.json" in
   let f2 = Fighter.from_file testdir "fighter3.json" in
   let f1', f2' = apply_effects bow f1 f2 in
@@ -23,4 +22,7 @@ let test_apply_effects () =
 
 
 let () =
-  test_get_ai_action ()
+  test_get_ai_action ();
+  test_apply_effects ()
+
+
