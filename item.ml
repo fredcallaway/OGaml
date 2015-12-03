@@ -1,6 +1,8 @@
 open Yojson.Basic.Util
 open Printf
 
+let debug = print_endline
+
 (* Fred: I simplified things a lot. Feel free to add stuff back,
  * as long as you keep the get_effects function. I think the
  * distinction between equippable and usable is unnecessary however.
@@ -101,7 +103,7 @@ let rec get_item (id: string) (selection: t list): t option =
 let rec remove (lst: t list) (i: t) =
   match lst with
   |[] -> raise (InvalidItem i.id)
-  |hd::tl -> if hd.id = i.id then tl else hd::(remove tl i)
+  |hd::tl -> debug (":" ^ hd.id ^ ":  -  :" ^ i.id ^ ":"); if hd.id = i.id then tl else hd::(remove tl i)
 
 let is_consumable (i: t) =
   match i.slot with

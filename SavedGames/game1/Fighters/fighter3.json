@@ -4,7 +4,7 @@
   [
     "Sword.json",
     "Helmet.json",
-    "Health Potion.json"
+    "health_potion.json"
   ],
   "hp": 130
 }

@@ -2,7 +2,7 @@
   "stats": "stats1.json",
   "equipped":
   [
-    "Health Potion.json",
+    "health_potion.json",
     "Sword.json"
   ],
   "hp": 100
