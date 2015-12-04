@@ -75,7 +75,6 @@ let print_return (shop: t) =
 let print_shop s =
   printf "%s\n" s.id
 
-<<<<<<< HEAD
 let print_supply (s: t) =
   printf "Shop's Supply:\n";
   Player.print_item_list (s.supply)

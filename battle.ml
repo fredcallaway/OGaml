@@ -15,7 +15,6 @@ type t = {
   money: int;
 }
 
-<<<<<<< HEAD
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Battles/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
@@ -76,8 +75,6 @@ let get_completed b =
   b.completed
 let get_id b =
   b.id
-=======
->>>>>>> 4866197ed0df165fb55820edd9bbc0248edd4b32
 
 (* User is always first, ai always second *)
 type state = Fighter.t * Fighter.t
@@ -213,13 +210,8 @@ let rec ai_value turn depth (state: state) : int =
   let ai = (if turn then fst else snd) state in
   match depth with
   | 0 -> ai_value_heuristic turn state
-<<<<<<< HEAD
   | _ ->
-    let child_states = List.map (use_item false state) (Fighter.get_equipped ai) in
-=======
-  | _ -> 
     let child_states = List.map (use_item turn state) (Fighter.get_equipped ai) in
->>>>>>> 4866197ed0df165fb55820edd9bbc0248edd4b32
     let child_ai = (ai_value (not turn) (depth-1)) in
     let child_values = List.map child_ai child_states in
     Utils.list_max (~+) (List.map (~-) child_values)
@@ -228,20 +220,9 @@ let get_ai_action turn depth state : Item.t =
   let ai = (if turn then fst else snd) state in
   let child_ai = (ai_value (not turn) (depth)) in
   Fighter.get_equipped ai
-<<<<<<< HEAD
-  |> Utils.list_max (fun it -> (use_item false state it)
-                               |> child_ai_value
-                               |> (~-))
-
-(*
-  let result act = do_action false state act) options in
-  Utils.list_max (get_value @@ do_action false state)
-=======
-  |> Utils.list_max (fun it -> (use_item turn state it) 
+  |> Utils.list_max (fun it -> (use_item turn state it)
                                 |> child_ai
                                 |> (~-))
-
->>>>>>> 4866197ed0df165fb55820edd9bbc0248edd4b32
 
 (********
  * MAIN *
