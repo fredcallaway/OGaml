@@ -14,14 +14,12 @@ let make (player: Player.t) : t =
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Fighters/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
-  let stats = json |> member "stats" |> to_string |> Stats.from_file path in
+  let stats = json |> member "stats" |> Stats.from_json (id^" stats") in
   let equipped = json |> member "equipped" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
-  (* let effects = json |> member "effects" |> to_list |> List.map effect_obj path in *)
   {
   id;
   stats;
   equipped;
-  (* effects *)
   }
 
 let to_file path fighter =

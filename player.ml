@@ -3,6 +3,7 @@ open Printf
 
 type t = {
   id: string;
+  stats: Stats.t;
   money: int;
   equipped: Item.t list;
   inventory: Item.t list;
@@ -12,11 +13,13 @@ type t = {
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Players/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
+  let stats = json |> member "stats" |> Stats.from_json (id^" stats") in
   let money = json |> member "money" |> to_int in
   let inventory = json |> member "inventory" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
   let equipped = json |> member "equipped" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
   {
   id;
+  stats;
   money;
   equipped;
   inventory;

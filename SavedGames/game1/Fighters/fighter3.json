@@ -1,5 +1,12 @@
 {
-  "stats": "stats3.json",
+  "stats":
+  {
+    "health": 70,
+    "strength": 60,
+    "speed": 50,
+    "dexterity": 40,
+    "magic": 30
+  },
   "equipped":
   [
     "Sword.json",
