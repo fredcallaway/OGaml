@@ -49,8 +49,8 @@ let get_unlocked z =
 let get_id z =
   z.id
 
-type command = Enter | Shop | Exit | Map | Score | Help
-let cmds = [  "Enter";"Shop";"Exit";"Map";"Score"]
+type command = Enter | Shop | Exit | Map | Bag | Help
+let cmds = [  "Enter";"Shop";"Exit";"Map";"Bag"]
 exception InvalidCommand of string
 exception InvalidZone of string
 
@@ -60,7 +60,7 @@ let str_to_command str : command =
   | "shop" -> Shop
   | "exit" -> Exit
   | "map" -> Map
-  | "score" -> Score
+  | "bag" -> Bag
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -70,7 +70,7 @@ let str_to_help str : string =
   | "shop" -> "Enter the shop."
   | "exit" -> "Exit the zone, returning to the world menu."
   | "map" -> "Display the map of the current zone."
-  | "score" -> "Display the score in the current zone."
+  | "bag" -> "Display money, inventory, and equipped."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -112,9 +112,6 @@ let print_map (zone: t) =
   printf "Shop:\n";
   Shop.print_shop zone.shop;
   printf "\n"
-
-let update_shop (zone: t) (shop: Shop.t) : t =
-  failwith "TODO"
 
 (* precondition: all battles in zone must have unique ids *)
 (* postcondition: zone with updated battle and next battle unlocked if battle was completed *)
@@ -171,8 +168,8 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       print_map zone;
       zone_repl zone player
 
-    | Score ->
-      Player.print_score player;
+    | Bag ->
+      Player.print_bag player;
       zone_repl zone player
 
     | Enter ->
@@ -190,7 +187,7 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       let new_state = Shop.enter_shop zone.shop player in
       let new_shop = (fst new_state) in
       let new_player = (snd new_state) in
-      let new_zone = update_shop zone new_shop in
+      let new_zone = {zone with shop=new_shop} in
       print_return new_zone;
       zone_repl new_zone new_player
 

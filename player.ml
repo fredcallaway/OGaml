@@ -48,19 +48,19 @@ let stats (p: t) =
   List.fold_left (let f acc i = Stats.combine i.Item.base_effect acc) blank_stats p.equipped
  *)
 
-let rec print_item_list p = 
-  match p with 
+let rec print_item_list p =
+  match p with
   | [] -> ()
-  | h::t -> printf "Item: %s\n" (Item.get_id h); 
-            printf "  Description: %s\n" (Item.get_description h); 
+  | h::t -> printf "%s:\n" (Item.get_id h);
+            printf "  Description: %s\n" (Item.get_description h);
             printf "  Value: %d\n" (Item.get_value h);
             print_item_list t
 
-let print_score p =
-  printf "money: %d\n" p.money;
-  printf "Inventory:\n";
+let print_bag p =
+  printf "\nMoney: %d\n" p.money;
+  printf "\nInventory:\n";
   print_item_list p.inventory;
-  printf "Equipped:\n";
+  printf "\nEquipped:\n";
   print_item_list p.equipped;
 
 

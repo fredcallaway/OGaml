@@ -20,7 +20,13 @@ let from_file path filename =
   player
   }
 
-let to_file path game =
+(* let pretty_to_file filename json =
+  Yojson.pretty_to_string
+  stream_from_string
+  stream_to_file filename stream *)
+
+let to_file game =
+  let path = "SavedGames/" ^ game.id ^ "/" in
   let world_json = game.world |> World.to_file path in
   let player_json = game.player |> Player.to_file path in
   let game_json = `Assoc [
@@ -30,37 +36,53 @@ let to_file path game =
   Yojson.Basic.to_file (path^game.id^".json") game_json;
   printf "Game saved successfully.\n"
 
-let new_game init_path init_filename new_path new_filename =
-  let init_game = from_file init_path init_filename in
+let mkdir path dir =
+  let permissions = 0o777 in
+  Unix.mkdir (path^dir) permissions
+
+let new_game init_name new_name =
+  let init_path = "InitGames/" ^ init_name ^ "/" in
+  let init_game = from_file init_path (init_name^".json") in
   printf "Initial game %s loaded.\n" init_game.id;
-  let new_game = {init_game with id=new_filename} in
-  to_file new_path new_game;
+  let new_game = {init_game with id=new_name} in
+
+  (* create new game dirs *)
+  mkdir "SavedGames/" new_name;
+  mkdir ("SavedGames/"^new_name) "/Battles";
+  mkdir ("SavedGames/"^new_name) "/Fighters";
+  mkdir ("SavedGames/"^new_name) "/Items";
+  mkdir ("SavedGames/"^new_name) "/Players";
+  mkdir ("SavedGames/"^new_name) "/Shops";
+  mkdir ("SavedGames/"^new_name) "/Worlds";
+  mkdir ("SavedGames/"^new_name) "/Zones";
+
+  to_file new_game;
   printf "New game created as %s.\n" new_game.id
 
-type command = Enter | New | Save | Load | List | Quit | Score | Help
-let cmds = [  "Enter";"New";"Save";"Load";"List";"Quit";"Score"]
+type command = New | Save | List | Load | Enter | Bag | Quit | Help
+let cmds = [  "New";"Save";"List";"Load";"Enter";"Bag";"Quit"]
 
 let str_to_command str : command =
   match str with
-  | "enter" -> Enter
   | "new" -> New
   | "save" -> Save
-  | "load" -> Load
   | "list" -> List
+  | "load" -> Load
+  | "enter" -> Enter
+  | "bag" -> Bag
   | "quit" -> Quit
-  | "score" -> Score
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
 let str_to_help str : string =
   match String.lowercase str with
-  | "enter" -> "Enter the loaded game."
   | "new" -> "Create a new game and load it."
   | "save" -> "Save the loaded game."
-  | "load" -> "Load a game from a json file."
   | "list" -> "List all avilible games to load."
+  | "load" -> "Load a game from a json file."
+  | "enter" -> "Enter the loaded game."
+  | "bag" -> "Check your player's bag in the loaded game."
   | "quit" -> "Quit the entire program."
-  | "score" -> "Display the score from the loaded game."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -113,8 +135,8 @@ let rec game_repl (gameop: t option) : t option =
       print_help arg;
       game_repl gameop
 
-    | Score, Some game ->
-      Player.print_score game.player;
+    | Bag, Some game ->
+      Player.print_bag game.player;
       game_repl gameop
 
     | Enter, Some game ->
@@ -127,9 +149,7 @@ let rec game_repl (gameop: t option) : t option =
       game_repl (Some updated_game)
 
     | Save, Some game ->
-      let filename = game.id in
-      let path = "SavedGames/" ^ filename ^ "/" in
-      to_file path game;
+      to_file game;
       game_repl gameop
 
     | Load, _ ->
@@ -145,11 +165,9 @@ let rec game_repl (gameop: t option) : t option =
       game_repl gameop
 
     | New, _ ->
-      let new_game_name = arg in
-      let init_game = "game1" in
-      let init_path = "InitGames/" ^ init_game ^ "/" in
-      let new_path = "SavedGames/" ^ new_game_name ^ "/" in
-      new_game init_path (init_game^".json") new_path (new_game_name^".json");
+      let new_name = arg in
+      let init_name = "game1" in
+      new_game init_name new_name;
       (* let new_game = from_file new_path new_filename in *)
       (* printf "Game loaded successfully.\n"; *)
       (* printf "Type 'Enter' to start game.\n"; *)
@@ -172,10 +190,14 @@ let rec game_repl (gameop: t option) : t option =
       printf "Please load a valid game file.\n";
       game_repl gameop
 
-    | Sys_error str ->
-      printf "\n%s\n" str;
-      printf "Please load a valid game file.\n";
+    | Unix.Unix_error (err, cmd, arg) ->
+      printf "Cannot create %s. \nA game with the same name already exists.\n" arg;
       game_repl gameop
+
+    (* | Sys_error str -> *)
+      (* printf "\n%s\n" str; *)
+      (* printf "Please load a valid game file.\n"; *)
+      (* game_repl gameop *)
 
     (* | Failure str -> *)
       (* printf "\nFailure: %s\n" str; *)
@@ -186,6 +208,7 @@ let rec game_repl (gameop: t option) : t option =
 let enter_game () =
   print_welcome();
   print_commands();
+  try mkdir "" "SavedGames"; with | _ -> ();
   ignore (game_repl None);
 in
 

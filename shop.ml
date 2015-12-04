@@ -25,8 +25,8 @@ let to_file path shop =
   `String filename
 
 
-type command = Exit | Supply | Buy | Sell | Equip | Remove | Score | Help
-let cmds = [  "Exit";"Supply";"Buy";"Sell";"Equip";"Remove";"Score"; "Help"]
+type command = Exit | Supply | Buy | Sell | Equip | Remove | Bag | Help
+let cmds = [  "Exit";"Supply";"Buy";"Sell";"Equip";"Remove";"Bag"; "Help"]
 exception InvalidCommand of string
 
 let str_to_command str : command =
@@ -37,7 +37,7 @@ let str_to_command str : command =
   | "sell" -> Sell
   | "equip" -> Equip
   | "remove" -> Remove
-  | "score" -> Score
+  | "bag" -> Bag
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -49,7 +49,7 @@ let str_to_help str : string =
   | "sell" -> "Sell an item."
   | "equip" -> "Equip an item."
   | "remove" -> "Remove an equipped item."
-  | "score" -> "Display money and inventory."
+  | "bag" -> "Display money, inventory, and equipped."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -142,8 +142,8 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       print_supply shop;
       shop_repl shop player
 
-    | Score ->
-      Player.print_score player;
+    | Bag ->
+      Player.print_bag player;
       shop_repl shop player
 
     | Buy ->

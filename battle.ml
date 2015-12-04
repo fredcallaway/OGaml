@@ -297,9 +297,6 @@ let from_file path filename =
   money
   }
 
-let to_file path battle =
-  failwith "TODO"
-
 exception InvalidBattle of string
 
 let print_battle (b: t) =

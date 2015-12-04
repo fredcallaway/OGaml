@@ -29,8 +29,8 @@ let to_file path world =
   Yojson.Basic.to_file (path^"Worlds/"^filename) world_json;
   `String filename
 
-type command = Enter | Exit | Map | Score | Help
-let cmds = [  "Enter";"Exit";"Map";"Score"]
+type command = Enter | Exit | Map | Bag | Help
+let cmds = [  "Enter";"Exit";"Map";"Bag"]
 exception InvalidCommand of string
 
 let str_to_command str : command =
@@ -38,7 +38,7 @@ let str_to_command str : command =
   | "enter" -> Enter
   | "exit" -> Exit
   | "map" -> Map
-  | "score" -> Score
+  | "bag" -> Bag
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -47,7 +47,7 @@ let str_to_help str : string =
   | "enter" -> "Enter the zone."
   | "exit" -> "Exit the world, returning to the main menu."
   | "map" -> "Display the map of the current world."
-  | "score" -> "Display the score in the current world."
+  | "bag" -> "Display money, inventory, and equipped."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -130,8 +130,8 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
       print_map world;
       world_repl world player
 
-    | Score ->
-      Player.print_score player;
+    | Bag ->
+      Player.print_bag player;
       world_repl world player
 
     | Enter ->
