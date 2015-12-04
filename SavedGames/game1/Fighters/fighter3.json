@@ -10,8 +10,7 @@
   "equipped":
   [
     "Sword.json",
-    "Helmet.json",
-    "Health Potion.json"
+    "Helmet.json"
   ],
   "hp": 130
 }

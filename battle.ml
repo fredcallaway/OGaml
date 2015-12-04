@@ -1,19 +1,21 @@
 open Yojson.Basic.Util
 open Printf
 open Fighter
-type ai
+
+
+let pf = Printf.printf
 
 type t = {
   id: string;
   unlocked : bool;
   completed : bool;
   opponent: Fighter.t;
-  (* ai: ai; *)
   xp: int;
   treasure: Item.t list;
   money: int;
 }
 
+<<<<<<< HEAD
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Battles/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
@@ -74,53 +76,52 @@ let get_completed b =
   b.completed
 let get_id b =
   b.id
+=======
+>>>>>>> 4866197ed0df165fb55820edd9bbc0248edd4b32
 
 (* User is always first, ai always second *)
 type state = Fighter.t * Fighter.t
 
+(* items self effects are always applied to f1, thus the user of the item
+ * should always be f1. *)
+let apply_effects (item: Item.t) (state: state) : Fighter.t * Fighter.t =
+  (* TOOD: Polosky
+   * make these functions smarter. *)
+  let f1, f2 = state in
+  let f1' =  Fighter.set_stats f1
+   (Stats.combine (Item.get_self_effect item)
+                  (Fighter.get_stats f1)) in
+  let f2' = Fighter.set_stats f2
+   (Stats.combine (Item.get_opponent_effect item)
+                  (Fighter.get_stats f2)) in
+  (f1', f2')
+
+let remove_item f i =
+  let new_equipped = Item.remove (Fighter.get_equipped f) i in
+  Fighter.set_equipped f new_equipped
+
+(* The state resulting from the active fighter using
+ * the given item. The active fighter of state (f1, f2)
+ * is f1 when turn is true. *)
+let use_item (turn: bool) (state: state) (item: Item.t) : state =
+  let switch (a,b) = (b,a) in
+  let user, opp = state in
+  match turn, Item.is_consumable item with
+  | true, true ->   apply_effects item ((remove_item user item), opp)
+  | true, false ->  apply_effects item state
+  | false, true ->  apply_effects item ((remove_item opp item), user) |> switch
+  | false, false -> apply_effects item (switch state) |> switch
+
+
+(******************
+ * USER INTERFACE *
+ ******************)
 
 type command =
   | Use
   | Details
   | Equipped
   | Help
-
-type result = | Win | Lose | Exit
-
-
-
-(* items self effects are always applied to f1, thus the user of the item
- * should always be f1. *)
-let apply_effects (item: Item.t) f1 f2 : Fighter.t * Fighter.t =
-  (* TOOD: Polosky
-   * make these functions smarter. *)
-  let self_effect it f =
-    Fighter.set_stats f (Stats.combine (Item.get_self_effect it)
-                                       (Fighter.get_stats f))
-  in
-  let opponent_effect it f1 f2 =
-    Fighter.set_stats f2 (Stats.combine (Item.get_opponent_effect it)
-                                        (Fighter.get_stats f2))
-  in
-  let new_f1 = self_effect item f1 in
-  let new_f2 = opponent_effect item f1 f2 in
-  (new_f1, new_f2)
-
-let remove_item f i =
-  let new_equipped = Item.remove (Fighter.get_equipped f) i in
-  Fighter.set_equipped f new_equipped
-
-
-let use_item (turn: bool) (state: state) (it: Item.t) : state =
-let switch (a,b) = (b,a) in
-  let user, opp = state in
-  match turn, Item.is_consumable it with
-  | true, true -> apply_effects it (remove_item user it) opp
-  | true, false ->  apply_effects it user opp
-  | false, true -> apply_effects it (remove_item opp it) user |> switch
-  | false, false ->  apply_effects it opp user |> switch
-
-
 
 let cmds = ["Use"; "Details"; "Exit"; "Equipped"]
 
@@ -138,8 +139,8 @@ let str_to_help str : string =
   match String.lowercase str with
   | "use" -> "Use this item."
   | "details" -> "Display details about this item."
-  | "exit" -> "Exit the battle, returning to the zone menu.
-  Consumed items are reset and no xp is gained."
+(*   | "exit" -> "Exit the battle, returning to the zone menu.
+  Consumed items are reset and no xp is gained." *)
   | "equipped" -> "Display the all of the users and opponents equipped items."
   | _ -> raise (InvalidCommand str)
 
@@ -196,27 +197,38 @@ let rec get_user_action state : Item.t =
       printf "\nFailure: %s\n" str;
       get_user_action state
 
-(* how much better off the ai is *)
+
+(******
+ * AI *
+ ******)
+
+(* how much better off the active fighter is *)
 let ai_value_heuristic turn (f1, f2) : int =
   let self, opp = if turn then f1, f2 else f2, f1 in
   Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp)
 
-
-(* the value of a state for the fighter whose turn it is *)
+(* the value of a state for the active fighter *)
 let rec ai_value turn depth (state: state) : int =
+  (* pf "ai_value %b %i\n" turn depth; *)
   let ai = (if turn then fst else snd) state in
   match depth with
   | 0 -> ai_value_heuristic turn state
+<<<<<<< HEAD
   | _ ->
     let child_states = List.map (use_item false state) (Fighter.get_equipped ai) in
+=======
+  | _ -> 
+    let child_states = List.map (use_item turn state) (Fighter.get_equipped ai) in
+>>>>>>> 4866197ed0df165fb55820edd9bbc0248edd4b32
     let child_ai = (ai_value (not turn) (depth-1)) in
     let child_values = List.map child_ai child_states in
-    Utils.list_max (~-) child_values
+    Utils.list_max (~+) (List.map (~-) child_values)
 
 let get_ai_action turn depth state : Item.t =
   let ai = (if turn then fst else snd) state in
-  let child_ai_value = (ai_value (not turn) (depth-1)) in
+  let child_ai = (ai_value (not turn) (depth)) in
   Fighter.get_equipped ai
+<<<<<<< HEAD
   |> Utils.list_max (fun it -> (use_item false state it)
                                |> child_ai_value
                                |> (~-))
@@ -224,11 +236,18 @@ let get_ai_action turn depth state : Item.t =
 (*
   let result act = do_action false state act) options in
   Utils.list_max (get_value @@ do_action false state)
+=======
+  |> Utils.list_max (fun it -> (use_item turn state it) 
+                                |> child_ai
+                                |> (~-))
 
-  printf "Opponent used %s!\n" (Item.get_id (List.hd ai_equipped));
-  Use (List.hd ai_equipped)
- *)
+>>>>>>> 4866197ed0df165fb55820edd9bbc0248edd4b32
 
+(********
+ * MAIN *
+ ********)
+
+type result = | Win | Lose | Exit
 
 let run_battle init_state get_p1_action get_p2_action : result * state =
   (* main loop of battle, called once for each turn *)
@@ -270,3 +289,51 @@ let enter_battle battle player : (t * Player.t) =
   | (Exit, (_, _)) ->
     printf "Battle exited! Returning to zone.";
     (battle, player)
+
+
+(********
+ * MISC *
+ ********)
+
+let from_file path filename =
+  let json = Yojson.Basic.from_file (path^"Battles/"^filename) in
+  let id = String.sub filename 0 (String.length filename - 5) in
+  let unlocked = json |> member "unlocked" |> to_bool in
+  let completed = json |> member "completed" |> to_bool in
+  let opponent = json |> member "opponent" |> to_string |> Fighter.from_file path in
+  (* let ai = json |> member "ai" |> ai_obj path in *)
+  let xp = json |> member "xp" |> to_int in
+  let treasure = json |> member "treasure" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
+  let money = json |> member "money" |> to_int in
+  {
+  id;
+  unlocked;
+  completed;
+  opponent;
+  (* ai; *)
+  xp;
+  treasure;
+  money
+  }
+
+let to_file path battle =
+  failwith "TODO"
+
+exception InvalidBattle of string
+
+let print_battle (b: t) =
+  let lockstr = if b.unlocked then "" else " (locked)" in
+  printf "%s%s\n" b.id lockstr
+
+let rec str_to_battle bs str =
+  match bs with
+  | [] -> raise (InvalidBattle str)
+  | b::t -> if b.id = str then b else str_to_battle t str
+
+let unlock b =
+  {b with unlocked = true}
+
+let get_completed b =
+  b.completed
+let get_id b =
+  b.id
