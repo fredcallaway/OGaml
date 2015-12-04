@@ -7,7 +7,6 @@ type t = {
 }
 
 let from_file path filename =
-  (* printf "path/Shops/filename: %s\n" (path^"Shops/"^filename); *)
   let json = Yojson.Basic.from_file (path^"Shops/"^filename) in
   let id = String.sub filename 0 (String.length filename - 5) in
   let supply = json |> member "supply" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
@@ -15,6 +14,15 @@ let from_file path filename =
   id;
   supply
   }
+
+let to_file path shop =
+  let supply_json = `List (shop.supply |> List.map (Item.to_file path)) in
+  let shop_json = `Assoc [
+    ("supply", supply_json)
+  ] in
+  let filename = shop.id^".json" in
+  Yojson.Basic.to_file (path^"Shops/"^filename) shop_json;
+  `String filename
 
 
 type command = Exit | Buy | Sell | Equip | Remove | Score | Help
@@ -65,16 +73,12 @@ let print_return (shop: t) =
 let print_shop s =
   printf "%s\n" s.id
 
-let to_file path shop =
-  failwith "TODO"
-
-
 let buy (id: string) (shop: t) (player: Player.t) : Player.t =
   match (Item.get_item id shop.supply) with
   | None -> player
-  | Some i -> if (player.Player.money >= i.Item.value) then 
+  | Some i -> if (player.Player.money >= i.Item.value) then
                 let new_money = player.Player.money - i.Item.value in
-                let new_inventory = i::player.Player.inventory in 
+                let new_inventory = i::player.Player.inventory in
                 {player with inventory = new_inventory; money = new_money}
               else
                 player
@@ -85,37 +89,37 @@ let sell (id: string) (shop: t) (player: Player.t) : Player.t =
   | None -> player
   | Some i -> let new_money = player.Player.money + (i.Item.value/2) in
               let new_inventory = (Item.remove player.Player.inventory i) in
-              {player with inventory = new_inventory; money = new_money} 
+              {player with inventory = new_inventory; money = new_money}
 
 let equip (id: string) (player: Player.t) : Player.t =
-  match (Item.get_item id player.Player.inventory) with 
+  match (Item.get_item id player.Player.inventory) with
   | None -> player
-  | Some i -> 
-    let old = Item.get_slot_item i player.Player.inventory in 
+  | Some i ->
+    let old = Item.get_slot_item i player.Player.inventory in
     begin
-      match old with 
-      | Some ol -> 
-        let new_equipped = i::(Item.remove player.Player.equipped ol) in 
-        let new_inventory = ol::(Item.remove player.Player.inventory i) in 
+      match old with
+      | Some ol ->
+        let new_equipped = i::(Item.remove player.Player.equipped ol) in
+        let new_inventory = ol::(Item.remove player.Player.inventory i) in
         {player with inventory = new_inventory; equipped = new_equipped}
-      | None -> 
+      | None ->
         let new_equipped = i::player.Player.equipped in
         let new_inventory = Item.remove player.Player.inventory i in
         {player with inventory = new_inventory; equipped = new_equipped}
     end
 
 let remove (id: string) (player: Player.t) : Player.t =
-  match (Item.get_item id player.Player.equipped) with 
+  match (Item.get_item id player.Player.equipped) with
   | None -> player
-  | Some i -> 
+  | Some i ->
     let new_inventory = i::player.Player.inventory in
-    let new_equipped = Item.remove player.Player.equipped i in 
+    let new_equipped = Item.remove player.Player.equipped i in
     {player with inventory = new_inventory; equipped = new_equipped}
-    
+
 
 let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
   try
-    let cmd, arg = Io.get_input () in 
+    let cmd, arg = Io.get_input () in
     let cmd = str_to_command cmd in
     match cmd with
 
@@ -145,7 +149,7 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
     | Remove ->
       let i = arg in
       let new_player = remove i player in
-      shop_repl shop new_player  
+      shop_repl shop new_player
 
     | Exit ->
       printf "Exiting shop\n";

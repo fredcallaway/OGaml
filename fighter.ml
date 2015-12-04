@@ -23,7 +23,15 @@ let from_file path filename =
   }
 
 let to_file path fighter =
-  failwith "TODO"
+  let stats_json = fighter.stats |> Stats.to_json in
+  let equipped_json = `List (fighter.equipped |> List.map (Item.to_file path)) in
+  let fighter_json = `Assoc [
+    ("stats", stats_json);
+    ("equipped", equipped_json)
+  ] in
+  let filename = fighter.id^".json" in
+  Yojson.Basic.to_file (path^"Fighters/"^filename) fighter_json;
+  `String filename
 
 let get_equipped (f: t) = f.equipped
 

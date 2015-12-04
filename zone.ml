@@ -25,7 +25,19 @@ let from_file path filename =
   }
 
 let to_file path zone =
-  failwith "TODO"
+  let unlocked_json = `Bool (zone.unlocked) in
+  let completed_json = `Bool (zone.completed) in
+  let battles_json = `List (zone.battles |> List.map (Battle.to_file path)) in
+  let shop_json = zone.shop |> Shop.to_file path in
+  let zone_json = `Assoc [
+    ("unlocked", unlocked_json);
+    ("completed", completed_json);
+    ("battles", battles_json);
+    ("shop", shop_json)
+  ] in
+  let filename = zone.id^".json" in
+  Yojson.Basic.to_file (path^"Zones/"^filename) zone_json;
+  `String filename
 
 let unlock z =
   {z with unlocked = true}

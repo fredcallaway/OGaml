@@ -30,8 +30,25 @@ let from_file path filename =
   let id = String.sub filename 0 (String.length filename - 5) in
   from_json id json
 
+let to_json stats =
+  let health_json = `Int (stats.health) in
+  let strength_json = `Int (stats.strength) in
+  let speed_json = `Int (stats.speed) in
+  let dexterity_json = `Int (stats.dexterity) in
+  let magic_json = `Int (stats.magic) in
+  `Assoc [
+    ("health", health_json);
+    ("strength", strength_json);
+    ("speed", speed_json);
+    ("dexterity", dexterity_json);
+    ("magic", magic_json)
+  ]
+
 let to_file path stats =
-  failwith "TODO"
+  let stats_json = to_json stats in
+  let filename = stats.id^".json" in
+  Yojson.Basic.to_file (path^"Stats/"^filename) stats_json;
+  `String filename
 
 let get_health s =
   s.health

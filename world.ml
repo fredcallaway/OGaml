@@ -19,7 +19,15 @@ let from_file path filename =
   }
 
 let to_file path world =
-  failwith "TODO"
+  let completed_json = `Bool (world.completed) in
+  let zones_json = `List (world.zones |> List.map (Zone.to_file path)) in
+  let world_json = `Assoc [
+    ("completed", completed_json);
+    ("zones", zones_json)
+  ] in
+  let filename = world.id^".json" in
+  Yojson.Basic.to_file (path^"Worlds/"^filename) world_json;
+  `String filename
 
 type command = Enter | Exit | Map | Score | Help
 let cmds = [  "Enter";"Exit";"Map";"Score"]

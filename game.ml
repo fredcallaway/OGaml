@@ -21,20 +21,19 @@ let from_file path filename =
   }
 
 let to_file path game =
-  let world = game.world |> World.to_file path in
-  let player = game.player |> Player.to_file path in
-  let json = `Assoc [
-    ("world", `String world);
-    ("player", `String player)
+  let world_json = game.world |> World.to_file path in
+  let player_json = game.player |> Player.to_file path in
+  let game_json = `Assoc [
+    ("world", world_json);
+    ("player", player_json)
   ] in
-  Yojson.Basic.to_file (path^game.id^".json") json;
+  Yojson.Basic.to_file (path^game.id^".json") game_json;
   printf "Game saved successfully.\n"
 
-let new_game path filename =
-  let game = from_file path filename in
-  printf "Initial game %s loaded.\n" game.id;
-  let new_game = {game with id="test1"} in
-  let new_path = "SavedGames/" ^ new_game.id ^ "/" in
+let new_game init_path init_filename new_path new_filename =
+  let init_game = from_file init_path init_filename in
+  printf "Initial game %s loaded.\n" init_game.id;
+  let new_game = {init_game with id=new_filename} in
   to_file new_path new_game;
   printf "New game created as %s.\n" new_game.id
 
@@ -146,10 +145,11 @@ let rec game_repl (gameop: t option) : t option =
       game_repl gameop
 
     | New, _ ->
-      let filename = arg in
-      let path = "InitGames/" ^ filename ^ "/" in
-      new_game path (filename^".json");
-      (* let new_path = "SavedGames/" ^ filename ^ "/" in *)
+      let new_game_name = arg in
+      let init_game = "game1" in
+      let init_path = "InitGames/" ^ init_game ^ "/" in
+      let new_path = "SavedGames/" ^ new_game_name ^ "/" in
+      new_game init_path (init_game^".json") new_path (new_game_name^".json");
       (* let new_game = from_file new_path new_filename in *)
       (* printf "Game loaded successfully.\n"; *)
       (* printf "Type 'Enter' to start game.\n"; *)

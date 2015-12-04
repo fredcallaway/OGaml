@@ -20,7 +20,7 @@ let from_file path filename =
   let unlocked = json |> member "unlocked" |> to_bool in
   let completed = json |> member "completed" |> to_bool in
   let opponent = json |> member "opponent" |> to_string |> Fighter.from_file path in
-  (* let ai = json |> member "ai" |> ai_obj path in *)
+  (* let ai = json |> member "ai" |> Ai.to_file path in *)
   let xp = json |> member "xp" |> to_int in
   let treasure = json |> member "treasure" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
   let money = json |> member "money" |> to_int in
@@ -36,7 +36,25 @@ let from_file path filename =
   }
 
 let to_file path battle =
-  failwith "TODO"
+  let unlocked_json = `Bool (battle.unlocked) in
+  let completed_json = `Bool (battle.completed) in
+  let opponent_json = battle.opponent |> Fighter.to_file path in
+  (* let ai_json = battle.ai |> Ai.to_file path in *)
+  let xp_json = `Int (battle.xp) in
+  let treasure_json = `List (battle.treasure |> List.map (Item.to_file path)) in
+  let money_json = `Int (battle.money) in
+  let battle_json = `Assoc [
+    ("unlocked", unlocked_json);
+    ("completed", completed_json);
+    ("opponent", opponent_json);
+    (* ("ai", ai_json); *)
+    ("xp", xp_json);
+    ("treasure", treasure_json);
+    ("money", money_json)
+  ] in
+  let filename = battle.id^".json" in
+  Yojson.Basic.to_file (path^"Battles/"^filename) battle_json;
+  `String filename
 
 exception InvalidBattle of string
 
@@ -146,7 +164,7 @@ let rec get_user_action state : Item.t =
   try
 
     let user, opp = state in
-    let cmd, arg = Io.get_input () in 
+    let cmd, arg = Io.get_input () in
     match str_to_command cmd with
     | Help ->
       print_help arg;
@@ -161,8 +179,8 @@ let rec get_user_action state : Item.t =
       Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
       get_user_action state
 
-    | Use -> 
-      printf "User used %s!\n" arg; 
+    | Use ->
+      printf "User used %s!\n" arg;
       Item.str_to_item (Fighter.get_equipped user) arg
 
   with
@@ -189,7 +207,7 @@ let rec ai_value turn depth (state: state) : int =
   let ai = (if turn then fst else snd) state in
   match depth with
   | 0 -> ai_value_heuristic turn state
-  | _ -> 
+  | _ ->
     let child_states = List.map (use_item false state) (Fighter.get_equipped ai) in
     let child_ai = (ai_value (not turn) (depth-1)) in
     let child_values = List.map child_ai child_states in
@@ -199,11 +217,11 @@ let get_ai_action turn depth state : Item.t =
   let ai = (if turn then fst else snd) state in
   let child_ai_value = (ai_value (not turn) (depth-1)) in
   Fighter.get_equipped ai
-  |> Utils.list_max (fun it -> (use_item false state it) 
+  |> Utils.list_max (fun it -> (use_item false state it)
                                |> child_ai_value
                                |> (~-))
 
-(* 
+(*
   let result act = do_action false state act) options in
   Utils.list_max (get_value @@ do_action false state)
 

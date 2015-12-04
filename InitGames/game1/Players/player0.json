@@ -1,6 +1,19 @@
 {
-  "fighter": "fighter0.json",
-  "money": 50,
-  "expereience": 40,
-  "level": 1
+  "stats":
+  {
+    "health": 50,
+    "strength": 40,
+    "speed": 30,
+    "dexterity": 20,
+    "magic": 10
+  },
+  "inventory":
+  [
+    "Health Potion.json"
+  ],
+  "equipped":
+  [
+    "Sword.json"
+  ],
+  "money": 0
 }

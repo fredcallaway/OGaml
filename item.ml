@@ -76,7 +76,23 @@ let from_file path filename =
   }
 
 let to_file path item =
-  failwith "TODO"
+  let description_json = `String (item.description) in
+  let base_effect_json = item.base_effect |> Stats.to_json in
+  let self_effect_json = item.self_effect |> Stats.to_json in
+  let opponent_effect_json = item.opponent_effect |> Stats.to_json in
+  let value_json = `Int (item.value) in
+  let slot_json = `String (item.slot |> slot_to_str) in
+  let item_json = `Assoc [
+    ("description", description_json);
+    ("base_effect", base_effect_json);
+    ("self_effect", self_effect_json);
+    ("opponent_effect", opponent_effect_json);
+    ("value", value_json);
+    ("slot", slot_json)
+  ] in
+  let filename = item.id^".json" in
+  Yojson.Basic.to_file (path^"Items/"^filename) item_json;
+  `String filename
 
 (* a set of equipped armor and weapons *)
 (* type equip = t list *)

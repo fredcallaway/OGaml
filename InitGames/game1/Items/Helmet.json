@@ -1,10 +1,18 @@
 {
-  "self_effect":
+  "base_effect":
   {
     "health": 5,
     "strength": 5,
     "speed": -2,
     "dexterity": -2,
+    "magic": 0
+  },
+  "self_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
     "magic": 0
   },
   "opponent_effect":

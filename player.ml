@@ -26,7 +26,19 @@ let from_file path filename =
   }
 
 let to_file path player =
-  failwith "TODO"
+  let stats_json = player.stats |> Stats.to_json in
+  let money_json = `Int (player.money) in
+  let inventory_json = `List (player.inventory |> List.map (Item.to_file path)) in
+  let equipped_json = `List (player.equipped |> List.map (Item.to_file path)) in
+  let player_json = `Assoc [
+    ("stats", stats_json);
+    ("money", money_json);
+    ("inventory", inventory_json);
+    ("equipped", equipped_json)
+  ] in
+  let filename = player.id^".json" in
+  Yojson.Basic.to_file (path^"Players/"^filename) player_json;
+  `String filename
 
 
 let stats (p: t) =
