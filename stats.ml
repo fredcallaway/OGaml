@@ -53,9 +53,9 @@ let difference (st1: t) (st2: t) : int =
   (st1.speed - st2.speed) +
   (st1.dexterity - st2.dexterity) +
   (st1.magic - st2.magic)
-   
 
-  
+
+
 
 let get_stats_list (st: t): string list =
   ["health: " ^ string_of_int st.health; "strength: " ^ string_of_int st.strength;

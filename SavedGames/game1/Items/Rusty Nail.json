@@ -17,13 +17,13 @@
   },
   "opponent_effect":
   {
-    "health": -20,
+    "health": -1,
     "strength": 0,
     "speed": 0,
     "dexterity": 0,
     "magic": 0
   },
-  "description": "This is a sword",
-  "value": 50,
+  "description": "This is a rusty nail.",
+  "value": 1,
   "slot": "Primary"
 }
