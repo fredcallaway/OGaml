@@ -89,7 +89,19 @@ let get_self_effect (i: t) = i.self_effect
 
 let get_opponent_effect (i: t) = i.opponent_effect
 
-let get_slot_item x y = failwith "unimplemented"
+let get_value (i: t) = i.value
+
+let is_consumable (i: t) =
+  match i.slot with
+  | Consumable -> true
+  | _ -> false
+
+let get_slot_item (item: t) (equipped: t list): t option = 
+  if is_consumable item then 
+    let consumables = List.filter (is_consumable) equipped in
+    if (List.length consumables) = 3 then Some (List.hd consumables)
+    else None  
+  else None 
 
 
 let rec get_item (id: string) (selection: t list): t option =
@@ -103,10 +115,6 @@ let rec remove (lst: t list) (i: t) =
   |[] -> raise (InvalidItem i.id)
   |hd::tl -> if hd.id = i.id then tl else hd::(remove tl i)
 
-let is_consumable (i: t) =
-  match i.slot with
-  | Consumable -> true
-  | _ -> false
 
 let rec str_to_item is str =
   match is with
