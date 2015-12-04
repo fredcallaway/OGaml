@@ -84,16 +84,14 @@ type state = Fighter.t * Fighter.t
 (* items self effects are always applied to f1, thus the user of the item
  * should always be f1. *)
 let apply_effects (item: Item.t) (state: state) : Fighter.t * Fighter.t =
-  (* TOOD: Polosky
-   * make these functions smarter. *)
-  let f1, f2 = state in
-  let f1' =  Fighter.set_stats f1
-   (Stats.combine (Item.get_self_effect item)
-                  (Fighter.get_stats f1)) in
-  let f2' = Fighter.set_stats f2
-   (Stats.combine (Item.get_opponent_effect item)
-                  (Fighter.get_stats f2)) in
-  (f1', f2')
+  let self, opp = state in
+  let self_stats',opp_stats' =
+    Stats.apply (Item.get_resistance_effect item)
+    (Item.get_self_effect item) (Item.get_opponent_effect item)
+    (Fighter.get_stats self) (Fighter.get_stats opp) in
+  let self' = Fighter.set_stats self self_stats' in
+  let opp' = Fighter.set_stats opp opp_stats' in
+  (self', opp')
 
 let remove_item f i =
   let new_equipped = Item.remove (Fighter.get_equipped f) i in
@@ -204,7 +202,7 @@ let rec get_user_action state : Item.t =
 (* how much better off the active fighter is *)
 let ai_value_heuristic turn (f1, f2) : int =
   let self, opp = if turn then f1, f2 else f2, f1 in
-  Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp)
+  int_of_float (Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp))
 
 (* the value of a state for the active fighter *)
 let rec ai_value turn depth (state: state) : int =

@@ -42,11 +42,10 @@ let to_file path player =
 
 
 let stats (p: t) =
-  failwith "this didn't compile"
-(*   let blank_stats =
-  {id = "Total Stats"; health = 0; strength = 0; speed = 0; dexterity = 0; magic = 0} in
-  List.fold_left (let f acc i = Stats.combine i.Item.base_effect acc) blank_stats p.equipped
- *)
+  let base_stats = Stats.get_base_stats (p.id^" stats") in
+  let f acc i = Stats.combine i.Item.base_effect acc in
+  List.fold_left f base_stats p.equipped
+
 
 let rec print_item_list p =
   match p with

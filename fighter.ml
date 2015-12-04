@@ -6,10 +6,14 @@ type t = {
   equipped: Item.t list;
 }
 
+(* let apply_equipped  *)
+
 let make (player: Player.t) : t =
-  {id="foo";
-   stats=Player.stats player;
-   equipped=player.Player.equipped}
+  {
+  id=player.Player.id;
+  stats=Player.stats player;
+  equipped=player.Player.equipped
+  }
 
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^"Fighters/"^filename) in
@@ -42,19 +46,19 @@ let get_stats (f: t) = f.stats
 
 let set_stats (f: t) (newstats: Stats.t)= {f with stats = newstats}
 
-let alive f : bool = Stats.get_health f.stats > 0
+let alive f : bool = Stats.get_health f.stats > 0.
 
 let apply_effect effect (f : t) =
   {f with stats = (effect f.stats)}
 
 
-let health (f:t): int =
+let health (f:t): float =
   f.stats.Stats.health
-let strength (f:t): int =
+let strength (f:t): float =
   f.stats.Stats.strength
-let speed (f:t): int =
+let speed (f:t): float =
   f.stats.Stats.speed
-let dexterity (f:t): int =
+let dexterity (f:t): float =
   f.stats.Stats.dexterity
-let magic (f:t): int =
+let magic (f:t): float =
   f.stats.Stats.magic

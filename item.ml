@@ -50,6 +50,7 @@ type t = {
   id: string;
   description: string;
   base_effect: Stats.t;
+  resistance_effect: Stats.t;
   self_effect: Stats.t;
   opponent_effect: Stats.t;
   value: int;
@@ -61,6 +62,7 @@ let from_file path filename =
   let id = String.sub filename 0 (String.length filename - 5) in
   let description = json |> member "description" |> to_string in
   let base_effect = json |> member "base_effect" |> Stats.from_json (id^" base_effect") in
+  let resistance_effect = json |> member "resistance_effect" |> Stats.from_json (id^" resistance_effect") in
   let self_effect = json |> member "self_effect" |> Stats.from_json (id^" self_effect") in
   let opponent_effect = json |> member "opponent_effect" |> Stats.from_json (id^" opponent_effect") in
   let value = json |> member "value" |> to_int in
@@ -69,6 +71,7 @@ let from_file path filename =
   id;
   description;
   base_effect;
+  resistance_effect;
   self_effect;
   opponent_effect;
   value;
@@ -78,6 +81,7 @@ let from_file path filename =
 let to_file path item =
   let description_json = `String (item.description) in
   let base_effect_json = item.base_effect |> Stats.to_json in
+  let resistance_effect_json = item.resistance_effect |> Stats.to_json in
   let self_effect_json = item.self_effect |> Stats.to_json in
   let opponent_effect_json = item.opponent_effect |> Stats.to_json in
   let value_json = `Int (item.value) in
@@ -85,6 +89,7 @@ let to_file path item =
   let item_json = `Assoc [
     ("description", description_json);
     ("base_effect", base_effect_json);
+    ("resistance_effect", resistance_effect_json);
     ("self_effect", self_effect_json);
     ("opponent_effect", opponent_effect_json);
     ("value", value_json);
@@ -101,9 +106,13 @@ let get_id (i: t) = i.id
 
 let get_description (i: t) = i.description
 
+let get_base_effect (i: t) = i.base_effect
+
 let get_self_effect (i: t) = i.self_effect
 
 let get_opponent_effect (i: t) = i.opponent_effect
+
+let get_resistance_effect (i: t) = i.resistance_effect
 
 let get_value (i: t) = i.value
 
@@ -112,12 +121,12 @@ let is_consumable (i: t) =
   | Consumable -> true
   | _ -> false
 
-let get_slot_item (item: t) (equipped: t list): t option = 
-  if is_consumable item then 
+let get_slot_item (item: t) (equipped: t list): t option =
+  if is_consumable item then
     let consumables = List.filter (is_consumable) equipped in
     if (List.length consumables) = 3 then Some (List.hd consumables)
-    else None  
-  else None 
+    else None
+  else None
 
 
 let rec get_item (id: string) (selection: t list): t option =
@@ -152,13 +161,3 @@ let print_double_item_list (ulst: t list) (olst: t list) =
   in
   printf "User Inventory:\t\t\t\t\tOpponent Inventory:\n";
   List.iter (fun (s, m, l1, l2) -> create_slot_block s m l1 l2) big_list
-
-let get_effects item : Stats.effect * Stats.effect =
-  failwith "TODO"
-  (* Many ways this function could be implemented. The simplest would be
-   * to match on every possible item id. A better option would be to
-   * get the information from the json somehow. *)
-  (* match item.id with *)
-  (* | "health potion" -> health_effect 10, null_effect *)
-  (* | "frighten" -> null_effect, strength_effect (-5) *)
-  (* | _ -> null_effect, null_effect *)

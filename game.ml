@@ -8,6 +8,7 @@ type t = {
 }
 exception InvalidCommand of string
 exception InvalidGame of string
+exception InvalidName of string
 
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^filename) in
@@ -41,6 +42,10 @@ let mkdir path dir =
   Unix.mkdir (path^dir) permissions
 
 let new_game init_name new_name =
+  if String.length new_name = 0
+  then raise (InvalidName new_name)
+  else ();
+
   let init_path = "InitGames/" ^ init_name ^ "/" in
   let init_game = from_file init_path (init_name^".json") in
   printf "Initial game %s loaded.\n" init_game.id;
@@ -170,6 +175,10 @@ let rec game_repl (gameop: t option) : t option =
     | InvalidGame str ->
       printf "\nInvalid game: %s\n" str;
       printf "Please load a valid game file.\n";
+      game_repl gameop
+
+    | InvalidName str ->
+      printf "\nInvalid name: %s \nPlease enter a valid new name.\n" str;
       game_repl gameop
 
     | Unix.Unix_error (err, cmd, arg) ->

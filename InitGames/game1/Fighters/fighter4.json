@@ -1,11 +1,11 @@
 {
   "stats":
   {
-    "health": 80,
-    "strength": 70,
-    "speed": 60,
-    "dexterity": 50,
-    "magic": 40
+    "health": 80.0,
+    "strength": 70.0,
+    "speed": 60.0,
+    "dexterity": 50.0,
+    "magic": 40.0
   },
   "equipped":
   [
@@ -13,6 +13,5 @@
     "Helmet.json",
     "Body Armor.json",
     "Health Potion.json"
-  ],
-  "hp": 150
+  ]
 }

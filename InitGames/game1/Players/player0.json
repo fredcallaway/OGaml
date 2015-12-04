@@ -1,11 +1,11 @@
 {
   "stats":
   {
-    "health": 50,
-    "strength": 40,
-    "speed": 30,
-    "dexterity": 20,
-    "magic": 10
+    "health": 50.0,
+    "strength": 40.0,
+    "speed": 30.0,
+    "dexterity": 20.0,
+    "magic": 10.0
   },
   "inventory":
   [
@@ -13,7 +13,9 @@
   ],
   "equipped":
   [
+    "Helmet.json",
+    "Body Armor.json",
     "Sword.json"
   ],
-  "money": 0
+  "money": 1000
 }
