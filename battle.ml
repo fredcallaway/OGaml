@@ -75,6 +75,8 @@ let get_completed b =
   b.completed
 let get_id b =
   b.id
+let get_unlocked b =
+  b.unlocked
 
 (* User is always first, ai always second *)
 type state = Fighter.t * Fighter.t

@@ -49,8 +49,8 @@ let get_unlocked z =
 let get_id z =
   z.id
 
-type command = Enter | Shop | Exit | Map | Bag | Help
-let cmds = [  "Enter";"Shop";"Exit";"Map";"Bag"]
+type command = Enter | Shop | Map | Bag | Exit | Help
+let cmds = [  "Enter";"Shop";"Map";"Bag";"Exit"]
 exception InvalidCommand of string
 exception InvalidZone of string
 
@@ -58,9 +58,9 @@ let str_to_command str : command =
   match str with
   | "enter" -> Enter
   | "shop" -> Shop
-  | "exit" -> Exit
   | "map" -> Map
   | "bag" -> Bag
+  | "exit" -> Exit
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -68,9 +68,9 @@ let str_to_help str : string =
   match String.lowercase str with
   | "enter" -> "Enter the battle."
   | "shop" -> "Enter the shop."
-  | "exit" -> "Exit the zone, returning to the world menu."
   | "map" -> "Display the map of the current zone."
   | "bag" -> "Display money, inventory, and equipped."
+  | "exit" -> "Exit the zone, returning to the world menu."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -142,23 +142,8 @@ let update_battles (zone: t) (battle: Battle.t) : t =
 
 let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
   try
-    (* prompt user for command *)
-    print_endline "\nWhats Next?";
-    (* get input line *)
-    let line = String.lowercase (input_line stdin) in
-    print_endline "\n";
-
-    if String.length line = 0 then raise (InvalidCommand line) else ();
-
-    (* split the input into command and args *)
-    let split = Str.bounded_split (Str.regexp " ") line 2 in
-    let has_arg = List.length split > 1 in
-
-    let cmd = str_to_command (List.nth split 0) in
-    let arg = if has_arg then List.nth split 1 else "" in
-
-    (* Command Switch *)
-    match cmd with
+    let cmd, arg = Io.get_input () in
+    match str_to_command cmd with
 
     | Help ->
       print_help arg;
@@ -174,13 +159,16 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
 
     | Enter ->
       let b = Battle.str_to_battle zone.battles arg in
-      printf "Entering %s\n\n" arg;
-      let new_state = Battle.enter_battle b player in
-      let new_battle = (fst new_state) in
-      let new_player = (snd new_state) in
-      let new_zone = update_battles zone new_battle in
-      print_return new_zone;
-      zone_repl new_zone new_player
+      if not (Battle.get_unlocked b)
+      then raise (Battle.InvalidBattle ((Battle.get_id b)^" locked."))
+      else
+        printf "Entering %s\n\n" arg;
+        let new_state = Battle.enter_battle b player in
+        let new_battle = (fst new_state) in
+        let new_player = (snd new_state) in
+        let new_zone = update_battles zone new_battle in
+        print_return new_zone;
+        zone_repl new_zone new_player
 
     | Shop ->
       printf "Entering shop\n\n";

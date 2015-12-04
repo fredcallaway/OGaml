@@ -48,13 +48,14 @@ let new_game init_name new_name =
 
   (* create new game dirs *)
   mkdir "SavedGames/" new_name;
-  mkdir ("SavedGames/"^new_name) "/Battles";
-  mkdir ("SavedGames/"^new_name) "/Fighters";
-  mkdir ("SavedGames/"^new_name) "/Items";
-  mkdir ("SavedGames/"^new_name) "/Players";
-  mkdir ("SavedGames/"^new_name) "/Shops";
-  mkdir ("SavedGames/"^new_name) "/Worlds";
-  mkdir ("SavedGames/"^new_name) "/Zones";
+  let game_path = "SavedGames/"^new_name^"/" in
+  mkdir game_path "Battles";
+  mkdir game_path "Fighters";
+  mkdir game_path "Items";
+  mkdir game_path "Players";
+  mkdir game_path "Shops";
+  mkdir game_path "Worlds";
+  mkdir game_path "Zones";
 
   to_file new_game;
   printf "New game created as %s.\n" new_game.id
@@ -99,7 +100,7 @@ let print_commands () =
   List.iter (printf "%s\n") (cmds)
 
 let print_welcome () =
-  printf "\n\nWelcome to OGaml!\n"
+  printf "\n\nWelcome to OGaml!\n\n"
 
 let print_return (game: t) =
   printf "You've returned to the main menu.\n"
@@ -113,23 +114,8 @@ let print_list () =
 
 let rec game_repl (gameop: t option) : t option =
   try
-    (* prompt user for command *)
-    print_endline "\nWhats Next?";
-    (* get input line *)
-    let line = String.lowercase (input_line stdin) in
-    print_endline "\n";
-
-    if String.length line = 0 then raise (InvalidCommand line) else ();
-
-    (* split the input into command and args *)
-    let split = Str.bounded_split (Str.regexp " ") line 2 in
-    let has_arg = List.length split > 1 in
-
-    let cmd = str_to_command (List.nth split 0) in
-    let arg = if has_arg then List.nth split 1 else "" in
-
-    (* Command Switch *)
-    match cmd,gameop with
+    let cmd, arg = Io.get_input () in
+    match (str_to_command cmd),gameop with
 
     | Help, _ ->
       print_help arg;
@@ -168,10 +154,6 @@ let rec game_repl (gameop: t option) : t option =
       let new_name = arg in
       let init_name = "game1" in
       new_game init_name new_name;
-      (* let new_game = from_file new_path new_filename in *)
-      (* printf "Game loaded successfully.\n"; *)
-      (* printf "Type 'Enter' to start game.\n"; *)
-      (* game_repl (Some new_game) *)
       game_repl gameop
 
     | Quit, _ ->
@@ -194,14 +176,14 @@ let rec game_repl (gameop: t option) : t option =
       printf "Cannot create %s. \nA game with the same name already exists.\n" arg;
       game_repl gameop
 
-    (* | Sys_error str -> *)
-      (* printf "\n%s\n" str; *)
-      (* printf "Please load a valid game file.\n"; *)
-      (* game_repl gameop *)
+    | Sys_error str ->
+      printf "\n%s\n" str;
+      printf "Please load a valid game file.\n";
+      game_repl gameop
 
-    (* | Failure str -> *)
-      (* printf "\nFailure: %s\n" str; *)
-      (* game_repl gameop *)
+    | Failure str ->
+      printf "\nFailure: %s\n" str;
+      game_repl gameop
 
 (* start the game with no game state *)
 (* postcondition: the updated game on exit *)
