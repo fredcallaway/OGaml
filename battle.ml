@@ -203,7 +203,7 @@ let rec get_user_action state : Item.t =
 let ai_value_heuristic turn (f1, f2) : float =
   let self, opp = if turn then f1, f2 else f2, f1 in
   let result = Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp) in
-  Stats.print_battle_stats (Fighter.get_stats self) (Fighter.get_stats opp);
+  (* Stats.print_battle_stats (Fighter.get_stats self) (Fighter.get_stats opp); *)
   pf "%f\n" result; result
 
 (* the value of a state for the active fighter *)

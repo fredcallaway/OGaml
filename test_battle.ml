@@ -1,26 +1,18 @@
 open Battle
 open Assertions
 open Printf
-
-let testdir = "SavedGames/game2/"
-
-let bow = Item.from_file testdir "Bow.json"
-let sword = Item.from_file testdir "Sword.json"
-let nail = Item.from_file testdir "Rusty Nail.json"
-let health_potion = Item.from_file testdir "Health Potion.json"
-
-let f0 = Fighter.from_file testdir "fighter0.json"
-let f1 = Fighter.from_file testdir "fighter1.json"
-let f2 = Fighter.from_file testdir "fighter2.json"
-let f3 = Fighter.from_file testdir "fighter3.json"
-
 open Testing_utils
 
 let test_apply_effects () =
   Stats.print_battle_stats (Fighter.get_stats f2) (Fighter.get_stats f3);
   let f2', f3' = apply_effects bow (f2, f3) in
-  (* f2' === f2; *)
+  f2' === f2;
   Stats.print_battle_stats (Fighter.get_stats f2') (Fighter.get_stats f3');
+
+  pf "\nTEST NAIL\n";
+  let a, b = apply_effects bow (f0, f0) in
+  Stats.print_battle_stats (Fighter.get_stats a) (Fighter.get_stats b);
+
   (* printf "%f" *)
   (* Fighter.health f3' === Fighter.health f3 - 10.; *)
 
@@ -34,10 +26,12 @@ let test_use_item () =
   let switch (a,b) = (b,a) in
   (* let f2_stats = Fighter.get_stats f2 in *)
   use_item true (f1, f2) sword === apply_effects sword (f1, f2);
+  use_item false (f1, f2) nail === switch (apply_effects nail (f2, f1));
   use_item false (f1, f2) sword === switch (apply_effects sword (f2, f1));
 
   (* test item removal *)
   let id_list equip = List.map (fun a -> a.Item.id) equip in
+
   let f1', f2' = use_item true (f1, f2) health_potion in
   id_list (Fighter.get_equipped f1') === id_list [sword];
   f2' === f2;
@@ -50,15 +44,22 @@ let test_use_item () =
 
 let test_ai_value_heuristic () =
   ai_value_heuristic true (f1, f2) === -50.0;
+  ai_value_heuristic false (f1, f2) === 50.0;
+  ai_value_heuristic true (f2, f1) === 50.0;
   ai_value_heuristic false (f2, f1) === -50.0;
   ()
 
 
 let test_ai_value () =
-  ai_value true 0 (f0, f0) === 0.0;
-  ai_value true 1 (f0, f0) === 1.0;
-  ai_value false 2 (f0, f0) === 0.0;
-  ai_value false 3 (f0, f0) === 1.0;
+  ai_value true 1 (f0, f0) === 0.0;
+  (* ai_value true 1 (f1, f1) === 20.0; *)
+  (* ai_value false 2 (f1, f1) === 0.0; *)
+  (* ai_value true 3 (f1, f1) === 5.0; *)
+
+(*   ai_value true 0 (f1, f1) === 0.0;
+  ai_value true 1 (f1, f1) === 20.0;
+  ai_value false 2 (f1, f1) === 0.0;
+  ai_value false 3 (f1, f1) === 5.0; *)
   ()
 
 
@@ -73,8 +74,8 @@ let test_get_ai_action () =
 
 let () =
   test_apply_effects ();
-  (* test_use_item () *)
-  (* test_ai_value_heuristic () *)
+  (* test_use_item (); *)
+  (* test_ai_value_heuristic (); *)
   (* test_ai_value (); *)
   (* test_get_ai_action (); *)
 
