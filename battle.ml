@@ -141,14 +141,6 @@ let print_commands () =
 let print_welcome (battle: t) =
   printf "Welcome to %s\n" battle.id
 
-
-type command =
-  | Use
-  | Details
-  | Equipped
-  | Help
-
-
 let rec get_user_action state : Item.t =
   try
 

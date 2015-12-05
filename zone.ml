@@ -49,7 +49,7 @@ let get_unlocked z =
 let get_id z =
   z.id
 
-type command = Enter | Shop | Map | Bag | Exit | Help
+type command = Enter | Shop | Map | Bag | Help
 let cmds = [  "Enter";"Shop";"Map";"Bag";"Exit"]
 exception InvalidCommand of string
 exception InvalidZone of string
@@ -60,7 +60,6 @@ let str_to_command str : command =
   | "shop" -> Shop
   | "map" -> Map
   | "bag" -> Bag
-  | "exit" -> Exit
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -179,9 +178,6 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       print_return new_zone;
       zone_repl new_zone new_player
 
-    | Exit ->
-      printf "Exiting zone\n";
-      (zone, player)
 
   with
     | InvalidCommand str ->
@@ -196,9 +192,9 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       printf "\nInvalid zone: %s\n" str;
       zone_repl zone player
 
-    | Failure str ->
-      printf "\nFailure: %s\n" str;
-      zone_repl zone player
+    | Io.Exit ->
+      printf "Exiting zone\n";
+      (zone, player)
 
 (* enter the zone with the player *)
 (* postcondition: the new player and the updated zone on exit *)

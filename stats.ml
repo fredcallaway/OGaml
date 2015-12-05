@@ -110,20 +110,28 @@ let apply resistance_effect self_effect opp_effect self_stats opp_stats : (t * t
   } in
 
   let damage_multiplier = (
-    (1.-.(new_opp_stats.strength/.100.))/.(1.-.(new_self_stats.strength/.100.))/.(1.-.(resistance_effect.strength/.100.))+.
-    (1.-.(new_opp_stats.speed/.100.))/.(1.-.(new_self_stats.speed/.100.))/.(1.-.(resistance_effect.speed/.100.))+.
-    (1.-.(new_opp_stats.dexterity/.100.))/.(1.-.(new_self_stats.dexterity/.100.))/.(1.-.(resistance_effect.dexterity/.100.))+.
-    (1.-.(new_opp_stats.magic/.100.))/.(1.-.(new_self_stats.magic/.100.))/.(1.-.(resistance_effect.magic/.100.))
-  ) /. ((1./.(1.-.(resistance_effect.strength/.100.)))+.
-  (1./.(1.-.(resistance_effect.speed/.100.)))+.
-  (1./.(1.-.(resistance_effect.dexterity/.100.)))+.
-  (1./.(1.-.(resistance_effect.magic/.100.)))) in
+    (1.-.(new_opp_stats.strength /. 100.))
+      /. (1.-.(new_self_stats.strength /. 100.))
+      /. (1.-.(resistance_effect.strength /. 100.)) +.
+    (1.-.(new_opp_stats.speed /. 100.))
+      /. (1.-.(new_self_stats.speed /. 100.))
+      /. (1.-.(resistance_effect.speed /. 100.)) +.
+    (1.-.(new_opp_stats.dexterity /. 100.))
+      /. (1.-.(new_self_stats.dexterity /. 100.))
+      /. (1.-.(resistance_effect.dexterity /. 100.)) +.
+    (1.-.(new_opp_stats.magic /. 100.))
+      /. (1.-.(new_self_stats.magic /. 100.))
+      /. (1.-.(resistance_effect.magic /. 100.))) 
+  /. ((1. /. (1. -. (resistance_effect.strength /. 100.))) +.
+      (1. /. (1. -. (resistance_effect.speed /. 100.))) +.
+      (1. /. (1. -. (resistance_effect.dexterity /. 100.))) +.
+      (1. /. (1. -. (resistance_effect.magic /. 100.)))) in
 
   let newer_opp_stats = {
   new_opp_stats with
   health = new_opp_stats.health +. (opp_effect.health *. damage_multiplier);
   } in
-  printf "opp_effect.health *. damage_multiplier = %f * %f = %f\n" opp_effect.health damage_multiplier (opp_effect.health *. damage_multiplier);
+  (* printf "opp_effect.health *. damage_multiplier = %f * %f = %f\n" opp_effect.health damage_multiplier (opp_effect.health *. damage_multiplier); *)
   (new_self_stats, newer_opp_stats)
 
 

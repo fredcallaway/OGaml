@@ -25,13 +25,12 @@ let to_file path shop =
   `String filename
 
 
-type command = Exit | Supply | Buy | Sell | Equip | Remove | Bag | Help
+type command = Supply | Buy | Sell | Equip | Remove | Bag | Help
 let cmds = [  "Exit";"Supply";"Buy";"Sell";"Equip";"Remove";"Bag"; "Help"]
 exception InvalidCommand of string
 
 let str_to_command str : command =
   match str with
-  | "exit" -> Exit
   | "supply" -> Supply
   | "buy" -> Buy
   | "sell" -> Sell
@@ -166,9 +165,6 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       let new_player = remove i player in
       shop_repl shop new_player
 
-    | Exit ->
-      printf "Exiting shop\n";
-      (shop, player)
 
   with
     | InvalidCommand str ->
@@ -179,9 +175,9 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       printf "\nInvalid item: %s\n" str;
       shop_repl shop player
 
-    | Failure str ->
-      printf "\nFailure: %s\n" str;
-      shop_repl shop player
+    | Exit ->
+      printf "Exiting shop\n";
+      (shop, player)
 
 (* enter the shop with the player *)
 (* postcondition: the new player and the updated shop on exit *)
