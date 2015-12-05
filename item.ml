@@ -146,6 +146,13 @@ let rec str_to_item is str =
   | [] -> raise (InvalidItem str)
   | hd::tl -> if String.lowercase hd.id = str then hd else str_to_item tl str
 
+let print_item i =
+  printf "%s Stats" i.id;
+  Stats.print_stats "base_effect" i.base_effect;
+  Stats.print_stats "resistance_effect" i.resistance_effect;
+  Stats.print_stats "self_effect" i.self_effect;
+  Stats.print_stats "opponent_effect" i.opponent_effect
+
 let print_double_item_list (ulst: t list) (olst: t list) =
   let nth_catch l n = try List.nth l n with |Failure str -> "___________" in
   let slot_list = [(Consumable, 3); (Head, 1); (Body, 1); (Legs, 1); (Feet, 1); (Hands, 1); (Primary, 1); (Secondary, 1); (Special, 1)] in

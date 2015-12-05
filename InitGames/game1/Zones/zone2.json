@@ -3,6 +3,7 @@
   "completed": false,
   "battles":
   [
+    "battle0.json",
     "battle3.json",
     "battle4.json"
   ],

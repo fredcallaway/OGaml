@@ -2,7 +2,7 @@ open Battle
 open Assertions
 open Printf
 
-let testdir = "SavedGames/game2/"
+let testdir = "SavedGames/game1/"
 
 let bow = Item.from_file testdir "Bow.json"
 let sword = Item.from_file testdir "Sword.json"
@@ -18,7 +18,9 @@ open Testing_utils
 
 let test_apply_effects () =
   Stats.print_battle_stats (Fighter.get_stats f2) (Fighter.get_stats f3);
+  Item.print_item bow;
   let f2', f3' = apply_effects bow (f2, f3) in
+
   (* f2' === f2; *)
   Stats.print_battle_stats (Fighter.get_stats f2') (Fighter.get_stats f3');
   (* printf "%f" *)

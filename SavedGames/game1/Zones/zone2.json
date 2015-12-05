@@ -1,10 +1,1 @@
-{
-  "unlocked": false,
-  "completed": false,
-  "battles":
-  [
-    "battle3.json",
-    "battle4.json"
-  ],
-  "shop": "shop2.json"
-}
+{"unlocked":false,"completed":false,"battles":["battle0.json","battle3.json","battle4.json"],"shop":"shop2.json"}

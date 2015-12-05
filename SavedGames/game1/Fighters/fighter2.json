@@ -1,17 +1,1 @@
-{
-  "stats":
-  {
-    "health": 60,
-    "strength": 50,
-    "speed": 40,
-    "dexterity": 30,
-    "magic": 20
-  },
-  "equipped":
-  [
-    "Health Potion.json",
-    "Health Potion.json",
-    "Bow.json"
-  ],
-  "hp": 110
-}
+{"stats":{"health":60.0,"strength":50.0,"speed":40.0,"dexterity":30.0,"magic":20.0},"equipped":["Health Potion.json","Health Potion.json","Bow.json"]}
