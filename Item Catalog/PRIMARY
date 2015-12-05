@@ -30,21 +30,6 @@ PRIMARY
   		Sharpened Dragon Steel Axe
   		Woodsman Axe
 
-  Dagger
-  	Lvl 1. 
-  		Rusted Dagger
-  		Iron Dagger
-  		Sharpened Iron Dagger
-  	Lvl 2. 
-  		Steel Dagger
-  		Sharpened Steel Dagger
-  		Black Steel Dagger
-  		Sharpened Black Steel Dagger
-  	Lvl 3. 
-  		Dragon Steel Dagger
-  		Sharpened Dragon Steel Dagger
-  		Bloody Dagger
-
   Bow
   	Lvl 1. 
   		Novice Bow
@@ -70,3 +55,4 @@ PRIMARY
   		Master Staff
   		Gandalf Staff
   		Freds Toy
+  		

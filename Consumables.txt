@@ -1,0 +1,51 @@
+CONSUMABLE
+
+  Health Potion
+  	Lvl 1.
+  		Minor Health Potion
+  	Lvl 2. 
+  		Good Health Potion
+  	Lvl 3.
+  		Strong Health Potion
+
+  Strength Potion
+  	Lvl 1.
+  		Minor Strength Potion
+  	Lvl 2. 
+  		Good Strength Potion
+  	Lvl 3.
+  		Strong Strength Potion
+
+  Speed Potion
+  	Lvl 1.
+  		Minor Speed Potion
+  	Lvl 2. 
+  		Good Speed Potion
+  	Lvl 3.
+  		Strong Speed Potion
+
+  Dexterity Potion
+  	Lvl 1.
+  		Minor Dexterity Potion
+  	Lvl 2. 
+  		Good Dexterity Potion
+  	Lvl 3.
+  		Strong Dexterity Potion
+
+  Magic Potion
+  	Lvl 1.
+  		Minor Magic Potion
+  	Lvl 2. 
+  		Good Magic Potion
+  	Lvl 3.
+  		Strong Magic Potion
+
+
+
+
+
+
+
+
+
+
