@@ -1,0 +1,15 @@
+{
+  "stats":
+  {
+    "health": 100.0,
+    "strength": 30.0,
+    "speed": 30.0,
+    "dexterity": 30.0,
+    "magic": 30.0
+  },
+  "equipped":
+  [
+    "Helm of Fear.json",
+    "Sword.json"
+  ]
+}

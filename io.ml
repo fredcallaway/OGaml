@@ -1,7 +1,7 @@
 
 open Printf
 exception Exit
-exception Quit
+(* exception Quit *)
 
 let rec get_input () : string * string =
   print_endline "\nWhats next?";
@@ -10,7 +10,7 @@ let rec get_input () : string * string =
   let cmd_list = Str.bounded_split (Str.regexp(" ")) (String.lowercase input) 2 in
 
   match cmd_list with
-  | "quit"::_ -> raise Quit
+  | "quit"::_ -> exit 0
   | "exit"::_ -> raise Exit
   | cmd::arg::[] -> cmd, arg
   | cmd::[] -> cmd, ""
