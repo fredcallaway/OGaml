@@ -110,12 +110,15 @@ let difference (st1: t) (st2: t) : float =
   (st1.magic -. st2.magic)
 
 
-
+  
 
 let get_stats_list (st: t): string list =
   ["health: " ^ string_of_float st.health; "strength: " ^ string_of_float st.strength;
   "speed: " ^ string_of_float st.speed; "dexterity: " ^ string_of_float st.dexterity;
   "magic: " ^ string_of_float st.magic]
+
+let to_str st : string = 
+  String.concat "\n" (get_stats_list st)
 
 let print_battle_stats (ustats: t) (ostats: t) =
   let user_stats = get_stats_list ustats in

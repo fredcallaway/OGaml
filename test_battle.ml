@@ -14,6 +14,7 @@ let f1 = Fighter.from_file testdir "fighter1.json"
 let f2 = Fighter.from_file testdir "fighter2.json"
 let f3 = Fighter.from_file testdir "fighter3.json"
 
+open Testing_utils
 
 let test_apply_effects () =
   Stats.print_battle_stats (Fighter.get_stats f2) (Fighter.get_stats f3);
@@ -36,27 +37,28 @@ let test_use_item () =
   use_item false (f1, f2) sword === switch (apply_effects sword (f2, f1));
 
   (* test item removal *)
+  let id_list equip = List.map (fun a -> a.Item.id) equip in
   let f1', f2' = use_item true (f1, f2) health_potion in
-  Fighter.get_equipped f1' === [sword];
+  id_list (Fighter.get_equipped f1') === id_list [sword];
   f2' === f2;
 
   let f1', f2' = use_item false (f1, f2) health_potion in
   f1' === f1;
-  Fighter.get_equipped f2' === [health_potion; bow];
+  id_list (Fighter.get_equipped f2') === id_list [health_potion; bow];
   ()
 
 
 let test_ai_value_heuristic () =
-  ai_value_heuristic true (f1, f2) === -50;
-  ai_value_heuristic false (f2, f1) === -50;
+  ai_value_heuristic true (f1, f2) === -50.0;
+  ai_value_heuristic false (f2, f1) === -50.0;
   ()
 
 
 let test_ai_value () =
-  ai_value true 0 (f0, f0) === 0;
-  ai_value true 1 (f0, f0) === 1;
-  ai_value false 2 (f0, f0) === 0;
-  ai_value false 3 (f0, f0) === 1;
+  ai_value true 0 (f0, f0) === 0.0;
+  ai_value true 1 (f0, f0) === 1.0;
+  ai_value false 2 (f0, f0) === 0.0;
+  ai_value false 3 (f0, f0) === 1.0;
   ()
 
 
@@ -70,10 +72,10 @@ let test_get_ai_action () =
 
 
 let () =
-  test_apply_effects ()
+  test_apply_effects ();
   (* test_use_item () *)
   (* test_ai_value_heuristic () *)
-  (* test_ai_value () *)
+  (* test_ai_value (); *)
   (* test_get_ai_action (); *)
 
 

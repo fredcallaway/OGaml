@@ -1,0 +1,30 @@
+{
+	"build_systems":
+	[
+		{
+			"name": "compile",
+			"cmd":
+			[
+				"cs3110 compile -q -p yojson,str game.ml"
+			],
+			"shell": true,
+		},
+		{
+			"name": "test battle",
+			"cmd":
+			[
+				"cs3110 compile -q -p yojson,str test_battle.ml && cs3110 run test_battle"
+			],
+			"shell": true,
+		}
+	],
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"settings":
+	{
+	}
+}
