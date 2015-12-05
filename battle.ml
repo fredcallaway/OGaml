@@ -200,21 +200,27 @@ let rec get_user_action state : Item.t =
  ******)
 
 (* how much better off the active fighter is *)
-let ai_value_heuristic turn (f1, f2) : int =
+let ai_value_heuristic turn (f1, f2) : float =
   let self, opp = if turn then f1, f2 else f2, f1 in
-  int_of_float (Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp))
+  let result = Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp) in
+  Stats.print_battle_stats (Fighter.get_stats self) (Fighter.get_stats opp);
+  pf "%f\n" result; result
 
 (* the value of a state for the active fighter *)
-let rec ai_value turn depth (state: state) : int =
+let rec ai_value turn depth (state: state) : float =
   (* pf "ai_value %b %i\n" turn depth; *)
   let ai = (if turn then fst else snd) state in
+
+  let result = 
   match depth with
   | 0 -> ai_value_heuristic turn state
   | _ ->
     let child_states = List.map (use_item turn state) (Fighter.get_equipped ai) in
     let child_ai = (ai_value (not turn) (depth-1)) in
     let child_values = List.map child_ai child_states in
-    Utils.list_max (~+) (List.map (~-) child_values)
+    Utils.list_max (~+.) (List.map (~-.) child_values)
+
+  in result
 
 let get_ai_action turn depth state : Item.t =
   let ai = (if turn then fst else snd) state in
@@ -222,7 +228,7 @@ let get_ai_action turn depth state : Item.t =
   Fighter.get_equipped ai
   |> Utils.list_max (fun it -> (use_item turn state it)
                                 |> child_ai
-                                |> (~-))
+                                |> (~-.))
 
 (********
  * MAIN *
@@ -272,46 +278,4 @@ let enter_battle battle player : (t * Player.t) =
     (battle, player)
 
 
-(********
- * MISC *
- ********)
 
-let from_file path filename =
-  let json = Yojson.Basic.from_file (path^"Battles/"^filename) in
-  let id = String.sub filename 0 (String.length filename - 5) in
-  let unlocked = json |> member "unlocked" |> to_bool in
-  let completed = json |> member "completed" |> to_bool in
-  let opponent = json |> member "opponent" |> to_string |> Fighter.from_file path in
-  (* let ai = json |> member "ai" |> ai_obj path in *)
-  let xp = json |> member "xp" |> to_int in
-  let treasure = json |> member "treasure" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
-  let money = json |> member "money" |> to_int in
-  {
-  id;
-  unlocked;
-  completed;
-  opponent;
-  (* ai; *)
-  xp;
-  treasure;
-  money
-  }
-
-exception InvalidBattle of string
-
-let print_battle (b: t) =
-  let lockstr = if b.unlocked then "" else " (locked)" in
-  printf "%s%s\n" b.id lockstr
-
-let rec str_to_battle bs str =
-  match bs with
-  | [] -> raise (InvalidBattle str)
-  | b::t -> if b.id = str then b else str_to_battle t str
-
-let unlock b =
-  {b with unlocked = true}
-
-let get_completed b =
-  b.completed
-let get_id b =
-  b.id

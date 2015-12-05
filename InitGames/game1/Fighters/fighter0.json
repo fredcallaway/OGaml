@@ -1,0 +1,14 @@
+{
+  "stats":
+  {
+    "health": 100.0,
+    "strength": 100.0,
+    "speed": 100.0,
+    "dexterity": 100.0,
+    "magic": 100.0
+  },
+  "equipped":
+  [
+    "Rusty Nail.json"
+  ]
+}
