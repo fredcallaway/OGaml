@@ -1,17 +1,15 @@
 open Battle
 open Assertions
 open Printf
+
 open Testing_utils
 
 let test_apply_effects () =
   Stats.print_battle_stats (Fighter.get_stats f2) (Fighter.get_stats f3);
+  Item.print_item bow;
   let f2', f3' = apply_effects bow (f2, f3) in
   f2' === f2;
   Stats.print_battle_stats (Fighter.get_stats f2') (Fighter.get_stats f3');
-
-  pf "\nTEST NAIL\n";
-  let a, b = apply_effects bow (f0, f0) in
-  Stats.print_battle_stats (Fighter.get_stats a) (Fighter.get_stats b);
 
   (* printf "%f" *)
   (* Fighter.health f3' === Fighter.health f3 - 10.; *)
@@ -51,10 +49,11 @@ let test_ai_value_heuristic () =
 
 
 let test_ai_value () =
-  ai_value true 1 (f0, f0) === 0.0;
-  (* ai_value true 1 (f1, f1) === 20.0; *)
-  (* ai_value false 2 (f1, f1) === 0.0; *)
-  (* ai_value true 3 (f1, f1) === 5.0; *)
+  ai_value true 0 (f0, f0) === 0.0;
+  ai_value true 1 (f0, f0) === 1.0;
+  
+  ai_value false 2 (f0, f0) === 0.0;
+  ai_value false 3 (f0, f0) === 1.0;
 
 (*   ai_value true 0 (f1, f1) === 0.0;
   ai_value true 1 (f1, f1) === 20.0;
@@ -73,10 +72,10 @@ let test_get_ai_action () =
 
 
 let () =
-  test_apply_effects ();
+  (* test_apply_effects (); *)
   (* test_use_item (); *)
   (* test_ai_value_heuristic (); *)
-  (* test_ai_value (); *)
+  test_ai_value ();
   (* test_get_ai_action (); *)
 
 
