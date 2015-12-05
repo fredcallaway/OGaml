@@ -71,9 +71,19 @@ let print_return (world: t) =
   printf "You're now in %s\n" world.id
 
 let print_map (world: t) =
-  printf "Map:\n";
-  List.iter (Zone.print_zone) (world.zones);
-  printf "\n"
+  Io.print_map_header world.id;
+  (* Io.print_map_line "Zones:"; *)
+  let f zone = Zone.zone_to_string zone in
+  let zones_string = List.map f world.zones in
+  List.iter Io.print_map_line zones_string;
+  Io.print_map_footer()
+
+let print_win (world: t) =
+  Io.print_map_header "Winner!";
+  Io.print_map_line ("You beat the last zone in "^world.id);
+  Io.print_map_line "Congratulations. You win!";
+  Io.print_map_footer()
+
 
 (* precondition: all zones in world must have unique ids *)
 (* postcondition: world with updated zone and next zone unlocked if zone was completed *)
@@ -86,8 +96,7 @@ let update_zones (world: t) (zone: Zone.t) : t =
       then
         match t with
         | [] ->
-          (* if zone.completed *)
-          (* then print_win; *)
+          if zone.Zone.completed then print_win world else ();
           a@[zone]@t
         | z_next::t_next ->
           if Zone.get_completed zone

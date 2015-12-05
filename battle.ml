@@ -59,9 +59,9 @@ let to_file path battle =
 
 exception InvalidBattle of string
 
-let print_battle (b: t) =
+let battle_to_string (b: t) =
   let lockstr = if b.unlocked then "" else " (locked)" in
-  printf "%s%s\n" b.id lockstr
+  b.id^lockstr
 
 let rec str_to_battle bs str =
   match bs with

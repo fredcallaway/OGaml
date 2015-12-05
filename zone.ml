@@ -93,9 +93,9 @@ let print_welcome (zone: t) =
 let print_return (zone: t) =
   printf "You're now in %s\n" zone.id
 
-let print_zone z =
+let zone_to_string z =
   let lockstr = if z.unlocked then "" else " (locked)" in
-  printf "%s%s\n" z.id lockstr
+  z.id^lockstr
 
 let rec str_to_zone zs str =
   match zs with
@@ -103,15 +103,21 @@ let rec str_to_zone zs str =
   | z::t -> if z.id = str then z else str_to_zone t str
 
 let print_map (zone: t) =
-  printf "Map:\n";
+  Io.print_map_header zone.id;
+  Io.print_map_line "Shop";
+  Io.print_map_line "";
+  Io.print_map_line "Battles:";
+  let f battle = Battle.battle_to_string battle in
+  let battles_string = List.map f zone.battles in
+  List.iter Io.print_map_line battles_string;
+  Io.print_map_footer()
 
-  printf "Battles:\n";
-  List.iter Battle.print_battle zone.battles;
-  printf "\n";
+let print_win (zone: t) =
+  Io.print_map_header "Winner!";
+  Io.print_map_line ("You beat the last battle in "^zone.id);
+  Io.print_map_line "The next zone has been unlocked!";
+  Io.print_map_footer()
 
-  printf "Shop:\n";
-  Shop.print_shop zone.shop;
-  printf "\n"
 
 (* precondition: all battles in zone must have unique ids *)
 (* postcondition: zone with updated battle and next battle unlocked if battle was completed *)
@@ -124,8 +130,7 @@ let update_battles (zone: t) (battle: Battle.t) : t =
       then
         match t with
         | [] ->
-          (* if battle.completed *)
-          (* then print_win; *)
+          if battle.Battle.completed then print_win zone else ();
           a@[battle]@t
         | b_next::t_next ->
           if Battle.get_completed battle
