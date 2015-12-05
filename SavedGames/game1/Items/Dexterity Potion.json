@@ -1,0 +1,29 @@
+{
+  "base_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
+  "self_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 20,
+    "magic": 0
+  },
+  "opponent_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
+  "description": "This is a dexterity potion",
+  "value": 50,
+  "slot": "Consumable"
+}
