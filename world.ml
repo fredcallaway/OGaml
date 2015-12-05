@@ -19,10 +19,18 @@ let from_file path filename =
   }
 
 let to_file path world =
-  failwith "TODO"
+  let completed_json = `Bool (world.completed) in
+  let zones_json = `List (world.zones |> List.map (Zone.to_file path)) in
+  let world_json = `Assoc [
+    ("completed", completed_json);
+    ("zones", zones_json)
+  ] in
+  let filename = world.id^".json" in
+  Yojson.Basic.to_file (path^"Worlds/"^filename) world_json;
+  `String filename
 
-type command = Enter | Exit | Map | Score | Help
-let cmds = [  "Enter";"Exit";"Map";"Score"]
+type command = Enter | Exit | Map | Bag | Help
+let cmds = [  "Enter";"Exit";"Map";"Bag"]
 exception InvalidCommand of string
 
 let str_to_command str : command =
@@ -30,7 +38,7 @@ let str_to_command str : command =
   | "enter" -> Enter
   | "exit" -> Exit
   | "map" -> Map
-  | "score" -> Score
+  | "bag" -> Bag
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -39,7 +47,7 @@ let str_to_help str : string =
   | "enter" -> "Enter the zone."
   | "exit" -> "Exit the world, returning to the main menu."
   | "map" -> "Display the map of the current world."
-  | "score" -> "Display the score in the current world."
+  | "bag" -> "Display money, inventory, and equipped."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -96,23 +104,8 @@ let update_zones (world: t) (zone: Zone.t) : t =
 
 let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
   try
-    (* prompt user for command *)
-    print_endline "\nWhats Next?";
-    (* get input line *)
-    let line = String.lowercase (input_line stdin) in
-    print_endline "\n";
-
-    if String.length line = 0 then raise (InvalidCommand line) else ();
-
-    (* split the input into command and args *)
-    let split = Str.bounded_split (Str.regexp " ") line 2 in
-    let has_arg = List.length split > 1 in
-
-    let cmd = str_to_command (List.nth split 0) in
-    let arg = if has_arg then List.nth split 1 else "" in
-
-    (* Command Switch *)
-    match cmd with
+    let cmd, arg = Io.get_input () in
+    match str_to_command cmd with
 
     | Help ->
       print_help arg;
@@ -122,15 +115,15 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
       print_map world;
       world_repl world player
 
-    | Score ->
-      Player.print_score player;
+    | Bag ->
+      Player.print_bag player;
       world_repl world player
 
     | Enter ->
       let z = Zone.str_to_zone world.zones arg in
-      let res = match Zone.get_unlocked z with
-      | false -> raise (Zone.InvalidZone ((Zone.get_id z)^" locked."))
-      | true ->
+      if not (Zone.get_unlocked z)
+      then raise (Zone.InvalidZone ((Zone.get_id z)^" locked."))
+      else
         printf "Entering %s\n\n" arg;
         let new_state = Zone.enter_zone z player in
         let new_zone = (fst new_state) in
@@ -138,7 +131,6 @@ let rec world_repl (world: t) (player: Player.t) : (t * Player.t) =
         let new_world = update_zones world new_zone in
         print_return new_world;
         world_repl new_world new_player
-      in res
 
     | Exit ->
       printf "Exiting world\n";

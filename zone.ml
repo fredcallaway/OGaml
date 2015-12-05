@@ -25,7 +25,19 @@ let from_file path filename =
   }
 
 let to_file path zone =
-  failwith "TODO"
+  let unlocked_json = `Bool (zone.unlocked) in
+  let completed_json = `Bool (zone.completed) in
+  let battles_json = `List (zone.battles |> List.map (Battle.to_file path)) in
+  let shop_json = zone.shop |> Shop.to_file path in
+  let zone_json = `Assoc [
+    ("unlocked", unlocked_json);
+    ("completed", completed_json);
+    ("battles", battles_json);
+    ("shop", shop_json)
+  ] in
+  let filename = zone.id^".json" in
+  Yojson.Basic.to_file (path^"Zones/"^filename) zone_json;
+  `String filename
 
 let unlock z =
   {z with unlocked = true}
@@ -37,8 +49,8 @@ let get_unlocked z =
 let get_id z =
   z.id
 
-type command = Enter | Shop | Exit | Map | Score | Help
-let cmds = [  "Enter";"Shop";"Exit";"Map";"Score"]
+type command = Enter | Shop | Map | Bag | Help
+let cmds = [  "Enter";"Shop";"Map";"Bag";"Exit"]
 exception InvalidCommand of string
 exception InvalidZone of string
 
@@ -46,9 +58,8 @@ let str_to_command str : command =
   match str with
   | "enter" -> Enter
   | "shop" -> Shop
-  | "exit" -> Exit
   | "map" -> Map
-  | "score" -> Score
+  | "bag" -> Bag
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
@@ -56,9 +67,9 @@ let str_to_help str : string =
   match String.lowercase str with
   | "enter" -> "Enter the battle."
   | "shop" -> "Enter the shop."
-  | "exit" -> "Exit the zone, returning to the world menu."
   | "map" -> "Display the map of the current zone."
-  | "score" -> "Display the score in the current zone."
+  | "bag" -> "Display money, inventory, and equipped."
+  | "exit" -> "Exit the zone, returning to the world menu."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -101,9 +112,6 @@ let print_map (zone: t) =
   Shop.print_shop zone.shop;
   printf "\n"
 
-let update_shop (zone: t) (shop: Shop.t) : t =
-  failwith "TODO"
-
 (* precondition: all battles in zone must have unique ids *)
 (* postcondition: zone with updated battle and next battle unlocked if battle was completed *)
 let update_battles (zone: t) (battle: Battle.t) : t =
@@ -133,23 +141,8 @@ let update_battles (zone: t) (battle: Battle.t) : t =
 
 let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
   try
-    (* prompt user for command *)
-    print_endline "\nWhats Next?";
-    (* get input line *)
-    let line = String.lowercase (input_line stdin) in
-    print_endline "\n";
-
-    if String.length line = 0 then raise (InvalidCommand line) else ();
-
-    (* split the input into command and args *)
-    let split = Str.bounded_split (Str.regexp " ") line 2 in
-    let has_arg = List.length split > 1 in
-
-    let cmd = str_to_command (List.nth split 0) in
-    let arg = if has_arg then List.nth split 1 else "" in
-
-    (* Command Switch *)
-    match cmd with
+    let cmd, arg = Io.get_input () in
+    match str_to_command cmd with
 
     | Help ->
       print_help arg;
@@ -159,32 +152,32 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       print_map zone;
       zone_repl zone player
 
-    | Score ->
-      Player.print_score player;
+    | Bag ->
+      Player.print_bag player;
       zone_repl zone player
 
     | Enter ->
       let b = Battle.str_to_battle zone.battles arg in
-      printf "Entering %s\n\n" arg;
-      let new_state = Battle.enter_battle b player in
-      let new_battle = (fst new_state) in
-      let new_player = (snd new_state) in
-      let new_zone = update_battles zone new_battle in
-      print_return new_zone;
-      zone_repl new_zone new_player
+      if not (Battle.get_unlocked b)
+      then raise (Battle.InvalidBattle ((Battle.get_id b)^" locked."))
+      else
+        printf "Entering %s\n\n" arg;
+        let new_state = Battle.enter_battle b player in
+        let new_battle = (fst new_state) in
+        let new_player = (snd new_state) in
+        let new_zone = update_battles zone new_battle in
+        print_return new_zone;
+        zone_repl new_zone new_player
 
     | Shop ->
       printf "Entering shop\n\n";
       let new_state = Shop.enter_shop zone.shop player in
       let new_shop = (fst new_state) in
       let new_player = (snd new_state) in
-      let new_zone = update_shop zone new_shop in
+      let new_zone = {zone with shop=new_shop} in
       print_return new_zone;
       zone_repl new_zone new_player
 
-    | Exit ->
-      printf "Exiting zone\n";
-      (zone, player)
 
   with
     | InvalidCommand str ->
@@ -199,9 +192,9 @@ let rec zone_repl (zone: t) (player: Player.t) : (t * Player.t) =
       printf "\nInvalid zone: %s\n" str;
       zone_repl zone player
 
-    | Failure str ->
-      printf "\nFailure: %s\n" str;
-      zone_repl zone player
+    | Io.Exit ->
+      printf "Exiting zone\n";
+      (zone, player)
 
 (* enter the zone with the player *)
 (* postcondition: the new player and the updated zone on exit *)

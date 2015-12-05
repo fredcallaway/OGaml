@@ -1,8 +1,1 @@
-{
-  "completed": false,
-  "zones":
-  [
-    "zone1.json",
-    "zone2.json"
-  ]
-}
+{"completed":false,"zones":["zone1.json","zone2.json"]}

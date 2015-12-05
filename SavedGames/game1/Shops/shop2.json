@@ -1,9 +1,1 @@
-{
-  "supply":
-  [
-    "Sword.json",
-    "Bow.json",
-    "Helmet.json",
-    "Body Armor.json"
-  ]
-}
+{"supply":["Sword.json","Bow.json","Helmet.json","Body Armor.json"]}

@@ -8,6 +8,7 @@ type t = {
 }
 exception InvalidCommand of string
 exception InvalidGame of string
+exception InvalidName of string
 
 let from_file path filename =
   let json = Yojson.Basic.from_file (path^filename) in
@@ -20,48 +21,74 @@ let from_file path filename =
   player
   }
 
-let to_file path game =
-  let world = game.world |> World.to_file path in
-  let player = game.player |> Player.to_file path in
-  let json = `Assoc [
-    ("world", `String world);
-    ("player", `String player)
+(* let pretty_to_file filename json =
+  Yojson.pretty_to_string
+  stream_from_string
+  stream_to_file filename stream *)
+
+let to_file game =
+  let path = "SavedGames/" ^ game.id ^ "/" in
+  let world_json = game.world |> World.to_file path in
+  let player_json = game.player |> Player.to_file path in
+  let game_json = `Assoc [
+    ("world", world_json);
+    ("player", player_json)
   ] in
-  Yojson.Basic.to_file (path^game.id^".json") json;
+  Yojson.Basic.to_file (path^game.id^".json") game_json;
   printf "Game saved successfully.\n"
 
-let new_game path filename =
-  let game = from_file path filename in
-  printf "Initial game %s loaded.\n" game.id;
-  let new_game = {game with id="test1"} in
-  let new_path = "SavedGames/" ^ new_game.id ^ "/" in
-  to_file new_path new_game;
+let mkdir path dir =
+  let permissions = 0o777 in
+  Unix.mkdir (path^dir) permissions
+
+let new_game init_name new_name =
+  if String.length new_name = 0
+  then raise (InvalidName new_name)
+  else ();
+
+  let init_path = "InitGames/" ^ init_name ^ "/" in
+  let init_game = from_file init_path (init_name^".json") in
+  printf "Initial game %s loaded.\n" init_game.id;
+  let new_game = {init_game with id=new_name} in
+
+  (* create new game dirs *)
+  mkdir "SavedGames/" new_name;
+  let game_path = "SavedGames/"^new_name^"/" in
+  mkdir game_path "Battles";
+  mkdir game_path "Fighters";
+  mkdir game_path "Items";
+  mkdir game_path "Players";
+  mkdir game_path "Shops";
+  mkdir game_path "Worlds";
+  mkdir game_path "Zones";
+
+  to_file new_game;
   printf "New game created as %s.\n" new_game.id
 
-type command = Enter | New | Save | Load | List | Quit | Score | Help
-let cmds = [  "Enter";"New";"Save";"Load";"List";"Quit";"Score"]
+type command = New | Save | List | Load | Enter | Bag | Quit | Help
+let cmds = [  "New";"Save";"List";"Load";"Enter";"Bag";"Quit"]
 
 let str_to_command str : command =
   match str with
-  | "enter" -> Enter
   | "new" -> New
   | "save" -> Save
-  | "load" -> Load
   | "list" -> List
+  | "load" -> Load
+  | "enter" -> Enter
+  | "bag" -> Bag
   | "quit" -> Quit
-  | "score" -> Score
   | "help" -> Help
   | _ -> raise (InvalidCommand str)
 
 let str_to_help str : string =
   match String.lowercase str with
-  | "enter" -> "Enter the loaded game."
   | "new" -> "Create a new game and load it."
   | "save" -> "Save the loaded game."
-  | "load" -> "Load a game from a json file."
   | "list" -> "List all avilible games to load."
+  | "load" -> "Load a game from a json file."
+  | "enter" -> "Enter the loaded game."
+  | "bag" -> "Check your player's bag in the loaded game."
   | "quit" -> "Quit the entire program."
-  | "score" -> "Display the score from the loaded game."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =
@@ -78,7 +105,7 @@ let print_commands () =
   List.iter (printf "%s\n") (cmds)
 
 let print_welcome () =
-  printf "\n\nWelcome to OGaml!\n"
+  printf "\n\nWelcome to OGaml!\n\n"
 
 let print_return (game: t) =
   printf "You've returned to the main menu.\n"
@@ -92,30 +119,15 @@ let print_list () =
 
 let rec game_repl (gameop: t option) : t option =
   try
-    (* prompt user for command *)
-    print_endline "\nWhats Next?";
-    (* get input line *)
-    let line = String.lowercase (input_line stdin) in
-    print_endline "\n";
-
-    if String.length line = 0 then raise (InvalidCommand line) else ();
-
-    (* split the input into command and args *)
-    let split = Str.bounded_split (Str.regexp " ") line 2 in
-    let has_arg = List.length split > 1 in
-
-    let cmd = str_to_command (List.nth split 0) in
-    let arg = if has_arg then List.nth split 1 else "" in
-
-    (* Command Switch *)
-    match cmd,gameop with
+    let cmd, arg = Io.get_input () in
+    match (str_to_command cmd),gameop with
 
     | Help, _ ->
       print_help arg;
       game_repl gameop
 
-    | Score, Some game ->
-      Player.print_score game.player;
+    | Bag, Some game ->
+      Player.print_bag game.player;
       game_repl gameop
 
     | Enter, Some game ->
@@ -128,9 +140,7 @@ let rec game_repl (gameop: t option) : t option =
       game_repl (Some updated_game)
 
     | Save, Some game ->
-      let filename = game.id in
-      let path = "SavedGames/" ^ filename ^ "/" in
-      to_file path game;
+      to_file game;
       game_repl gameop
 
     | Load, _ ->
@@ -146,14 +156,9 @@ let rec game_repl (gameop: t option) : t option =
       game_repl gameop
 
     | New, _ ->
-      let filename = arg in
-      let path = "InitGames/" ^ filename ^ "/" in
-      new_game path (filename^".json");
-      (* let new_path = "SavedGames/" ^ filename ^ "/" in *)
-      (* let new_game = from_file new_path new_filename in *)
-      (* printf "Game loaded successfully.\n"; *)
-      (* printf "Type 'Enter' to start game.\n"; *)
-      (* game_repl (Some new_game) *)
+      let new_name = arg in
+      let init_name = "game1" in
+      new_game init_name new_name;
       game_repl gameop
 
     | Quit, _ ->
@@ -172,20 +177,29 @@ let rec game_repl (gameop: t option) : t option =
       printf "Please load a valid game file.\n";
       game_repl gameop
 
+    | InvalidName str ->
+      printf "\nInvalid name: %s \nPlease enter a valid new name.\n" str;
+      game_repl gameop
+
+    | Unix.Unix_error (err, cmd, arg) ->
+      printf "Cannot create %s. \nA game with the same name already exists.\n" arg;
+      game_repl gameop
+
     | Sys_error str ->
       printf "\n%s\n" str;
       printf "Please load a valid game file.\n";
       game_repl gameop
 
-    (* | Failure str -> *)
-      (* printf "\nFailure: %s\n" str; *)
-      (* game_repl gameop *)
+    | Failure str ->
+      printf "\nFailure: %s\n" str;
+      game_repl gameop
 
 (* start the game with no game state *)
 (* postcondition: the updated game on exit *)
 let enter_game () =
   print_welcome();
   print_commands();
+  try mkdir "" "SavedGames"; with | _ -> ();
   ignore (game_repl None);
 in
 

@@ -1,16 +1,1 @@
-{
-  "stats":
-  {
-    "health": 70,
-    "strength": 60,
-    "speed": 50,
-    "dexterity": 40,
-    "magic": 30
-  },
-  "equipped":
-  [
-    "Sword.json",
-    "Helmet.json"
-  ],
-  "hp": 130
-}
+{"stats":{"health":70.0,"strength":60.0,"speed":50.0,"dexterity":40.0,"magic":30.0},"equipped":["Sword.json","Helmet.json","Health Potion.json"]}

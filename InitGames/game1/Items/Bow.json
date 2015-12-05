@@ -1,19 +1,35 @@
 {
+  "base_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "resistance_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
   "self_effect":
   {
-    "health": 0,
-    "strength": 10,
-    "speed": 10,
-    "dexterity": 10,
-    "magic": 0
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
   },
   "opponent_effect":
   {
-    "health": -10,
-    "strength": 0,
-    "speed": 0,
-    "dexterity": 0,
-    "magic": 0
+    "health": -10.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
   },
   "description": "This is a bow",
   "value": 40,

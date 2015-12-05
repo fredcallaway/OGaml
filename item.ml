@@ -50,6 +50,7 @@ type t = {
   id: string;
   description: string;
   base_effect: Stats.t;
+  resistance_effect: Stats.t;
   self_effect: Stats.t;
   opponent_effect: Stats.t;
   value: int;
@@ -61,6 +62,7 @@ let from_file path filename =
   let id = String.sub filename 0 (String.length filename - 5) in
   let description = json |> member "description" |> to_string in
   let base_effect = json |> member "base_effect" |> Stats.from_json (id^" base_effect") in
+  let resistance_effect = json |> member "resistance_effect" |> Stats.from_json (id^" resistance_effect") in
   let self_effect = json |> member "self_effect" |> Stats.from_json (id^" self_effect") in
   let opponent_effect = json |> member "opponent_effect" |> Stats.from_json (id^" opponent_effect") in
   let value = json |> member "value" |> to_int in
@@ -69,6 +71,7 @@ let from_file path filename =
   id;
   description;
   base_effect;
+  resistance_effect;
   self_effect;
   opponent_effect;
   value;
@@ -76,7 +79,25 @@ let from_file path filename =
   }
 
 let to_file path item =
-  failwith "TODO"
+  let description_json = `String (item.description) in
+  let base_effect_json = item.base_effect |> Stats.to_json in
+  let resistance_effect_json = item.resistance_effect |> Stats.to_json in
+  let self_effect_json = item.self_effect |> Stats.to_json in
+  let opponent_effect_json = item.opponent_effect |> Stats.to_json in
+  let value_json = `Int (item.value) in
+  let slot_json = `String (item.slot |> slot_to_str) in
+  let item_json = `Assoc [
+    ("description", description_json);
+    ("base_effect", base_effect_json);
+    ("resistance_effect", resistance_effect_json);
+    ("self_effect", self_effect_json);
+    ("opponent_effect", opponent_effect_json);
+    ("value", value_json);
+    ("slot", slot_json)
+  ] in
+  let filename = item.id^".json" in
+  Yojson.Basic.to_file (path^"Items/"^filename) item_json;
+  `String filename
 
 (* a set of equipped armor and weapons *)
 (* type equip = t list *)
@@ -85,9 +106,13 @@ let get_id (i: t) = i.id
 
 let get_description (i: t) = i.description
 
+let get_base_effect (i: t) = i.base_effect
+
 let get_self_effect (i: t) = i.self_effect
 
 let get_opponent_effect (i: t) = i.opponent_effect
+
+let get_resistance_effect (i: t) = i.resistance_effect
 
 let get_value (i: t) = i.value
 
@@ -124,6 +149,7 @@ let get_slot_item (item: t) (equipped: t list): t option =
     get_same_type item equipped
 
 
+
 let rec get_item (id: string) (selection: t list): t option =
   match selection with
   | h::t -> if (String.lowercase id) = (String.lowercase h.id) then Some h
@@ -141,6 +167,13 @@ let rec str_to_item is str =
   | [] -> raise (InvalidItem str)
   | hd::tl -> if String.lowercase hd.id = str then hd else str_to_item tl str
 
+let print_item i =
+  printf "%s Stats" i.id;
+  Stats.print_stats "base_effect" i.base_effect;
+  Stats.print_stats "resistance_effect" i.resistance_effect;
+  Stats.print_stats "self_effect" i.self_effect;
+  Stats.print_stats "opponent_effect" i.opponent_effect
+
 let print_double_item_list (ulst: t list) (olst: t list) =
   let nth_catch l n = try List.nth l n with |Failure str -> "___________" in
   let slot_list = [(Consumable, 3); (Head, 1); (Body, 1); (Legs, 1); (Feet, 1); (Hands, 1); (Primary, 1); (Secondary, 1); (Special, 1)] in
@@ -156,13 +189,3 @@ let print_double_item_list (ulst: t list) (olst: t list) =
   in
   printf "User Inventory:\t\t\t\t\tOpponent Inventory:\n";
   List.iter (fun (s, m, l1, l2) -> create_slot_block s m l1 l2) big_list
-
-let get_effects item : Stats.effect * Stats.effect =
-  failwith "TODO"
-  (* Many ways this function could be implemented. The simplest would be
-   * to match on every possible item id. A better option would be to
-   * get the information from the json somehow. *)
-  (* match item.id with *)
-  (* | "health potion" -> health_effect 10, null_effect *)
-  (* | "frighten" -> null_effect, strength_effect (-5) *)
-  (* | _ -> null_effect, null_effect *)
