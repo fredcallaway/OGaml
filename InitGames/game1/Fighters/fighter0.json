@@ -1,11 +1,11 @@
 {
   "stats":
   {
-    "health": 100.0,
-    "strength": 100.0,
-    "speed": 100.0,
-    "dexterity": 100.0,
-    "magic": 100.0
+    "health": 10.0,
+    "strength": 10.0,
+    "speed": 10.0,
+    "dexterity": 10.0,
+    "magic": 10.0
   },
   "equipped":
   [

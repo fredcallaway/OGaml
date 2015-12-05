@@ -56,6 +56,27 @@ let get_health s =
 let get_base_stats id =
   {id = id; health = 100.; strength = 5.; speed = 5.; dexterity = 5.; magic = 0.}
 
+let get_stats_list (st: t): string list =
+  ["health: " ^ string_of_float st.health; "strength: " ^ string_of_float st.strength;
+  "speed: " ^ string_of_float st.speed; "dexterity: " ^ string_of_float st.dexterity;
+  "magic: " ^ string_of_float st.magic]
+
+let print_stats id s =
+  let stats_list = get_stats_list s in
+  let f str = printf "\t%s\n" str in
+  printf "\n%s Stats:" id;
+  List.iter f stats_list
+
+let to_str st : string =
+  String.concat "\n" (get_stats_list st)
+
+let print_battle_stats (ustats: t) (ostats: t) =
+  let user_stats = get_stats_list ustats in
+  let opp_stats = get_stats_list ostats in
+  let f str1 str2 = printf "\t%s\t\t\t\t\t%s\n" str1 str2 in
+  printf "\nUser Stats:\t\t\t\t\tOpponent Stats:\n";
+  List.iter2 f user_stats opp_stats
+
 let combine (st1: t) (st2: t) : t =
   {
   id = st2.id;
@@ -75,6 +96,10 @@ let apply resistance_effect self_effect opp_effect self_stats opp_stats : (t * t
   dexterity = self_stats.dexterity /. (1.-.(self_effect.dexterity/.100.));
   magic = self_stats.magic /. (1.-.(self_effect.magic/.100.));
   } in
+
+  (* print_stats "resistance_effect" resistance_effect; *)
+  (* print_stats "self_effect" self_effect; *)
+  (* print_stats "opponent_effect" opp_effect; *)
 
   let new_opp_stats = {
   opp_stats with
@@ -108,21 +133,3 @@ let difference (st1: t) (st2: t) : float =
   (st1.speed -. st2.speed) +.
   (st1.dexterity -. st2.dexterity) +.
   (st1.magic -. st2.magic)
-
-
-  
-
-let get_stats_list (st: t): string list =
-  ["health: " ^ string_of_float st.health; "strength: " ^ string_of_float st.strength;
-  "speed: " ^ string_of_float st.speed; "dexterity: " ^ string_of_float st.dexterity;
-  "magic: " ^ string_of_float st.magic]
-
-let to_str st : string = 
-  String.concat "\n" (get_stats_list st)
-
-let print_battle_stats (ustats: t) (ostats: t) =
-  let user_stats = get_stats_list ustats in
-  let opp_stats = get_stats_list ostats in
-  let f str1 str2 = printf "\t%s\t\t\t\t\t%s\n" str1 str2 in
-  printf "\nUser Stats:\t\t\t\t\tOpponent Stats:\n";
-  List.iter2 f user_stats opp_stats

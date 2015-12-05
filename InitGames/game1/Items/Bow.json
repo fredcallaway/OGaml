@@ -29,7 +29,7 @@
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
-    "magic": -1.0
+    "magic": 0.0
   },
   "description": "This is a bow",
   "value": 40,

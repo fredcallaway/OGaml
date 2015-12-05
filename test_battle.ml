@@ -9,6 +9,8 @@ let test_apply_effects () =
   Item.print_item bow;
   let f2', f3' = apply_effects bow (f2, f3) in
   f2' === f2;
+
+  (* f2' === f2; *)
   Stats.print_battle_stats (Fighter.get_stats f2') (Fighter.get_stats f3');
 
   (* printf "%f" *)

@@ -1,0 +1,29 @@
+{
+  "base_effect":
+  {
+    "health": 0,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
+  "self_effect":
+  {
+    "health": 0,
+    "strength": 20,
+    "speed": 5,
+    "dexterity": 5,
+    "magic": 0
+  },
+  "opponent_effect":
+  {
+    "health": -20,
+    "strength": 0,
+    "speed": 0,
+    "dexterity": 0,
+    "magic": 0
+  },
+  "description": "This is a sword",
+  "value": 50,
+  "slot": "Primary"
+}

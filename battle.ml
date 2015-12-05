@@ -113,33 +113,16 @@ let use_item (turn: bool) (state: state) (item: Item.t) : state =
 (******************
  * USER INTERFACE *
  ******************)
-
-type command =
-  | Use
-  | Details
-  | Equipped
-  | Help
-
 let cmds = ["Use"; "Details"; "Exit"; "Equipped"]
-
-exception InvalidCommand of string
-
-let str_to_command str : command =
-  match str with
-  | "use" -> Use
-  | "details" -> Details
-  | "equipped" -> Equipped
-  | "help" -> Help
-  | _ -> raise (InvalidCommand str)
 
 let str_to_help str : string =
   match String.lowercase str with
   | "use" -> "Use this item."
   | "details" -> "Display details about this item."
-(*   | "exit" -> "Exit the battle, returning to the zone menu.
-  Consumed items are reset and no xp is gained." *)
+  | "exit" -> "Exit the battle, returning to the zone menu.\n" ^
+              "Consumed items are reset and no xp is gained."
   | "equipped" -> "Display the all of the users and opponents equipped items."
-  | _ -> raise (InvalidCommand str)
+  | _ -> "Invalid command."
 
 let print_help (arg: string) =
   let print_helper cmd =
@@ -158,41 +141,42 @@ let print_commands () =
 let print_welcome (battle: t) =
   printf "Welcome to %s\n" battle.id
 
+
+type command =
+  | Use
+  | Details
+  | Equipped
+  | Help
+
+
 let rec get_user_action state : Item.t =
   try
 
     let user, opp = state in
     let cmd, arg = Io.get_input () in
-    match str_to_command cmd with
-    | Help ->
+    match cmd with
+    | "help" ->
       print_help arg;
       get_user_action state
 
-    | Details ->
+    | "details" ->
       let i = Item.str_to_item (Fighter.get_equipped user) arg in
       printf "%s\n" (Item.get_description i);
       get_user_action state
 
-    | Equipped ->
+    | "equipped" ->
       Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
       get_user_action state
 
-    | Use ->
-      printf "User used %s!\n" arg;
-      Item.str_to_item (Fighter.get_equipped user) arg
+    | "use" ->
+      let item = Item.str_to_item (Fighter.get_equipped user) arg in
+      printf "User used %s!\n" item.Item.id; item
+    | _ -> print_endline "Invalid command\n"; get_user_action state
 
   with
-    | InvalidCommand str ->
-        printf "\nInvalid command: %s\n" str;
-        get_user_action state
-
     | Item.InvalidItem str ->
         printf "\nInvalid item: %s\n" str;
         get_user_action state
-
-    | Failure str ->
-      printf "\nFailure: %s\n" str;
-      get_user_action state
 
 
 (******
@@ -234,7 +218,7 @@ let get_ai_action turn depth state : Item.t =
  * MAIN *
  ********)
 
-type result = | Win | Lose | Exit
+type result = | Win | Lose
 
 let run_battle init_state get_p1_action get_p2_action : result * state =
   (* main loop of battle, called once for each turn *)
@@ -264,18 +248,18 @@ let enter_battle battle player : (t * Player.t) =
   let opp = Fighter.apply_base_effects battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
-  match run_battle (user, opp) get_user_action (get_ai_action true 3) with
-  | (Win, (fighter, _)) ->
-    let new_battle = {battle with completed = true} in
-    let new_player = clean_up player fighter battle in
-    printf "Battle won! Returning to zone.";
-    (new_battle, new_player)
-  | (Lose, (_, _)) ->
-    printf "Battle lost! Returning to zone.";
-    (battle, player)
-  | (Exit, (_, _)) ->
-    printf "Battle exited! Returning to zone.";
-    (battle, player)
+  try
+    match run_battle (user, opp) get_user_action (get_ai_action true 3) with
+    | (Win, (fighter, _)) ->
+      let new_battle = {battle with completed = true} in
+      let new_player = clean_up player fighter battle in
+      printf "Battle won! Returning to zone.";
+      (new_battle, new_player)
+    | (Lose, (_, _)) ->
+      printf "Battle lost! Returning to zone.";
+      (battle, player)      
+  with 
+   | Io.Exit -> print_endline "Battle exited! Returning to zone."; (battle, player)
 
 
 
