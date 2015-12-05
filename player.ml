@@ -40,13 +40,6 @@ let to_file path player =
   Yojson.Basic.to_file (path^"Players/"^filename) player_json;
   `String filename
 
-
-let stats (p: t) =
-  let base_stats = Stats.get_base_stats (p.id^" stats") in
-  let f acc i = Stats.combine i.Item.base_effect acc in
-  List.fold_left f base_stats p.equipped
-
-
 let rec print_item_list p =
   match p with
   | [] -> ()

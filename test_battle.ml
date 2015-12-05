@@ -1,7 +1,8 @@
 open Battle
 open Assertions
+open Printf
 
-let testdir = "SavedGames/game1/"
+let testdir = "SavedGames/game2/"
 
 let bow = Item.from_file testdir "Bow.json"
 let sword = Item.from_file testdir "Sword.json"
@@ -14,14 +15,17 @@ let f2 = Fighter.from_file testdir "fighter2.json"
 let f3 = Fighter.from_file testdir "fighter3.json"
 
 
-let test_apply_effects () = 
+let test_apply_effects () =
+  Stats.print_battle_stats (Fighter.get_stats f2) (Fighter.get_stats f3);
   let f2', f3' = apply_effects bow (f2, f3) in
-  f2' === f2;
-  Fighter.health f3' === Fighter.health f3 - 10;
+  (* f2' === f2; *)
+  Stats.print_battle_stats (Fighter.get_stats f2') (Fighter.get_stats f3');
+  (* printf "%f" *)
+  (* Fighter.health f3' === Fighter.health f3 - 10.; *)
 
-  let f2', f3' = apply_effects health_potion (f2, f3) in
-  f3' === f3;
-  Fighter.health f2' === Fighter.health f2 + 20;
+  (* let f2', f3' = apply_effects health_potion (f2, f3) in *)
+  (* f3' === f3; *)
+  (* Fighter.health f2' === Fighter.health f2 + 20.; *)
   ()
 
 
@@ -48,7 +52,7 @@ let test_ai_value_heuristic () =
   ()
 
 
-let test_ai_value () = 
+let test_ai_value () =
   ai_value true 0 (f0, f0) === 0;
   ai_value true 1 (f0, f0) === 1;
   ai_value false 2 (f0, f0) === 0;
@@ -66,8 +70,8 @@ let test_get_ai_action () =
 
 
 let () =
-  (* test_apply_effects () *)
-  test_use_item ()
+  test_apply_effects ()
+  (* test_use_item () *)
   (* test_ai_value_heuristic () *)
   (* test_ai_value () *)
   (* test_get_ai_action (); *)

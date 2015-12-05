@@ -6,12 +6,16 @@ type t = {
   equipped: Item.t list;
 }
 
-(* let apply_equipped  *)
+let apply_base_effects (f: t) : t =
+  let base_stats = Stats.get_base_stats (f.id^" stats") in
+  let g acc i = Stats.combine i.Item.base_effect acc in
+  let new_stats = List.fold_left g base_stats f.equipped in
+  {f with stats=new_stats}
 
 let make (player: Player.t) : t =
   {
   id=player.Player.id;
-  stats=Player.stats player;
+  stats=Stats.get_base_stats (player.Player.id^" stats");
   equipped=player.Player.equipped
   }
 
@@ -48,8 +52,8 @@ let set_stats (f: t) (newstats: Stats.t)= {f with stats = newstats}
 
 let alive f : bool = Stats.get_health f.stats > 0.
 
-let apply_effect effect (f : t) =
-  {f with stats = (effect f.stats)}
+(* let apply_effect effect (f : t) =
+  {f with stats = (effect f.stats)} *)
 
 
 let health (f:t): float =

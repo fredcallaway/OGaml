@@ -254,8 +254,8 @@ let clean_up player fighter battle : Player.t =
 let enter_battle battle player : (t * Player.t) =
   print_welcome battle ;
   print_commands ();
-  let user = Fighter.make player in
-  let opp = battle.opponent in
+  let user = Fighter.apply_base_effects (Fighter.make player) in
+  let opp = Fighter.apply_base_effects battle.opponent in
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
   match run_battle (user, opp) get_user_action (get_ai_action true 3) with
