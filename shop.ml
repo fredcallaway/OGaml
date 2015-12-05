@@ -90,7 +90,7 @@ let buy (id: string) (shop: t) (player: Player.t) : Player.t =
 let sell (id: string) (shop: t) (player: Player.t) : Player.t =
   match (Item.get_item id player.Player.inventory) with
   | None -> printf "Item %s not in inventory.\n" id; player
-  | Some i -> printf "Sold %s for %d!" id (i.Item.value/2);
+  | Some i -> printf "Sold %s for %d!\n" id (i.Item.value/2);
               let new_money = player.Player.money + (i.Item.value/2) in
               let new_inventory = (Item.remove player.Player.inventory i) in
               {player with Player.inventory = new_inventory; Player.money = new_money} 
@@ -99,7 +99,7 @@ let equip (id: string) (player: Player.t) : Player.t =
   match (Item.get_item id player.Player.inventory) with 
   | None -> printf "Item %s not in inventory.\n" id; player
   | Some i -> 
-    let old = Item.get_slot_item i player.Player.inventory in 
+    let old = Item.get_slot_item i player.Player.equipped in 
     begin
       match old with 
       | Some ol -> 

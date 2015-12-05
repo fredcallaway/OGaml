@@ -96,12 +96,32 @@ let is_consumable (i: t) =
   | Consumable -> true
   | _ -> false
 
+let same_type (item1: t) (item2: t) = 
+  match item1.slot, item2.slot with
+  | Consumable,Consumable -> true
+  | Head,Head -> true
+  | Body,Body -> true
+  | Legs,Legs -> true
+  | Feet,Feet -> true
+  | Hands,Hands -> true
+  | Primary,Primary -> true
+  | Secondary,Secondary -> true
+  | Special,Special -> true
+  | _,_ -> false
+
+let rec get_same_type (item: t) (equipped: t list): t option =
+  match equipped with 
+  | [] -> None 
+  | h::t -> if same_type h item then Some h else get_same_type item t 
+
+
 let get_slot_item (item: t) (equipped: t list): t option = 
   if is_consumable item then 
     let consumables = List.filter (is_consumable) equipped in
     if (List.length consumables) = 3 then Some (List.hd consumables)
     else None  
-  else None 
+  else 
+    get_same_type item equipped
 
 
 let rec get_item (id: string) (selection: t list): t option =
