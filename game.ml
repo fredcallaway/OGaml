@@ -102,7 +102,8 @@ let print_help (arg: string) =
 
 let print_commands () =
   printf "Availible commands: (type 'Help [cmd]' to get more info)\n";
-  List.iter (printf "%s\n") (cmds)
+  List.iter (printf "%s\n") (cmds);
+  printf "\n"
 
 let print_welcome () =
   printf "\n\nWelcome to OGaml!\n\n"
@@ -199,6 +200,7 @@ let rec game_repl (gameop: t option) : t option =
 let enter_game () =
   print_welcome();
   print_commands();
+  print_list();
   try mkdir "" "SavedGames"; with | _ -> ();
   ignore (game_repl None);
 in
