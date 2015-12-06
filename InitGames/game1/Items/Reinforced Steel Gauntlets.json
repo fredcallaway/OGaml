@@ -1,11 +1,11 @@
 {
   "base_effect":
   {
-    "health": 0.0,
-    "strength": 0.0,
+    "health": 3.0,
+    "strength": 3.0,
     "speed": 0.0,
     "dexterity": 0.0,
-    "magic": 3.0
+    "magic": 0.0
   },
   "resistance_effect":
   {
@@ -31,7 +31,7 @@
     "dexterity": 0.0,
     "magic": 0.0
   },
-  "description": "This is a set of tingling new white socks.",
-  "value": 270,
-  "slot": "Feet"
+  "description": "This is a set of reinforced steel gauntlets.",
+  "value": 220,
+  "slot": "Hands"
 }

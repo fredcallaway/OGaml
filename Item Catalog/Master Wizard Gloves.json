@@ -5,7 +5,7 @@
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
-    "magic": 3.0
+    "magic": 4.0
   },
   "resistance_effect":
   {
@@ -31,7 +31,7 @@
     "dexterity": 0.0,
     "magic": 0.0
   },
-  "description": "This is a set of tingling new white socks.",
-  "value": 270,
-  "slot": "Feet"
+  "description": "This is a set of gloves for the master wizard.",
+  "value": 320,
+  "slot": "Hands"
 }
