@@ -1,8 +1,8 @@
 {
   "base_effect":
   {
-    "health": 15.0,
-    "strength": 0.0,
+    "health": 0.0,
+    "strength": 3.0,
     "speed": 0.0,
     "dexterity": 0.0,
     "magic": 0.0
@@ -10,7 +10,7 @@
   "resistance_effect":
   {
     "health": 0.0,
-    "strength": 0.0,
+    "strength": 1.0,
     "speed": 0.0,
     "dexterity": 0.0,
     "magic": 0.0
@@ -25,13 +25,13 @@
   },
   "opponent_effect":
   {
-    "health": -15.0,
+    "health": -3.0,
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
     "magic": 0.0
   },
-  "description": "This is a ring that burns your enemies!",
-  "value": 550,
-  "slot": "Special"
+  "description": "This is an old rusted axe.",
+  "value": 40,
+  "slot": "Primary"
 }

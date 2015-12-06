@@ -1,10 +1,10 @@
 {
   "base_effect":
   {
-    "health": 15.0,
+    "health": 0.0,
     "strength": 0.0,
     "speed": 0.0,
-    "dexterity": 0.0,
+    "dexterity": 7.0,
     "magic": 0.0
   },
   "resistance_effect":
@@ -12,7 +12,7 @@
     "health": 0.0,
     "strength": 0.0,
     "speed": 0.0,
-    "dexterity": 0.0,
+    "dexterity": 1.0,
     "magic": 0.0
   },
   "self_effect":
@@ -25,13 +25,13 @@
   },
   "opponent_effect":
   {
-    "health": -15.0,
+    "health": -13.0,
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
     "magic": 0.0
   },
-  "description": "This is a ring that burns your enemies!",
-  "value": 550,
-  "slot": "Special"
+  "description": "This is a longbow made by the elven kind.",
+  "value": 310,
+  "slot": "Primary"
 }

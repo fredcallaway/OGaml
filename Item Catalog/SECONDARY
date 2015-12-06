@@ -4,7 +4,6 @@ SECONDARY
   	Lvl 1.
   		Wooden Shield
   		Iron Shield
-  		Reinforced Iron Shield
   	Lvl 2.
   		Steel Shield
   		Reinforced Steel Shield
@@ -25,12 +24,11 @@ SECONDARY
   		Shopping Bag
 
   Orb
- 	Lvl 1.
- 		Cracked Orb
- 		Used Orb
+ 	  Lvl 1.
+ 		  Cracked Orb
+ 		  Used Orb
   	Lvl 2.
   		Shiny Orb
-  		Seeing Orb
   		Pearl Orb
   	Lvl 3.
   		Orb of Doom
