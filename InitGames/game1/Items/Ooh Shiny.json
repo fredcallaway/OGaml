@@ -1,0 +1,37 @@
+{
+  "base_effect":
+  {
+    "health": 14.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 5.0
+  },
+  "resistance_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "self_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 1.0
+  },
+  "opponent_effect":
+  {
+    "health": -15.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "description": "This is a strong magic amulet that channels your power.",
+  "value": 600,
+  "slot": "Special"
+}

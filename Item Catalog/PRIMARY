@@ -7,9 +7,7 @@ PRIMARY
   		Sharpened Iron Sword
   	Lvl 2. 
   		Steel Sword
-  		Sharpened Steel Sword
   		Black Steel Sword
-  		Sharpened Black Steel Sword
   	Lvl 3. 
   		Dragon Steel Sword
   		Sharpened Dragon Steel Sword
@@ -21,14 +19,11 @@ PRIMARY
   		Iron Axe
   		Sharpened Iron Axe
   	Lvl 2. 
-  		Steel Axe
   		Sharpened Steel Axe
   		Black Steel Axe
-  		Sharpened Black Steel Axe
   	Lvl 3. 
   		Dragon Steel Axe
-  		Sharpened Dragon Steel Axe
-  		Woodsman Axe
+    	Woodsman Axe
 
   Bow
   	Lvl 1. 
@@ -38,10 +33,8 @@ PRIMARY
   	Lvl 2. 
   		Elven Bow
   		Elven Longbow
-  		Decorative Bow
   	Lvl 3. 
   		Composite Bow
-  		Advanced Composite Bow
   		Bow Down
 
   Magic Staff
@@ -53,6 +46,4 @@ PRIMARY
   		Experienced Staff
   	Lvl 3. 
   		Master Staff
-  		Gandalf Staff
   		Freds Toy
-  		
