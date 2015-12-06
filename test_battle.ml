@@ -2,7 +2,7 @@ open Battle
 open Assertions
 open Printf
 
-open Testing_utils
+open Testing_utils (* populates name space with fighters and items *)
 
 let test_apply_effects () =
   Stats.print_battle_stats (Fighter.get_stats f2) (Fighter.get_stats f3);
@@ -57,6 +57,7 @@ let test_ai_value () =
   ai_value false 2 (f0, f0) === 0.0;
   ai_value false 3 (f0, f0) === 1.0;
 
+
 (*   ai_value true 0 (f1, f1) === 0.0;
   ai_value true 1 (f1, f1) === 20.0;
   ai_value false 2 (f1, f1) === 0.0;
@@ -65,11 +66,10 @@ let test_ai_value () =
 
 
 let test_get_ai_action () =
-  get_ai_action true 0 (f2, f3) === health_potion;
-  get_ai_action true 3 (f2, f3) === health_potion;
-
-  get_ai_action false 0 (f2, f3) === sword;
-  get_ai_action false 3 (f2, f3) === sword;
+  (* get_ai_action true 0 (f2, f3) === health_potion; *)
+  (* get_ai_action false 1 (f2, f3) === health_potion; *)
+  
+  get_ai_action true 2 (f5, f3) === sword;
   ()
 
 
@@ -77,7 +77,7 @@ let () =
   (* test_apply_effects (); *)
   (* test_use_item (); *)
   (* test_ai_value_heuristic (); *)
-  test_ai_value ();
-  (* test_get_ai_action (); *)
+  (* test_ai_value (); *)
+  test_get_ai_action ();
 
 

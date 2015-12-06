@@ -163,7 +163,11 @@ let rec get_user_action state : Item.t =
     | "use" ->
       let item = Item.str_to_item (Fighter.get_equipped user) arg in
       printf "User used %s!\n" item.Item.id; item
-    | _ -> print_endline "Invalid command\n"; get_user_action state
+
+    | item_id -> 
+      let item = Item.str_to_item (Fighter.get_equipped user) arg in
+      printf "User used %s!\n" item.Item.id; item
+      (* print_endline "Invalid command\n"; get_user_action state *)
 
   with
     | Item.InvalidItem str ->
@@ -180,7 +184,7 @@ let ai_value_heuristic turn (f1, f2) : float =
   let self, opp = if turn then f1, f2 else f2, f1 in
   let result = Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp) in
   (* Stats.print_battle_stats (Fighter.get_stats self) (Fighter.get_stats opp); *)
-  pf "%f\n" result; result
+  result
 
 (* the value of a state for the active fighter *)
 let rec ai_value turn depth (state: state) : float =

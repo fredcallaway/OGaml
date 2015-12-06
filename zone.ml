@@ -69,7 +69,6 @@ let str_to_help str : string =
   | "shop" -> "Enter the shop."
   | "map" -> "Display the map of the current zone."
   | "bag" -> "Display money, inventory, and equipped."
-  | "exit" -> "Exit the zone, returning to the world menu."
   | _ -> raise (InvalidCommand str)
 
 let print_help (arg: string) =

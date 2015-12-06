@@ -1,3 +1,6 @@
+(* The element t in lst such that [comp t] >= [comp t'] 
+ * for t' in lst. If more than one t satisfy this condition,
+ * the first is returned*)
 let list_max (comp: 'a -> 'b) (lst : 'a list) : 'a = 
   let folder (best, best_val) elt =
     let elt_val = comp elt in
