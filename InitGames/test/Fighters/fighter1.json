@@ -1,0 +1,15 @@
+{
+  "stats":
+  {
+    "health": 50.0,
+    "strength": 40.0,
+    "speed": 30.0,
+    "dexterity": 20.0,
+    "magic": 10.0
+  },
+  "equipped":
+  [
+    "Health Potion.json",
+    "Sword.json"
+  ]
+}

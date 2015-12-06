@@ -1,4 +1,4 @@
-let testdir = "InitGames/game1/"
+let testdir = "InitGames/test/"
 let bow = Item.from_file testdir "Bow.json"
 let sword = Item.from_file testdir "Sword.json"
 let nail = Item.from_file testdir "Rusty Nail.json"
