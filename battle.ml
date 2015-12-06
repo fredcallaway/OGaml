@@ -3,8 +3,6 @@ open Printf
 open Fighter
 
 
-let pf = Printf.printf
-
 type t = {
   id: string;
   unlocked : bool;
@@ -20,7 +18,6 @@ let from_file path filename =
   let unlocked = json |> member "unlocked" |> to_bool in
   let completed = json |> member "completed" |> to_bool in
   let opponent = json |> member "opponent" |> to_string |> Fighter.from_file path in
-  (* let ai = json |> member "ai" |> Ai.to_file path in *)
   let treasure = json |> member "treasure" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
   let money = json |> member "money" |> to_int in
   {
@@ -159,8 +156,8 @@ let rec get_user_action state : Item.t =
       let item = Item.str_to_item (Fighter.get_equipped user) arg in
       printf "User used %s!\n" item.Item.id; item
 
-    | item_id ->
-      let item = Item.str_to_item (Fighter.get_equipped user) arg in
+    | item_id -> 
+      let item = Item.str_to_item (Fighter.get_equipped user) item_id in
       printf "User used %s!\n" item.Item.id; item
       (* print_endline "Invalid command\n"; get_user_action state *)
 
@@ -177,13 +174,16 @@ let rec get_user_action state : Item.t =
 (* how much better off the active fighter is *)
 let ai_value_heuristic turn (f1, f2) : float =
   let self, opp = if turn then f1, f2 else f2, f1 in
-  let result = Stats.difference (Fighter.get_stats self) (Fighter.get_stats opp) in
-  (* Stats.print_battle_stats (Fighter.get_stats self) (Fighter.get_stats opp); *)
-  result
+  match (Fighter.alive self), (Fighter.alive opp) with
+  | false, _ -> -. max_float
+  | true, false -> max_float
+  | true, true-> 
+    Stats.difference (Fighter.get_stats self) 
+                     (Fighter.get_stats opp)
 
 (* the value of a state for the active fighter *)
-let rec ai_value turn depth (state: state) : float =
-  (* pf "ai_value %b %i\n" turn depth; *)
+let rec ai_value depth turn  (state: state) : float =
+  (* printf "ai_value %b %i\n" turn depth; *)
   let ai = (if turn then fst else snd) state in
 
   let result =
@@ -191,19 +191,36 @@ let rec ai_value turn depth (state: state) : float =
   | 0 -> ai_value_heuristic turn state
   | _ ->
     let child_states = List.map (use_item turn state) (Fighter.get_equipped ai) in
-    let child_ai = (ai_value (not turn) (depth-1)) in
+    let child_ai = (ai_value (depth-1)) (not turn) in
     let child_values = List.map child_ai child_states in
     Utils.list_max (~+.) (List.map (~-.) child_values)
 
   in result
 
+(* An item that is deemed appropriate to use in a given state.
+ * Turn indicates whether ai is *)
 let get_ai_action turn depth state : Item.t =
   let ai = (if turn then fst else snd) state in
-  let child_ai = (ai_value (not turn) (depth)) in
+  let child_ai = (ai_value (depth)) (not turn) in
   Fighter.get_equipped ai
   |> Utils.list_max (fun it -> (use_item turn state it)
                                 |> child_ai
                                 |> (~-.))
+
+let random_action turn state : Item.t =
+  let ai = (if turn then fst else snd) state in
+  let choices = Fighter.get_equipped ai in
+  List.nth choices (Random.int (List.length choices))
+
+(* Returns a random action with probability [fuzz], otherwise
+ * returns an "intelligent" action. *)
+let get_fuzzy_ai_action fuzz depth turn state : Item.t = 
+  let item = 
+    if Random.float 1.0 > fuzz
+    then get_ai_action turn depth state
+    else random_action turn state
+  in printf "Opponent used %s!\n" item.Item.id; item
+
 
 (********
  * MAIN *
@@ -228,9 +245,9 @@ let run_battle init_state get_p1_action get_p2_action : result * state =
   in loop true init_state
 
 (* Give the player the reward, and update the players inventory *)
-let clean_up player fighter battle : Player.t =
-  (* TODO *)
-  player
+let give_reward player fighter battle : Player.t =
+  {player with Player.money = player.Player.money + battle.money;
+               Player.inventory = player.Player.inventory @ battle.treasure;}
 
 let enter_battle battle player : (t * Player.t) =
   print_welcome battle ;
@@ -240,10 +257,11 @@ let enter_battle battle player : (t * Player.t) =
   (* print out player and ai stats, equipped items and commands for battle *)
   Item.print_double_item_list (Fighter.get_equipped user) (Fighter.get_equipped opp);
   try
-    match run_battle (user, opp) get_user_action (get_ai_action true 3) with
+    let ai = (get_fuzzy_ai_action 0.3 3 false) in
+    match run_battle (user, opp) get_user_action ai with
     | (Win, (fighter, _)) ->
       let new_battle = {battle with completed = true} in
-      let new_player = clean_up player fighter battle in
+      let new_player = give_reward player fighter battle in
       printf "Battle won! Returning to zone.";
       (new_battle, new_player)
     | (Lose, (_, _)) ->

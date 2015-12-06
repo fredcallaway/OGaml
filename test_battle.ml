@@ -51,11 +51,10 @@ let test_ai_value_heuristic () =
 
 
 let test_ai_value () =
-  ai_value true 0 (f0, f0) === 0.0;
-  ai_value true 1 (f0, f0) === 1.0;
-
-  ai_value false 2 (f0, f0) === 0.0;
-  ai_value false 3 (f0, f0) === 1.0;
+  ai_value 0 true (f0, f0) === 0.0;
+  ai_value 1 true (f0, f0) === 1.0;
+  ai_value 2 false (f0, f0) === 0.0;
+  ai_value 3 false (f0, f0) === 1.0;
 
 
 (*   ai_value true 0 (f1, f1) === 0.0;
@@ -93,12 +92,10 @@ let test_all_battles () =
   Array.iter test_battle battles
 
 let () =
-  test_all_battles ();
-  (* test_load_battle (); *)
-  (* test_apply_effects (); *)
-  (* test_use_item (); *)
-  (* test_ai_value_heuristic (); *)
-  (* test_ai_value (); *)
-  (* test_get_ai_action (); *)
+  test_apply_effects ();
+  test_use_item ();
+  test_ai_value_heuristic ();
+  test_ai_value ();
+  test_get_ai_action ();
 
 

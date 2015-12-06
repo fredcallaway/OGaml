@@ -175,7 +175,7 @@ let rec shop_repl (shop: t) (player: Player.t) : (t * Player.t) =
       printf "\nInvalid item: %s\n" str;
       shop_repl shop player
 
-    | Exit ->
+    | Io.Exit ->
       printf "Exiting shop\n";
       (shop, player)
 

@@ -26,7 +26,7 @@ let from_file path filename =
   stream_from_string
   stream_to_file filename stream *)
 
-let to_file game =
+let to_file game: unit =
   let path = "SavedGames/" ^ game.id ^ "/" in
   let world_json = game.world |> World.to_file path in
   let player_json = game.player |> Player.to_file path in
