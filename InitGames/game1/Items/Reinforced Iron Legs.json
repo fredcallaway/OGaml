@@ -1,0 +1,37 @@
+{
+  "base_effect":
+  {
+    "health": 4.0,
+    "strength": 3.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "resistance_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "self_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "opponent_effect":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "description": "This is a set of reinforced heavy iron plate legs.",
+  "value": 120,
+  "slot": "Legs"
+}
