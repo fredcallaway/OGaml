@@ -1,11 +1,11 @@
 {
   "base_effect":
   {
-    "health": 0.0,
+    "health": 10.0,
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
-    "magic": 10.0
+    "magic": 5.0
   },
   "resistance_effect":
   {
@@ -17,7 +17,7 @@
   },
   "self_effect":
   {
-    "health": 0.0,
+    "health": 14.0,
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
@@ -25,13 +25,13 @@
   },
   "opponent_effect":
   {
-    "health": -20.0,
+    "health": -9.0,
     "strength": 0.0,
     "speed": 0.0,
     "dexterity": 0.0,
     "magic": 0.0
   },
-  "description": "This is a magic wand made out of smooth silicone material.",
-  "value": 540,
-  "slot": "Primary"
+  "description": "UNLOCK THE ZWEIGGGGG!!!!",
+  "value": 500,
+  "slot": "Secondary"
 }
