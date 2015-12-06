@@ -10,7 +10,6 @@ type t = {
   unlocked : bool;
   completed : bool;
   opponent: Fighter.t;
-  xp: int;
   treasure: Item.t list;
   money: int;
 }
@@ -22,7 +21,6 @@ let from_file path filename =
   let completed = json |> member "completed" |> to_bool in
   let opponent = json |> member "opponent" |> to_string |> Fighter.from_file path in
   (* let ai = json |> member "ai" |> Ai.to_file path in *)
-  let xp = json |> member "xp" |> to_int in
   let treasure = json |> member "treasure" |> to_list |> List.map to_string |> List.map (Item.from_file path) in
   let money = json |> member "money" |> to_int in
   {
@@ -31,7 +29,6 @@ let from_file path filename =
   completed;
   opponent;
   (* ai; *)
-  xp;
   treasure;
   money
   }
@@ -41,7 +38,6 @@ let to_file path battle =
   let completed_json = `Bool (battle.completed) in
   let opponent_json = battle.opponent |> Fighter.to_file path in
   (* let ai_json = battle.ai |> Ai.to_file path in *)
-  let xp_json = `Int (battle.xp) in
   let treasure_json = `List (battle.treasure |> List.map (Item.to_file path)) in
   let money_json = `Int (battle.money) in
   let battle_json = `Assoc [
@@ -49,7 +45,6 @@ let to_file path battle =
     ("completed", completed_json);
     ("opponent", opponent_json);
     (* ("ai", ai_json); *)
-    ("xp", xp_json);
     ("treasure", treasure_json);
     ("money", money_json)
   ] in
@@ -164,7 +159,7 @@ let rec get_user_action state : Item.t =
       let item = Item.str_to_item (Fighter.get_equipped user) arg in
       printf "User used %s!\n" item.Item.id; item
 
-    | item_id -> 
+    | item_id ->
       let item = Item.str_to_item (Fighter.get_equipped user) arg in
       printf "User used %s!\n" item.Item.id; item
       (* print_endline "Invalid command\n"; get_user_action state *)
@@ -253,8 +248,8 @@ let enter_battle battle player : (t * Player.t) =
       (new_battle, new_player)
     | (Lose, (_, _)) ->
       printf "Battle lost! Returning to zone.";
-      (battle, player)      
-  with 
+      (battle, player)
+  with
    | Io.Exit -> print_endline "Battle exited! Returning to zone."; (battle, player)
 
 

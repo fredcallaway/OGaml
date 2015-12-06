@@ -1,0 +1,20 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Dragon Steel Sword.json",
+    "Dragon Steel Legs.json",
+    "Dragon Steel Gauntlets.json",
+    "Dragon Steel Boots.json",
+    "Dragon Steel Armor.json",
+    "Dragon Steel Helm.json",
+    "Strong Strength Potion.json"
+  ]
+}

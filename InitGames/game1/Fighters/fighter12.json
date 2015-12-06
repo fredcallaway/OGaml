@@ -1,0 +1,23 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Elven Longbow.json",
+    "Dragonskin Quiver.json",
+    "Archers Chaps.json",
+    "Archers Bracers.json",
+    "Archers Striders.json",
+    "Archers Vest.json",
+    "Dragonskin Coif.json",
+    "Good Health Potion.json",
+    "Good Speed Potion.json",
+    "Good Speed Potion.json"
+  ]
+}

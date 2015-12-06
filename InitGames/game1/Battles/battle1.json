@@ -3,10 +3,9 @@
   "completed": false,
   "opponent": "fighter1.json",
   // "ai": "ai.json",
-  "xp": 50,
   "treasure":
   [
-    "Health Potion.json"
+    "Old Gloves.json"
   ],
-  "money": 40
+  "money": 100
 }

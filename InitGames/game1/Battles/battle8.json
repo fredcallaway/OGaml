@@ -1,0 +1,14 @@
+{
+  "unlocked": true,
+  "completed": false,
+  "opponent": "fighter8.json",
+  // "ai": "ai.json",
+  "treasure":
+  [
+    "Steel Sword.json",
+    "Steel Legs.json",
+    "Good Health Potion.json",
+    "Good Strength Potion.json"
+  ],
+  "money": 250
+}

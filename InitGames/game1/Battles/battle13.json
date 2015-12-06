@@ -1,0 +1,13 @@
+{
+  "unlocked": false,
+  "completed": false,
+  "opponent": "fighter13.json",
+  // "ai": "ai.json",
+  "treasure":
+  [
+    "Pearl Orb.json",
+    "White Wizard Robe Bottoms.json",
+    "Good Magic Potion.json"
+  ],
+  "money": 400
+}

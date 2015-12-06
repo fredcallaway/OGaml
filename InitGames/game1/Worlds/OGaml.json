@@ -3,6 +3,7 @@
   "zones":
   [
     "zone1.json",
-    "zone2.json"
+    "zone2.json",
+    "zone3.json"
   ]
 }

@@ -3,9 +3,13 @@
   "completed": false,
   "battles":
   [
-    "battle0.json",
-    "battle3.json",
-    "battle4.json"
+    "battle8.json",
+    "battle9.json",
+    "battle10.json",
+    "battle11.json",
+    "battle12.json",
+    "battle13.json",
+    "battle14.json"
   ],
   "shop": "shop2.json"
 }

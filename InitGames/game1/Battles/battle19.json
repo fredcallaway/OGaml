@@ -1,11 +1,11 @@
 {
   "unlocked": false,
   "completed": false,
-  "opponent": "fighter2.json",
+  "opponent": "fighter19.json",
   // "ai": "ai.json",
   "treasure":
   [
-    "Iron Sword.json"
+    "Strong Dexterity Potion.json"
   ],
-  "money": 100
+  "money": 550
 }

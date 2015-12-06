@@ -1,0 +1,21 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Magic Wand.json",
+    "Shiny Orb.json",
+    "Grey Wizard Robe Bottoms.json",
+    "Grey Wizard Gloves.json",
+    "Grey Wizard Socks.json",
+    "Good Magic Potion.json",
+    "Grey Wizard Robe.json",
+    "Grey Wizard Hat.json"
+  ]
+}

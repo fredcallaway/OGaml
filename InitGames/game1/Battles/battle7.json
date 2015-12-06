@@ -1,0 +1,13 @@
+{
+  "unlocked": false,
+  "completed": false,
+  "opponent": "fighter7.json",
+  // "ai": "ai.json",
+  "treasure":
+  [
+    "Reinforced Iron Armor.json",
+    "Minor Strength Potion.json",
+    "Reinforced Iron Helm.json"
+  ],
+  "money": 250
+}

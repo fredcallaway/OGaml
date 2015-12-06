@@ -1,0 +1,13 @@
+{
+  "unlocked": false,
+  "completed": false,
+  "opponent": "fighter16.json",
+  // "ai": "ai.json",
+  "treasure":
+  [
+    "Composite Bow.json",
+    "Mythril Weave Vest.json",
+    "Strong Speed Potion.json"
+  ],
+  "money": 500
+}

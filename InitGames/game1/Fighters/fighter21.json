@@ -1,0 +1,22 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Freds Toy.json",
+    "Orb of Zweig.json",
+    "Bath Robe Bottoms.json",
+    "Magic Mittens.json",
+    "Fuzzy Socks.json",
+    "Bath Robe.json",
+    "Sorting Hat.json",
+    "Strong Magic Potion.json",
+    "Strong Speed Potion.json"
+  ]
+}

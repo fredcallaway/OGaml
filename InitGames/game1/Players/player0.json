@@ -1,22 +1,22 @@
 {
   "stats":
   {
-    "health": 50.0,
-    "strength": 40.0,
-    "speed": 30.0,
-    "dexterity": 20.0,
-    "magic": 10.0
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
   },
   "inventory":
   [
-    "Health Potion.json"
+    "Minor Health Potion.json"
   ],
   "equipped":
   [
-    "Helmet.json",
-    "Body Armor.json",
-    "Sword.json",
-    "Rusty Nail.json"
+    "Leather Vest.json",
+    "Leather Striders.json",
+    "Old Gloves.json",
+    "Rusted Sword.json"
   ],
   "money": 1000
 }

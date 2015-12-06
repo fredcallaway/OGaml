@@ -1,0 +1,15 @@
+{
+  "unlocked": false,
+  "completed": false,
+  "battles":
+  [
+    "battle15.json",
+    "battle16.json",
+    "battle17.json",
+    "battle18.json",
+    "battle19.json",
+    "battle20.json",
+    "battle21.json"
+  ],
+  "shop": "shop3.json"
+}

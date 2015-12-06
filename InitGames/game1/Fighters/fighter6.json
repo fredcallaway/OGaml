@@ -9,10 +9,12 @@
   },
   "equipped":
   [
-    "Iron Sword.json",
     "Minor Health Potion.json",
-    "Minor Health Potion.json",
-    "Minor Speed Potion.json",
-    "Iron Helm.json"
+    "Old Tophat.json",
+    "Old Robe.json",
+    "Minor Magic Potion.json",
+    "Old Magic Socks.json",
+    "Apprentice Staff.json",
+    "Used Orb.json"
   ]
 }

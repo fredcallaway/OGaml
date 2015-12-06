@@ -4,7 +4,12 @@
   "battles":
   [
     "battle1.json",
-    "battle2.json"
+    "battle2.json",
+    "battle3.json",
+    "battle4.json",
+    "battle5.json",
+    "battle6.json",
+    "battle7.json"
   ],
   "shop": "shop1.json"
 }

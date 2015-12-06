@@ -1,0 +1,21 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Experienced Staff.json",
+    "Pearl Orb.json",
+    "White Wizard Robe Bottoms.json",
+    "White Wizard Gloves.json",
+    "White Wizard Socks.json",
+    "Good Magic Potion.json",
+    "Good Strength Potion.json",
+    "Good Health Potion.json"
+  ]
+}

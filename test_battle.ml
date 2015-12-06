@@ -53,7 +53,7 @@ let test_ai_value_heuristic () =
 let test_ai_value () =
   ai_value true 0 (f0, f0) === 0.0;
   ai_value true 1 (f0, f0) === 1.0;
-  
+
   ai_value false 2 (f0, f0) === 0.0;
   ai_value false 3 (f0, f0) === 1.0;
 
@@ -68,16 +68,37 @@ let test_ai_value () =
 let test_get_ai_action () =
   (* get_ai_action true 0 (f2, f3) === health_potion; *)
   (* get_ai_action false 1 (f2, f3) === health_potion; *)
-  
+
   get_ai_action true 2 (f5, f3) === sword;
   ()
 
+let test_load_battle () =
+  let testdir = "InitGames/game1/" in
+  let b0 = Battle.from_file testdir "battle1.json" in
+  ignore b0;
+  ()
+
+let testdir = "InitGames/game1/"
+
+let test_battle filename =
+  try
+    let b = Battle.from_file testdir filename in
+    ignore b
+  with
+  | Yojson.Json_error(str) ->
+    printf "############### %s ################\n" filename
+
+let test_all_battles () =
+  let battles = Sys.readdir (testdir^"Battles/") in
+  Array.iter test_battle battles
 
 let () =
+  test_all_battles ();
+  (* test_load_battle (); *)
   (* test_apply_effects (); *)
   (* test_use_item (); *)
   (* test_ai_value_heuristic (); *)
   (* test_ai_value (); *)
-  test_get_ai_action ();
+  (* test_get_ai_action (); *)
 
 

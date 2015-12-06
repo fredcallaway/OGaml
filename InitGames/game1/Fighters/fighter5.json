@@ -9,7 +9,9 @@
   },
   "equipped":
   [
-    "Iron Sword.json",
-    "Minor Health Potion.json"
+    "Oak Bow.json",
+    "Minor Health Potion.json",
+    "Minor Speed Potion.json",
+    "Iron Helm.json"
   ]
 }

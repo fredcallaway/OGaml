@@ -1,12 +1,11 @@
 {
-  "unlocked": true,
+  "unlocked": false,
   "completed": false,
   "opponent": "fighter3.json",
   // "ai": "ai.json",
-  "xp": 80,
   "treasure":
   [
-    "Helmet.json"
+    "Used Orb.json"
   ],
-  "money": 60
+  "money": 150
 }

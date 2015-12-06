@@ -1,0 +1,21 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Composite Bow.json",
+    "Bottomless Quiver.json",
+    "Mythril Weave Chaps.json",
+    "Mythril Weave Bracers.json",
+    "Mythril Weave Vest.json",
+    "Mythril Weave Coif.json",
+    "Strong Dexterity Potion.json",
+    "Strong Speed Potion.json"
+  ]
+}

@@ -10,6 +10,10 @@
   "equipped":
   [
     "Iron Sword.json",
-    "Minor Health Potion.json"
+    "Reinforced Iron Armor.json",
+    "Minor Health Potion.json",
+    "Minor Speed Potion.json",
+    "Minor Strength Potion.json",
+    "Reinforced Iron Helm.json"
   ]
 }

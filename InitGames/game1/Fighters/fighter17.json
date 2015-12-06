@@ -1,0 +1,22 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Master Staff.json",
+    "Orb of Doom.json",
+    "Master Wizard Robe Bottoms.json",
+    "Master Wizard Gloves.json",
+    "Master Wizard Socks.json",
+    "Master Wizard Robe.json",
+    "Master Wizard Hat.json",
+    "Strong Magic Potion.json",
+    "Strong Health Potion.json"
+  ]
+}

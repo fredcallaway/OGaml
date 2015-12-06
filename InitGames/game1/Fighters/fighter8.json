@@ -1,0 +1,19 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Steel Sword.json",
+    "Steel Legs.json",
+    "Steel Gauntlets.json",
+    "Steel Armor.json",
+    "Good Health Potion.json",
+    "Good Strength Potion.json"
+  ]
+}

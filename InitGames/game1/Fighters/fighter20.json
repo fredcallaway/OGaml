@@ -1,0 +1,22 @@
+{
+  "stats":
+  {
+    "health": 0.0,
+    "strength": 0.0,
+    "speed": 0.0,
+    "dexterity": 0.0,
+    "magic": 0.0
+  },
+  "equipped":
+  [
+    "Bow Down.json",
+    "Shopping Bag.json",
+    "Marksman Chaps.json",
+    "Marksman Bracers.json",
+    "Marksman Striders.json",
+    "Marksman Vest.json",
+    "Poloskys Vision.json",
+    "Strong Dexterity Potion.json",
+    "Strong Health Potion.json"
+  ]
+}
