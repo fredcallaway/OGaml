@@ -94,3 +94,10 @@ The Json module is responsible for all of the loading and saving of data. It dep
 
 This module handles all interaction with the user. It is currently very minimal, but we include it as a module in case common use patterns emerge.
 
+
+
+
+### Labor
+
+Bryan: Helped plan general game design and gameplay. Designed item, shop, and player. Implemented parts of item and player that interfaced with shop. Implemented functionality of shop. Designed and created expansive item catalog with different catagories of items based on player styles and increasing difficulty. Made all of the json files for all of the items.
+

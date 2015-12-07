@@ -1,0 +1,1553 @@
+commit 6e4e642d129bd214bc5b905e0b5e3ac4e7f56fec
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 23:51:48 2015 -0500
+
+    readme
+
+ README.txt                      |  5 +++++
+ interfaces/ai.mli               |  4 ----
+ interfaces/battle.mli           | 20 ------------------
+ interfaces/fighter.mli          | 13 ------------
+ interfaces/game.mli             |  8 -------
+ interfaces/io.mli               |  2 --
+ interfaces/item.mli             | 47 -----------------------------------------
+ interfaces/player.mli           |  9 --------
+ interfaces/shop.mli             |  6 ------
+ interfaces/world.mli            | 13 ------------
+ interfaces/zone.mli             | 15 -------------
+ original_interfaces/ai.mli      |  4 ++++
+ original_interfaces/battle.mli  | 20 ++++++++++++++++++
+ original_interfaces/fighter.mli | 13 ++++++++++++
+ original_interfaces/game.mli    |  8 +++++++
+ original_interfaces/io.mli      |  2 ++
+ original_interfaces/item.mli    | 47 +++++++++++++++++++++++++++++++++++++++++
+ original_interfaces/player.mli  |  9 ++++++++
+ original_interfaces/shop.mli    |  6 ++++++
+ original_interfaces/world.mli   | 13 ++++++++++++
+ original_interfaces/zone.mli    | 15 +++++++++++++
+ 21 files changed, 142 insertions(+), 137 deletions(-)
+
+commit 2377114a7b4a1938755d319803ffcb85161c8798
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 23:38:14 2015 -0500
+
+    AAHHHHHH
+
+ battle.ml      | 52 +++++++++++++++++++++++++++++++++++-----------------
+ game.ml        |  2 +-
+ shop.ml        |  2 +-
+ test_battle.ml | 21 +++++++++------------
+ 4 files changed, 46 insertions(+), 31 deletions(-)
+
+commit dd45e228d81b2c1fd764bbf839e2cee565067980
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Dec 5 23:33:27 2015 -0500
+
+    added all battles, zones, and world json, also tests for all
+
+ InitGames/game1/Battles/battle0.json    | 12 --------
+ InitGames/game1/Battles/battle1.json    |  5 ++--
+ InitGames/game1/Battles/battle10.json   | 14 +++++++++
+ InitGames/game1/Battles/battle11.json   | 13 ++++++++
+ InitGames/game1/Battles/battle12.json   | 13 ++++++++
+ InitGames/game1/Battles/battle13.json   | 13 ++++++++
+ InitGames/game1/Battles/battle14.json   | 13 ++++++++
+ InitGames/game1/Battles/battle15.json   | 13 ++++++++
+ InitGames/game1/Battles/battle16.json   | 13 ++++++++
+ InitGames/game1/Battles/battle17.json   | 14 +++++++++
+ InitGames/game1/Battles/battle18.json   | 13 ++++++++
+ InitGames/game1/Battles/battle19.json   | 11 +++++++
+ InitGames/game1/Battles/battle2.json    |  5 ++--
+ InitGames/game1/Battles/battle20.json   | 14 +++++++++
+ InitGames/game1/Battles/battle21.json   | 15 ++++++++++
+ InitGames/game1/Battles/battle3.json    |  7 ++---
+ InitGames/game1/Battles/battle4.json    |  6 ++--
+ InitGames/game1/Battles/battle5.json    | 12 ++++++++
+ InitGames/game1/Battles/battle6.json    | 14 +++++++++
+ InitGames/game1/Battles/battle7.json    | 13 ++++++++
+ InitGames/game1/Battles/battle8.json    | 14 +++++++++
+ InitGames/game1/Battles/battle9.json    | 13 ++++++++
+ InitGames/game1/Fighters/fighter0.json  | 14 ---------
+ InitGames/game1/Fighters/fighter1.json  | 14 ++++-----
+ InitGames/game1/Fighters/fighter10.json | 21 +++++++++++++
+ InitGames/game1/Fighters/fighter11.json | 19 ++++++++++++
+ InitGames/game1/Fighters/fighter12.json | 23 ++++++++++++++
+ InitGames/game1/Fighters/fighter13.json | 21 +++++++++++++
+ InitGames/game1/Fighters/fighter14.json | 21 +++++++++++++
+ InitGames/game1/Fighters/fighter15.json | 20 +++++++++++++
+ InitGames/game1/Fighters/fighter16.json | 21 +++++++++++++
+ InitGames/game1/Fighters/fighter17.json | 22 ++++++++++++++
+ InitGames/game1/Fighters/fighter18.json | 21 +++++++++++++
+ InitGames/game1/Fighters/fighter19.json | 20 +++++++++++++
+ InitGames/game1/Fighters/fighter2.json  | 15 +++++-----
+ InitGames/game1/Fighters/fighter20.json | 22 ++++++++++++++
+ InitGames/game1/Fighters/fighter21.json | 22 ++++++++++++++
+ InitGames/game1/Fighters/fighter3.json  | 16 +++++-----
+ InitGames/game1/Fighters/fighter4.json  | 19 ++++++------
+ InitGames/game1/Fighters/fighter5.json  | 17 +++++++++++
+ InitGames/game1/Fighters/fighter6.json  | 20 +++++++++++++
+ InitGames/game1/Fighters/fighter7.json  | 19 ++++++++++++
+ InitGames/game1/Fighters/fighter8.json  | 19 ++++++++++++
+ InitGames/game1/Fighters/fighter9.json  | 21 +++++++++++++
+ InitGames/game1/Items/Orb of Doom.json  | 37 +++++++++++++++++++++++
+ InitGames/game1/Items/Orb or Doom.json  | 37 -----------------------
+ InitGames/game1/Players/player0.json    | 20 ++++++-------
+ InitGames/game1/Shops/shop1.json        | 41 +++++++++++++++++++++++--
+ InitGames/game1/Shops/shop2.json        | 50 ++++++++++++++++++++++++++++---
+ InitGames/game1/Shops/shop3.json        | 53 +++++++++++++++++++++++++++++++++
+ InitGames/game1/Worlds/OGaml.json       |  9 ++++++
+ InitGames/game1/Worlds/world1.json      |  8 -----
+ InitGames/game1/Zones/zone1.json        |  7 ++++-
+ InitGames/game1/Zones/zone2.json        | 10 +++++--
+ InitGames/game1/Zones/zone3.json        | 15 ++++++++++
+ InitGames/game1/game1.json              |  2 +-
+ Item Catalog/BODY                       | 10 +++----
+ Item Catalog/FEET                       | 10 +++----
+ Item Catalog/HANDS                      | 10 +++----
+ Item Catalog/LEGS                       | 10 +++----
+ battle.ml                               | 11 ++-----
+ test_battle.ml                          | 27 +++++++++++++++--
+ test_item.ml                            | 25 ++++++++++++++++
+ test_player.ml                          | 25 ++++++++++++++++
+ test_world.ml                           |  4 +--
+ test_zone.ml                            |  6 ++--
+ 66 files changed, 941 insertions(+), 173 deletions(-)
+
+commit e0585a23d0b2680d0a9c7d18df1e1a726fbf4417
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 23:12:32 2015 -0500
+
+    completely finished jsons
+
+ InitGames/game1/Items/Bottomless Quiver.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Cracked Orb.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Diamond Shield.json          | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragonskin Quiver.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Freds Toy.json               |  2 +-
+ InitGames/game1/Items/Iron Shield.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Kite Shield.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Leather Quiver.json          | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Orb of Zweig.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Orb or Doom.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Pearl Orb.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Reinforced Steel Shield.json | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Shiny Orb.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Shopping Bag.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Small Dragonskin Quiver.json | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Small Leather Quiver.json    | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Steel Shield.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Used Orb.json                | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Wooden Shield.json           | 37 ++++++++++++++++++++++
+ 19 files changed, 667 insertions(+), 1 deletion(-)
+
+commit d51cdaa9877d6d7075aadc143c9a7d495340ab2b
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 20:27:26 2015 -0500
+
+    more json files, updated catalog again
+
+ InitGames/game1/Items/Apprentice Staff.json        | 37 ++++++++++++++++++++++
+ .../game1/Items/Beyonces Ring 7.45.34 PM.json      | 37 ----------------------
+ InitGames/game1/Items/Beyonces Ring.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Black Steel Axe.json         | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Black Steel Sword.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Bow Down.json                | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Composite Bow.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragon Steel Axe.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragon Steel Sword.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Elven Bow.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Elven Longbow.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Experienced Staff.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Freds Toy.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Iron Axe.json                | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Iron Shield.json             |  0
+ InitGames/game1/Items/Iron Sword.json              | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Magic Wand.json              | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Master Staff.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Masterpiece Sword.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Novice Bow.json              | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Novice Staff.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Oak Bow.json                 | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Oak Longbow.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Ooh Shiny.json               |  2 +-
+ InitGames/game1/Items/Ring of Fire 7.45.34 PM.json | 37 ----------------------
+ InitGames/game1/Items/Ring of Fire.json            |  2 +-
+ InitGames/game1/Items/Rusted Axe.json              | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Rusted Sword.json            | 37 ++++++++++++++++++++++
+ .../game1/Items/Sharpened Dragon Steel Sword.json  | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Sharpened Iron Axe.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Sharpened Iron Sword.json    | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Sharpened Steel Axe.json     | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Steel Sword.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Wooden Shield.json           |  0
+ InitGames/game1/Items/Woodsman Axe.json            | 37 ++++++++++++++++++++++
+ Item Catalog/SECONDARY                             |  8 ++---
+ 36 files changed, 1078 insertions(+), 81 deletions(-)
+
+commit d90d3d67a7ac55cb3921866897fd583cda7d1874
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 19:50:11 2015 -0500
+
+    more json files. changed catalog slightly
+
+ InitGames/game1/Items/Archers Bracers.json         | 37 ++++++++++++++++++++++
+ .../game1/Items/Beyonces Ring 7.45.34 PM.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Beyonces Ring.json           |  0
+ InitGames/game1/Items/Grey Wizard Gloves.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Mages Amulet.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Magic Mittens.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Marksman Bracers.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Marksman Ring.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Marksmans Ring.json          | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Master Wizard Gloves.json    | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Mythril Weave Bracers.json   | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Novice Amulet.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Old Gloves.json              | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Ooh Shiny.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Ring of Fire 7.45.34 PM.json | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Ring of Fire.json            | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Strength Ring.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/True Shot Ring.json          | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Warriors RIng.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/White Wizard Gloves.json     | 37 ++++++++++++++++++++++
+ Item Catalog/Archers Bracers.json                  | 37 ----------------------
+ Item Catalog/Beyonces Ring.json                    | 37 ++++++++++++++++++++++
+ Item Catalog/Dragonskin Bracers.json               | 37 ----------------------
+ Item Catalog/Grey Wizard Gloves.json               | 37 ----------------------
+ Item Catalog/Magic Mittens.json                    | 37 ----------------------
+ Item Catalog/Marksman Bracers.json                 | 37 ----------------------
+ Item Catalog/Master Wizard Gloves.json             | 37 ----------------------
+ Item Catalog/Mythril Weave Bracers.json            | 37 ----------------------
+ Item Catalog/Old Gloves.json                       | 37 ----------------------
+ Item Catalog/PRIMARY                               | 11 +------
+ Item Catalog/White Wizard Gloves.json              | 37 ----------------------
+ 31 files changed, 741 insertions(+), 343 deletions(-)
+
+commit 8b7498c55678529b0a57cd9cb17fd1261081b56b
+Merge: ca82d23 07a0022
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 19:22:36 2015 -0500
+
+    modified item catalog
+
+commit ca82d23ab3768c51e54e820f10a6d0d154034e3d
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 19:22:00 2015 -0500
+
+    modified item catalog
+
+ InitGames/game1/Items/Dragon Steel Gauntlets.json  | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragonskin Bracers.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Fuzzy Socks.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Iron Gauntlets.json          | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Leather Bracers.json         | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Master Wizard Socks.json     | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Masterpiece Gauntlets.json   | 37 ++++++++++++++++++++++
+ .../game1/Items/Reinforced Steel Gauntlets.json    | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Steel Gauntlets.json         | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/White Wizard Socks.json      |  4 +--
+ Item Catalog/Archers Bracers.json                  | 37 ++++++++++++++++++++++
+ Item Catalog/Dragonskin Bracers.json               | 37 ++++++++++++++++++++++
+ Item Catalog/Grey Wizard Gloves.json               | 37 ++++++++++++++++++++++
+ Item Catalog/Magic Mittens.json                    | 37 ++++++++++++++++++++++
+ Item Catalog/Marksman Bracers.json                 | 37 ++++++++++++++++++++++
+ Item Catalog/Master Wizard Gloves.json             | 37 ++++++++++++++++++++++
+ Item Catalog/Mythril Weave Bracers.json            | 37 ++++++++++++++++++++++
+ Item Catalog/Old Gloves.json                       | 37 ++++++++++++++++++++++
+ Item Catalog/White Wizard Gloves.json              | 37 ++++++++++++++++++++++
+ SPECIAL                                            | 13 --------
+ 20 files changed, 668 insertions(+), 15 deletions(-)
+
+commit 07a0022024d5d33c67930b47544c21dac5f4ea05
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 19:16:49 2015 -0500
+
+    test game
+
+ InitGames/game1/Fighters/fighter5.json            | 15 ---------
+ InitGames/game1/Items/Helm of Fear.json           | 37 -----------------------
+ InitGames/test/Battles/battle0.json               | 12 ++++++++
+ InitGames/test/Battles/battle1.json               | 12 ++++++++
+ InitGames/test/Battles/battle2.json               | 12 ++++++++
+ InitGames/test/Battles/battle3.json               | 12 ++++++++
+ InitGames/test/Battles/battle4.json               | 12 ++++++++
+ InitGames/test/Fighters/fighter0.json             | 14 +++++++++
+ InitGames/test/Fighters/fighter1.json             | 15 +++++++++
+ InitGames/test/Fighters/fighter2.json             | 16 ++++++++++
+ InitGames/test/Fighters/fighter3.json             | 16 ++++++++++
+ InitGames/test/Fighters/fighter4.json             | 17 +++++++++++
+ InitGames/test/Fighters/fighter5.json             | 15 +++++++++
+ InitGames/test/Items/Body Armor.json              | 37 +++++++++++++++++++++++
+ InitGames/test/Items/Bow.json                     | 37 +++++++++++++++++++++++
+ InitGames/test/Items/Health Potion.json           | 37 +++++++++++++++++++++++
+ InitGames/test/Items/Helm of Fear.json            | 37 +++++++++++++++++++++++
+ InitGames/test/Items/Helmet.json                  | 37 +++++++++++++++++++++++
+ InitGames/test/Items/Knife.json                   | 37 +++++++++++++++++++++++
+ InitGames/test/Items/New Items/Blessed Armor.json | 29 ++++++++++++++++++
+ InitGames/test/Items/New Items/Dual Sword.json    | 29 ++++++++++++++++++
+ InitGames/test/Items/New Items/Flame Sword.json   | 29 ++++++++++++++++++
+ InitGames/test/Items/New Items/Magic Armor.json   | 29 ++++++++++++++++++
+ InitGames/test/Items/New Items/Magic Sword.json   | 29 ++++++++++++++++++
+ InitGames/test/Items/Rusty Nail.json              | 37 +++++++++++++++++++++++
+ InitGames/test/Items/Sword.json                   | 37 +++++++++++++++++++++++
+ InitGames/test/Players/player0.json               | 22 ++++++++++++++
+ InitGames/test/Shops/shop1.json                   |  7 +++++
+ InitGames/test/Shops/shop2.json                   |  9 ++++++
+ InitGames/test/Worlds/world1.json                 |  8 +++++
+ InitGames/test/Zones/zone1.json                   | 10 ++++++
+ InitGames/test/Zones/zone2.json                   | 11 +++++++
+ InitGames/test/game1.json                         |  4 +++
+ testing_utils.ml                                  |  2 +-
+ 34 files changed, 666 insertions(+), 53 deletions(-)
+
+commit 52f36cd8d59180434775b989018f21d501decb06
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 19:14:31 2015 -0500
+
+    Revert "remove helm of fear"
+    
+    This reverts commit 4a3f6461bb1d75935bd536eba60b9966ca799cb3.
+
+ InitGames/game1/Items/Helm of Fear.json | 37 +++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+commit 4a3f6461bb1d75935bd536eba60b9966ca799cb3
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 19:05:32 2015 -0500
+
+    remove helm of fear
+
+ InitGames/game1/Items/Helm of Fear.json | 37 ---------------------------------
+ 1 file changed, 37 deletions(-)
+
+commit afb1e3e560f4bb8e4b966962ae6caf1d29b81b26
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 18:44:07 2015 -0500
+
+    Redo exit IO stuff, not sure why it got undone
+
+ InitGames/game1/Fighters/fighter5.json  | 15 +++++++++++++
+ InitGames/game1/Items/Helm of Fear.json | 37 +++++++++++++++++++++++++++++++++
+ battle.ml                               |  8 +++++--
+ io.ml                                   |  4 ++--
+ test_battle.ml                          | 16 +++++++-------
+ testing_utils.ml                        |  2 ++
+ utils.ml                                |  3 +++
+ world.ml                                | 10 ++++-----
+ zone.ml                                 |  1 -
+ 9 files changed, 78 insertions(+), 18 deletions(-)
+
+commit 8818dc26d3b080a27c8ff7d3a0e7330892c1eebe
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 19:01:49 2015 -0500
+
+    more json files
+
+ InitGames/game1/Items/Apprentice Robe Bottoms.json | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Apprentice Robe.json         | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Archers Chaps.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Archers Striders.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Bath Robe Bottoms.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Bath Robe.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragon Steel Boots.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragon Steel Legs.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragonskin Chaps.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Dragonskin Striders.json     | 37 ++++++++++++++++++++++
+ .../game1/Items/Grey Wizard Robe Bottoms.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Grey Wizard Robe.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Grey Wizard Socks.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Iron Boots.json              | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Iron Legs.json               | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Leather Chaps.json           | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Leather Striders.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Marksman Chaps.json          | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Marksman Striders.json       | 37 ++++++++++++++++++++++
+ .../game1/Items/Master Wizard Robe Bottoms.json    | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Master Wizard Robe.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Masterpiece Boots.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Masterpiece Legs.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Mythril Striders.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Mythril Weave Chaps.json     | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Old Magic Socks.json         | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Old Robe Bottoms.json        | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Old Robe.json                | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Reinforced Iron Legs.json    | 37 ++++++++++++++++++++++
+ .../game1/Items/Reinforced Leather Chaps.json      | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Reinforced Steel Boots.json  | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Reinforced Steel Legs.json   | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Steel Boots.json             | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/Steel Legs.json              | 37 ++++++++++++++++++++++
+ .../game1/Items/White Wizard Robe Bottoms.json     | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/White Wizard Robe.json       | 37 ++++++++++++++++++++++
+ InitGames/game1/Items/White Wizard Socks.json      | 37 ++++++++++++++++++++++
+ Item Catalog/FEET                                  | 33 +++++++++----------
+ Item Catalog/HANDS                                 |  3 --
+ 39 files changed, 1384 insertions(+), 21 deletions(-)
+
+commit ecd0845054f619e7d23749d36b3b3a13550c9f69
+Merge: cc7ba74 794dea3
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 18:13:16 2015 -0500
+
+    making item json files
+
+commit cc7ba74528803b425a39548ed4ddfd02a7236e79
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 18:12:16 2015 -0500
+
+    making item json files
+
+ Consumables.txt                                    | 51 ++++++++++++++++++++++
+ InitGames/game1/Items/Archers Vest.json            | 37 ++++++++++++++++
+ InitGames/game1/Items/Body Armor.json              | 37 ----------------
+ InitGames/game1/Items/Bow.json                     | 37 ----------------
+ InitGames/game1/Items/Dragon Steel Armor.json      | 37 ++++++++++++++++
+ InitGames/game1/Items/Dragon Steel Helm.json       | 37 ++++++++++++++++
+ InitGames/game1/Items/Dragonskin Coif.json         | 37 ++++++++++++++++
+ InitGames/game1/Items/Dragonskin Vest.json         | 37 ++++++++++++++++
+ InitGames/game1/Items/Good Dexterity Potion.json   | 37 ++++++++++++++++
+ InitGames/game1/Items/Good Health Potion.json      | 37 ++++++++++++++++
+ InitGames/game1/Items/Good Magic Potion.json       | 37 ++++++++++++++++
+ InitGames/game1/Items/Good Speed Potion.json       | 37 ++++++++++++++++
+ InitGames/game1/Items/Good Strength Potion.json    | 37 ++++++++++++++++
+ InitGames/game1/Items/Grey Wizard Hat.json         | 37 ++++++++++++++++
+ InitGames/game1/Items/Health Potion.json           | 37 ----------------
+ InitGames/game1/Items/Helmet.json                  | 37 ----------------
+ InitGames/game1/Items/Iron Armor.json              | 37 ++++++++++++++++
+ InitGames/game1/Items/Iron Helm.json               | 37 ++++++++++++++++
+ InitGames/game1/Items/Knife.json                   | 37 ----------------
+ InitGames/game1/Items/Leather Coif.json            | 37 ++++++++++++++++
+ InitGames/game1/Items/Leather Vest.json            | 37 ++++++++++++++++
+ InitGames/game1/Items/Marksman Coif.json           | 37 ++++++++++++++++
+ InitGames/game1/Items/Marksman Vest.json           | 37 ++++++++++++++++
+ InitGames/game1/Items/Master Wizard Hat.json       | 37 ++++++++++++++++
+ InitGames/game1/Items/Masterpiece Armor.json       | 37 ++++++++++++++++
+ InitGames/game1/Items/Minor Dexterity Potion.json  | 37 ++++++++++++++++
+ InitGames/game1/Items/Minor Health Potion.json     | 37 ++++++++++++++++
+ InitGames/game1/Items/Minor Magic Potion.json      | 37 ++++++++++++++++
+ InitGames/game1/Items/Minor Speed Potion.json      | 37 ++++++++++++++++
+ InitGames/game1/Items/Minor Strength Potion.json   | 37 ++++++++++++++++
+ InitGames/game1/Items/Mythril Weave Coif.json      | 37 ++++++++++++++++
+ InitGames/game1/Items/Mythril Weave Vest.json      | 37 ++++++++++++++++
+ InitGames/game1/Items/New Items/Blessed Armor.json | 29 ------------
+ InitGames/game1/Items/New Items/Dual Sword.json    | 29 ------------
+ InitGames/game1/Items/New Items/Flame Sword.json   | 29 ------------
+ InitGames/game1/Items/New Items/Magic Armor.json   | 29 ------------
+ InitGames/game1/Items/New Items/Magic Sword.json   | 29 ------------
+ InitGames/game1/Items/Old Tophat.json              | 37 ++++++++++++++++
+ InitGames/game1/Items/Poloskys Vision.json         | 37 ++++++++++++++++
+ InitGames/game1/Items/Reinforced Iron Armor.json   | 37 ++++++++++++++++
+ InitGames/game1/Items/Reinforced Iron Helm.json    | 37 ++++++++++++++++
+ InitGames/game1/Items/Reinforced Leather Coif.json | 37 ++++++++++++++++
+ InitGames/game1/Items/Reinforced Leather Vest.json | 37 ++++++++++++++++
+ InitGames/game1/Items/Reinforced Steel Armor.json  | 37 ++++++++++++++++
+ InitGames/game1/Items/Reinforced Steel Helm.json   | 37 ++++++++++++++++
+ InitGames/game1/Items/Rusty Nail.json              | 37 ----------------
+ InitGames/game1/Items/Sorting Hat.json             | 37 ++++++++++++++++
+ InitGames/game1/Items/Steel Armor.json             | 37 ++++++++++++++++
+ InitGames/game1/Items/Steel Helm.json              | 37 ++++++++++++++++
+ InitGames/game1/Items/Strong Dexterity Potion.json | 37 ++++++++++++++++
+ InitGames/game1/Items/Strong Health Potion.json    | 37 ++++++++++++++++
+ InitGames/game1/Items/Strong Magic Potion.json     | 37 ++++++++++++++++
+ InitGames/game1/Items/Strong Speed Potion.json     | 37 ++++++++++++++++
+ InitGames/game1/Items/Strong Strength Potion.json  | 37 ++++++++++++++++
+ InitGames/game1/Items/Sword.json                   | 37 ----------------
+ InitGames/game1/Items/White Wizard Hat.json        | 37 ++++++++++++++++
+ Item Catalog/BODY                                  | 16 -------
+ Item Catalog/FEET                                  | 16 -------
+ Item Catalog/HANDS                                 | 16 -------
+ Item Catalog/HEAD                                  | 24 ++--------
+ Item Catalog/LEGS                                  | 17 --------
+ Item Catalog/PRIMARY                               | 18 +-------
+ Item Catalog/SECONDARY                             | 10 -----
+ 63 files changed, 1647 insertions(+), 516 deletions(-)
+
+commit 794dea34f5bd984f8354f26131a72c1fd9949468
+Merge: f32f5dc 21b4646
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Dec 5 18:02:51 2015 -0500
+
+    testing zone and world, added cool map print
+
+commit f32f5dc758396f12231048d9d7b335774c0d77af
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Dec 5 18:01:20 2015 -0500
+
+    testing zone and world, added cool map print
+
+ battle.ml     |  4 ++--
+ game.ml       |  4 +++-
+ io.ml         | 24 +++++++++++++++++++++++-
+ test_world.ml | 18 ++++++++++++++++++
+ test_zone.ml  | 16 ++++++++++++++++
+ world.ml      | 19 ++++++++++++++-----
+ zone.ml       | 29 +++++++++++++++++------------
+ 7 files changed, 93 insertions(+), 21 deletions(-)
+
+commit 21b464688092d13d8e0f279d6b58cb462899395f
+Merge: 6e07b06 0bbe094
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 16:33:35 2015 -0500
+
+    test cases for shop and item catalog
+
+commit 6e07b06641c35fa72781a01e0e4e723efc443b3c
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Sat Dec 5 16:31:47 2015 -0500
+
+    test cases for shop and item catalog
+
+ Item Catalog/BODY                            |  51 +++++++++++
+ Item Catalog/Consumables.txt                 |  66 ++++++++++++++
+ Item Catalog/FEET                            |  51 +++++++++++
+ Item Catalog/HANDS                           |  51 +++++++++++
+ Item Catalog/HEAD                            |  51 +++++++++++
+ Item Catalog/LEGS                            |  51 +++++++++++
+ Item Catalog/PRIMARY                         |  72 +++++++++++++++
+ Item Catalog/SECONDARY                       |  47 ++++++++++
+ SPECIAL                                      |  33 +++++++
+ SavedGames/game1/Items/Dexterity Potion.json |  29 ++++++
+ item.ml                                      |  22 ++++-
+ shop.ml                                      |   4 +-
+ test_shop.ml                                 | 128 ++++++++++++++++++++++-----
+ 13 files changed, 630 insertions(+), 26 deletions(-)
+
+commit 0bbe0947b58edea93b77e0c586fc9d053a3b90d3
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 16:29:38 2015 -0500
+
+    change repls to propperly handle exit
+
+ battle.ml |  8 --------
+ shop.ml   | 12 ++++--------
+ stats.ml  | 26 +++++++++++++++++---------
+ zone.ml   | 12 ++++--------
+ 4 files changed, 25 insertions(+), 33 deletions(-)
+
+commit 5714dfb00b9be74f2adcfc9734c7c6d6800c8f42
+Merge: afcb6fe cf1555c
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 16:12:16 2015 -0500
+
+    i'm confused by git right now
+
+commit afcb6fe690461d11fc5e45b2bebc0182e43eadf9
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 16:10:01 2015 -0500
+
+    more testing battle
+
+ test_battle.ml | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+commit 358ebc03d9f80f948d72506095840fea2f30de6d
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 15:37:06 2015 -0500
+
+    testing apply_effects
+
+ battle.ml      |  2 +-
+ test_battle.ml | 41 +++++++++++++++++++++--------------------
+ 2 files changed, 22 insertions(+), 21 deletions(-)
+
+commit cf1555cc1095ed2aa3a5584f581837d8778aafb0
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Dec 5 15:35:09 2015 -0500
+
+    testing apply effects and items
+
+ InitGames/game1/Battles/battle0.json               | 12 ++++++
+ InitGames/game1/Items/Bow.json                     |  2 +-
+ InitGames/game1/Items/New Items/Blessed Armor.json | 29 ++++++++++++++
+ InitGames/game1/Items/New Items/Dual Sword.json    | 29 ++++++++++++++
+ InitGames/game1/Items/New Items/Flame Sword.json   | 29 ++++++++++++++
+ InitGames/game1/Items/New Items/Magic Armor.json   | 29 ++++++++++++++
+ InitGames/game1/Items/New Items/Magic Sword.json   | 29 ++++++++++++++
+ InitGames/game1/Zones/zone2.json                   |  1 +
+ SavedGames/game1/Battles/battle0.json              |  1 +
+ SavedGames/game1/Battles/battle1.json              | 13 +------
+ SavedGames/game1/Battles/battle2.json              | 13 +------
+ SavedGames/game1/Battles/battle3.json              | 13 +------
+ SavedGames/game1/Battles/battle4.json              | 13 +------
+ SavedGames/game1/Fighters/fighter0.json            | 16 +-------
+ SavedGames/game1/Fighters/fighter1.json            | 17 +-------
+ SavedGames/game1/Fighters/fighter2.json            | 18 +--------
+ SavedGames/game1/Fighters/fighter3.json            | 17 +-------
+ SavedGames/game1/Fighters/fighter4.json            | 19 +--------
+ SavedGames/game1/Items/Body Armor.json             | 30 +--------------
+ SavedGames/game1/Items/Bow.json                    | 30 +--------------
+ SavedGames/game1/Items/Health Potion.json          | 30 +--------------
+ SavedGames/game1/Items/Helmet.json                 | 30 +--------------
+ SavedGames/game1/Items/Knife.json                  | 30 +--------------
+ SavedGames/game1/Items/Rusty Nail.json             | 30 +--------------
+ SavedGames/game1/Items/Sword.json                  | 30 +--------------
+ SavedGames/game1/Players/player0.json              | 20 +---------
+ SavedGames/game1/Shops/shop1.json                  |  8 +---
+ SavedGames/game1/Shops/shop2.json                  | 10 +----
+ SavedGames/game1/Worlds/world1.json                |  9 +----
+ SavedGames/game1/Zones/zone1.json                  | 11 +-----
+ SavedGames/game1/Zones/zone2.json                  | 11 +-----
+ SavedGames/game1/game1.json                        |  5 +--
+ item.ml                                            |  7 ++++
+ stats.ml                                           | 45 +++++++++++++---------
+ test_battle.ml                                     |  4 +-
+ 35 files changed, 219 insertions(+), 421 deletions(-)
+
+commit 956ab09a543afe34f467c3c24d9af7b19e4551ab
+Merge: fcd1854 e12af20
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Dec 5 14:49:45 2015 -0500
+
+    fixed apply effects and changed to float stats
+
+commit fcd185456ad6e05885ad3fd79b1640b68250ecf1
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Dec 5 14:46:22 2015 -0500
+
+    fixed apply effects and changed to float stats
+
+ InitGames/game1/Items/Body Armor.json |  4 ++--
+ InitGames/game1/Items/Bow.json        |  8 ++++----
+ InitGames/game1/Items/Helmet.json     |  4 ++--
+ InitGames/game1/Items/Sword.json      |  2 +-
+ InitGames/game1/Players/player0.json  |  3 ++-
+ battle.ml                             |  4 ++--
+ fighter.ml                            | 12 ++++++++----
+ player.ml                             |  7 -------
+ stats.ml                              | 21 +++++++++++----------
+ test_battle.ml                        | 26 +++++++++++++++-----------
+ 10 files changed, 47 insertions(+), 44 deletions(-)
+
+commit e12af208060f742fa3b8dc07bfacfe31e44a833e
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 14:41:51 2015 -0500
+
+    Discovered bug, probably in Stats.apply
+
+ .gitignore                             |  1 -
+ InitGames/game1/Fighters/fighter0.json | 14 ++++++++
+ InitGames/game1/Fighters/fighter2.json |  1 +
+ battle.ml                              | 58 +++++++---------------------------
+ stats.ml                               |  7 ++--
+ test_battle.ml                         | 43 ++++++++++---------------
+ test_stats.ml                          | 10 ++++++
+ testing_utils.ml                       | 10 ++++++
+ 8 files changed, 67 insertions(+), 77 deletions(-)
+
+commit d1df4b040593a80000ccf76169c5c5b4a4022411
+Author: fredcallaway <fredc@llaway.com>
+Date:   Sat Dec 5 14:22:52 2015 -0500
+
+    You can compile and run test_battle with sublime build
+
+ ogaml.sublime-project | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+commit d959185f53c248c7cb10de809fa63bcca92bede5
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Fri Dec 4 10:45:03 2015 -0500
+
+    first attempt at apply effects, not tested much
+
+ InitGames/game1/Fighters/fighter1.json   |  13 ++--
+ InitGames/game1/Fighters/fighter2.json   |  13 ++--
+ InitGames/game1/Fighters/fighter3.json   |  13 ++--
+ InitGames/game1/Fighters/fighter4.json   |  13 ++--
+ InitGames/game1/Items/Body Armor.json    |  38 ++++++-----
+ InitGames/game1/Items/Bow.json           |  38 ++++++-----
+ InitGames/game1/Items/Health Potion.json |  38 ++++++-----
+ InitGames/game1/Items/Helmet.json        |  38 ++++++-----
+ InitGames/game1/Items/Knife.json         |  38 ++++++-----
+ InitGames/game1/Items/Rusty Nail.json    |  37 +++++++++++
+ InitGames/game1/Items/Sword.json         |  38 ++++++-----
+ InitGames/game1/Players/player0.json     |  14 ++--
+ battle.ml                                |  20 +++---
+ fighter.ml                               |  22 ++++---
+ game.ml                                  |   9 +++
+ item.ml                                  |  29 ++++----
+ player.ml                                |   9 ++-
+ stats.ml                                 | 109 +++++++++++++++++++------------
+ 18 files changed, 324 insertions(+), 205 deletions(-)
+
+commit ce981289c25d8e109b03a9517ad2cb377dac88df
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Fri Dec 4 02:36:28 2015 -0500
+
+    cleanup and used IO in game,world,zone
+
+ battle.ml |  2 ++
+ game.ml   | 54 ++++++++++++++++++------------------------------------
+ io.ml     |  2 +-
+ world.ml  | 26 +++++---------------------
+ zone.ml   | 44 ++++++++++++++++----------------------------
+ 5 files changed, 42 insertions(+), 86 deletions(-)
+
+commit 2127556f813b676b02f28dfa145fd5d611cf56d5
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Fri Dec 4 01:20:13 2015 -0500
+
+    saving now works!
+
+ battle.ml |  3 ---
+ game.ml   | 75 +++++++++++++++++++++++++++++++++++++++++----------------------
+ player.ml | 16 +++++++-------
+ shop.ml   | 12 +++++-----
+ world.ml  | 12 +++++-----
+ zone.ml   | 17 ++++++---------
+ 6 files changed, 76 insertions(+), 59 deletions(-)
+
+commit cf8a11c797b4a5441a4f064b76422f4c245dafca
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Thu Dec 3 21:54:08 2015 -0500
+
+    fixed merge conflicts
+
+ battle.ml | 21 +--------------------
+ shop.ml   |  1 -
+ 2 files changed, 1 insertion(+), 21 deletions(-)
+
+commit 4cc7baeda76c247fbbe3613bbe62f131eae44def
+Merge: ea97648 4866197
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Thu Dec 3 21:50:18 2015 -0500
+
+    added json saving (to_file)
+
+commit ea976480f36051f624bf68a482fe9a484f5d8253
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Thu Dec 3 21:46:24 2015 -0500
+
+    added json saving (to_file)
+
+ InitGames/game1/Fighters/fighter0.json   | 12 --------
+ InitGames/game1/Fighters/fighter1.json   | 14 ++++++----
+ InitGames/game1/Fighters/fighter2.json   | 14 ++++++----
+ InitGames/game1/Fighters/fighter3.json   | 16 +++++++----
+ InitGames/game1/Fighters/fighter4.json   | 16 +++++++----
+ InitGames/game1/Items/Body Armor.json    | 10 ++++++-
+ InitGames/game1/Items/Bow.json           | 10 ++++++-
+ InitGames/game1/Items/Health Potion.json |  8 ++++++
+ InitGames/game1/Items/Helmet.json        | 10 ++++++-
+ InitGames/game1/Items/Knife.json         |  8 ++++++
+ InitGames/game1/Items/Sword.json         |  8 ++++++
+ InitGames/game1/Players/player0.json     | 21 +++++++++++---
+ InitGames/game1/Stats/stats0.json        |  7 -----
+ InitGames/game1/Stats/stats1.json        |  7 -----
+ InitGames/game1/Stats/stats2.json        |  7 -----
+ InitGames/game1/Stats/stats3.json        |  7 -----
+ InitGames/game1/Stats/stats4.json        |  7 -----
+ battle.ml                                | 34 ++++++++++++++++------
+ fighter.ml                               | 10 ++++++-
+ game.ml                                  | 30 ++++++++++----------
+ item.ml                                  | 18 +++++++++++-
+ player.ml                                | 14 +++++++++-
+ shop.ml                                  | 48 +++++++++++++++++---------------
+ stats.ml                                 | 19 ++++++++++++-
+ world.ml                                 | 10 ++++++-
+ zone.ml                                  | 14 +++++++++-
+ 26 files changed, 252 insertions(+), 127 deletions(-)
+
+commit 4866197ed0df165fb55820edd9bbc0248edd4b32
+Merge: e4a78e5 207c09d
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Thu Dec 3 21:44:37 2015 -0500
+
+    start test shop, add feedback for shop repl
+
+commit e4a78e5723bfdf949124746ac31b55a953b2a6da
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Thu Dec 3 21:43:56 2015 -0500
+
+    begin tests for shop and feedback for shop repl
+
+ item.ml      | 18 +++++++++++++-----
+ player.ml    | 13 +++++++++++++
+ shop.ml      | 54 +++++++++++++++++++++++++++++++++++-------------------
+ test_shop.ml | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 105 insertions(+), 24 deletions(-)
+
+commit 207c09d89581f6a1a6beab9f6d7982c45c10ce1e
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Dec 3 21:10:35 2015 -0500
+
+    AI appears to work. Preliminary tests for major functions in battle.
+
+ SavedGames/game1/Fighters/fighter0.json |  15 +++
+ SavedGames/game1/Fighters/fighter2.json |   1 +
+ SavedGames/game1/Fighters/fighter3.json |   3 +-
+ SavedGames/game1/Items/Rusty Nail.json  |  29 +++++
+ SavedGames/game1/Items/Sword.json       |   6 +-
+ battle.ml                               | 193 +++++++++++++++++---------------
+ test_battle.ml                          |  63 +++++++++--
+ 7 files changed, 204 insertions(+), 106 deletions(-)
+
+commit f1a3d5f5f6189ec737076f72ad04102cf0a4dbc4
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Thu Dec 3 19:36:13 2015 -0500
+
+    got rid off separate stats json files
+
+ SavedGames/game1/Fighters/fighter0.json | 8 --------
+ SavedGames/game1/Fighters/fighter1.json | 9 ++++++++-
+ SavedGames/game1/Fighters/fighter2.json | 9 ++++++++-
+ SavedGames/game1/Fighters/fighter3.json | 9 ++++++++-
+ SavedGames/game1/Fighters/fighter4.json | 9 ++++++++-
+ SavedGames/game1/Players/player0.json   | 9 ++++++++-
+ SavedGames/game1/Stats/stats0.json      | 7 -------
+ SavedGames/game1/Stats/stats1.json      | 7 -------
+ SavedGames/game1/Stats/stats2.json      | 7 -------
+ SavedGames/game1/Stats/stats3.json      | 7 -------
+ SavedGames/game1/Stats/stats4.json      | 7 -------
+ fighter.ml                              | 4 +---
+ player.ml                               | 3 +++
+ stats.ml                                | 4 ++--
+ 14 files changed, 46 insertions(+), 53 deletions(-)
+
+commit 8deef71764be5011b844ccf9f343ba81de182928
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Dec 3 19:10:06 2015 -0500
+
+    Revert "demonstrate bug in item.remove"
+    
+    This reverts commit 22c22ec9084bdee4f6b8b90e7002ea690d7f8601.
+
+ InitGames/game1/Items/health_potion.json  | 21 ---------------------
+ SavedGames/game1/Fighters/fighter1.json   |  2 +-
+ SavedGames/game1/Fighters/fighter2.json   |  5 ++---
+ SavedGames/game1/Fighters/fighter3.json   |  2 +-
+ SavedGames/game1/Items/health_potion.json | 29 -----------------------------
+ item.ml                                   |  4 +---
+ test_battle.ml                            | 11 +++++------
+ 7 files changed, 10 insertions(+), 64 deletions(-)
+
+commit 22c22ec9084bdee4f6b8b90e7002ea690d7f8601
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Dec 3 16:37:23 2015 -0500
+
+    demonstrate bug in item.remove
+
+ InitGames/game1/Items/health_potion.json  | 21 +++++++++++++++++++++
+ SavedGames/game1/Fighters/fighter1.json   |  2 +-
+ SavedGames/game1/Fighters/fighter2.json   |  5 +++--
+ SavedGames/game1/Fighters/fighter3.json   |  2 +-
+ SavedGames/game1/Items/health_potion.json | 29 +++++++++++++++++++++++++++++
+ item.ml                                   |  4 +++-
+ test_battle.ml                            | 11 ++++++-----
+ 7 files changed, 64 insertions(+), 10 deletions(-)
+
+commit 58356b613e1d6ba407bacb374140a6892182783c
+Author: fredcallaway <fredc@llaway.com>
+Date:   Wed Dec 2 01:13:39 2015 -0500
+
+    first attempt at minimax, there is a bug possibly in Item
+
+ battle.ml      | 37 ++++++++++++++++++++++++++-----------
+ test_battle.ml | 26 +++++++++++++-------------
+ utils.ml       |  4 ++--
+ 3 files changed, 41 insertions(+), 26 deletions(-)
+
+commit 2c717c8cfde5b7051266547ad5123385ad98e899
+Author: fredcallaway <fredc@llaway.com>
+Date:   Tue Dec 1 23:51:58 2015 -0500
+
+    test_apply_effects
+
+ test_battle.ml | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+commit 977b6ae5cc2c57eea914b2c2ef11febcbba0098e
+Author: fredcallaway <fredc@llaway.com>
+Date:   Tue Dec 1 23:51:17 2015 -0500
+
+    simple apply_effects
+
+ SavedGames/TestGame/Battles/battle1.json     | 12 ------------
+ SavedGames/TestGame/Battles/battle2.json     | 12 ------------
+ SavedGames/TestGame/Battles/battle3.json     | 12 ------------
+ SavedGames/TestGame/Battles/battle4.json     | 12 ------------
+ SavedGames/TestGame/Fighters/fighter0.json   |  8 --------
+ SavedGames/TestGame/Fighters/fighter1.json   |  9 ---------
+ SavedGames/TestGame/Fighters/fighter2.json   |  9 ---------
+ SavedGames/TestGame/Fighters/fighter3.json   | 10 ----------
+ SavedGames/TestGame/Fighters/fighter4.json   | 11 -----------
+ SavedGames/TestGame/Items/Body Armor.json    | 22 ----------------------
+ SavedGames/TestGame/Items/Bow.json           | 22 ----------------------
+ SavedGames/TestGame/Items/Health Potion.json | 22 ----------------------
+ SavedGames/TestGame/Items/Helmet.json        | 22 ----------------------
+ SavedGames/TestGame/Items/Knife.json         | 22 ----------------------
+ SavedGames/TestGame/Items/Sword.json         | 22 ----------------------
+ SavedGames/TestGame/Players/player0.json     | 11 -----------
+ SavedGames/TestGame/Shops/shop1.json         |  7 -------
+ SavedGames/TestGame/Shops/shop2.json         |  9 ---------
+ SavedGames/TestGame/Stats/stats0.json        |  7 -------
+ SavedGames/TestGame/Stats/stats1.json        |  7 -------
+ SavedGames/TestGame/Stats/stats2.json        |  7 -------
+ SavedGames/TestGame/Stats/stats3.json        |  7 -------
+ SavedGames/TestGame/Stats/stats4.json        |  7 -------
+ SavedGames/TestGame/Worlds/world1.json       |  8 --------
+ SavedGames/TestGame/Zones/zone1.json         | 10 ----------
+ SavedGames/TestGame/Zones/zone2.json         | 10 ----------
+ SavedGames/TestGame/game1.json               |  4 ----
+ battle.ml                                    | 22 ++++++++++++----------
+ 28 files changed, 12 insertions(+), 331 deletions(-)
+
+commit 04bc7ac920a070c8ae8423f81e12ceda63843094
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Tue Dec 1 07:11:12 2015 -0500
+
+    fixed json and records
+
+ SavedGames/game1/Items/Body Armor.json    | 13 ++++++++++---
+ SavedGames/game1/Items/Bow.json           | 13 ++++++++++---
+ SavedGames/game1/Items/Health Potion.json | 11 +++++++++--
+ SavedGames/game1/Items/Helmet.json        | 13 ++++++++++---
+ SavedGames/game1/Items/Knife.json         | 11 +++++++++--
+ SavedGames/game1/Items/Sword.json         | 11 +++++++++--
+ SavedGames/game1/Players/player0.json     |  9 +++++----
+ game.ml                                   |  6 +++---
+ item.ml                                   | 19 +++++++------------
+ player.ml                                 |  6 +++---
+ 10 files changed, 75 insertions(+), 37 deletions(-)
+
+commit b45b3872a666f48562a37a90fb0f5238f1d078ef
+Author: fredcallaway <fredc@llaway.com>
+Date:   Tue Dec 1 01:00:47 2015 -0500
+
+    test_apply_effects
+
+ battle.ml      |  2 +-
+ fighter.ml     | 14 +++++++++++++-
+ test_battle.ml | 30 ++++++++++++++++++------------
+ 3 files changed, 32 insertions(+), 14 deletions(-)
+
+commit 419497727d068c0e093c19429c167c8f9ae3606f
+Author: fredcallaway <fredc@llaway.com>
+Date:   Tue Dec 1 00:44:51 2015 -0500
+
+    allow ai to play as the player
+
+ battle.ml | 41 ++++++++++++++++++++++-------------------
+ stats.ml  | 11 +++++++++++
+ 2 files changed, 33 insertions(+), 19 deletions(-)
+
+commit 93ec0b7aae700d1ba82d59711de531935098e618
+Author: fredcallaway <fredc@llaway.com>
+Date:   Tue Dec 1 00:44:14 2015 -0500
+
+    Start test_battle
+
+ SavedGames/TestGame/Battles/battle1.json     | 12 ++++++++++++
+ SavedGames/TestGame/Battles/battle2.json     | 12 ++++++++++++
+ SavedGames/TestGame/Battles/battle3.json     | 12 ++++++++++++
+ SavedGames/TestGame/Battles/battle4.json     | 12 ++++++++++++
+ SavedGames/TestGame/Fighters/fighter0.json   |  8 ++++++++
+ SavedGames/TestGame/Fighters/fighter1.json   |  9 +++++++++
+ SavedGames/TestGame/Fighters/fighter2.json   |  9 +++++++++
+ SavedGames/TestGame/Fighters/fighter3.json   | 10 ++++++++++
+ SavedGames/TestGame/Fighters/fighter4.json   | 11 +++++++++++
+ SavedGames/TestGame/Items/Body Armor.json    | 22 ++++++++++++++++++++++
+ SavedGames/TestGame/Items/Bow.json           | 22 ++++++++++++++++++++++
+ SavedGames/TestGame/Items/Health Potion.json | 22 ++++++++++++++++++++++
+ SavedGames/TestGame/Items/Helmet.json        | 22 ++++++++++++++++++++++
+ SavedGames/TestGame/Items/Knife.json         | 22 ++++++++++++++++++++++
+ SavedGames/TestGame/Items/Sword.json         | 22 ++++++++++++++++++++++
+ SavedGames/TestGame/Players/player0.json     | 11 +++++++++++
+ SavedGames/TestGame/Shops/shop1.json         |  7 +++++++
+ SavedGames/TestGame/Shops/shop2.json         |  9 +++++++++
+ SavedGames/TestGame/Stats/stats0.json        |  7 +++++++
+ SavedGames/TestGame/Stats/stats1.json        |  7 +++++++
+ SavedGames/TestGame/Stats/stats2.json        |  7 +++++++
+ SavedGames/TestGame/Stats/stats3.json        |  7 +++++++
+ SavedGames/TestGame/Stats/stats4.json        |  7 +++++++
+ SavedGames/TestGame/Worlds/world1.json       |  8 ++++++++
+ SavedGames/TestGame/Zones/zone1.json         | 10 ++++++++++
+ SavedGames/TestGame/Zones/zone2.json         | 10 ++++++++++
+ SavedGames/TestGame/game1.json               |  4 ++++
+ test_battle.ml                               | 20 ++++++++++++++++++++
+ 28 files changed, 341 insertions(+)
+
+commit 02276556b6a9f264ab56e923788e43e386d1f0a9
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 23:59:53 2015 -0500
+
+    do_action -> use_item
+
+ battle.ml | 64 +++++++++++++++++++++------------------------------------------
+ utils.ml  |  4 ++--
+ 2 files changed, 23 insertions(+), 45 deletions(-)
+
+commit 12c60ecdcdded65db3f1540b32128349fee1cb13
+Merge: ded30d5 e24a5b1
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Tue Dec 1 00:01:31 2015 -0500
+
+    item and shop compile
+
+commit ded30d5fdb0445e22a4c61fb55454fd2815e41fc
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 30 23:30:27 2015 -0500
+
+    fix
+
+ item.ml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+commit e24a5b17c1186bf998663229efafd8e3545948d7
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 23:28:00 2015 -0500
+
+    Fixing typos in item to get battle to compile
+
+ battle.ml | 24 +++++++++++++++++++-----
+ item.ml   | 33 ++++++---------------------------
+ player.ml |  7 ++++---
+ shop.ml   |  2 +-
+ utils.ml  |  2 +-
+ 5 files changed, 31 insertions(+), 37 deletions(-)
+
+commit 0b510e4e00324b8f97a1074f6916fd8ac7f896cd
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 30 22:59:31 2015 -0500
+
+    equip and remove with helper funcitons in item
+
+ item.ml   | 28 ++++++++++++++++++++++++++--
+ player.ml |  4 +++-
+ shop.ml   | 27 ++++++++++++++++++++++-----
+ 3 files changed, 51 insertions(+), 8 deletions(-)
+
+commit 0cd02fc06cd4c1ef81af5c834b7b995553d65f7e
+Merge: 68b9785 0a8133f
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 30 21:20:51 2015 -0500
+
+    merge
+
+commit 68b9785fe07d7425019399a7ab770dcf059a2043
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 30 21:19:52 2015 -0500
+
+    merge
+
+ item.ml | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+commit 0a8133f9a51e996a83c92774e0596aa1e7be7842
+Merge: 010dba2 763bd28
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 21:19:35 2015 -0500
+
+    Merge branch 'master' of github.com:fredcallaway/OGaml
+    
+    e is necessary,
+
+commit 010dba28578c000d055115c022e161de5ce4b957
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 21:18:24 2015 -0500
+
+    apply_item stub
+
+ battle.ml | 15 +++++++++++----
+ item.ml   |  1 +
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+commit 763bd28195823d5a533e2864aecd8d2b68b837c7
+Merge: 92255ea 13bd289
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 30 21:03:44 2015 -0500
+
+    handled merge
+
+commit 92255ea4c37e147d006ad7b3defa015fd47d5f83
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 30 20:03:39 2015 -0500
+
+    item
+
+ interfaces/item.mli |  6 ++++--
+ item.ml             |  7 +++++++
+ player.ml           | 16 +++++-----------
+ shop.ml             | 36 ++++++++++++++++++++++++------------
+ 4 files changed, 40 insertions(+), 25 deletions(-)
+
+commit 13bd2892a1e7f1378dd08f3a7f1368664da2295b
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 20:03:05 2015 -0500
+
+    fighter removed from player
+
+ battle.ml  |  2 +-
+ fighter.ml |  8 +++++---
+ player.ml  | 12 ++++--------
+ shop.ml    |  6 +++---
+ 4 files changed, 13 insertions(+), 15 deletions(-)
+
+commit 4589b4e6a236cfa3c4e452055dabdd07b3ab387d
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 19:23:07 2015 -0500
+
+    Start on AI
+
+ ai.ml     |  8 +++++--
+ battle.ml | 77 ++++++++++++++++++++++++++++++++++++---------------------------
+ io.ml     |  1 +
+ item.ml   |  1 +
+ player.ml |  1 +
+ shop.ml   |  7 +++---
+ utils.ml  |  7 ++++++
+ 7 files changed, 63 insertions(+), 39 deletions(-)
+
+commit 05c7876841603f55c971b81419085b2515b0900a
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 30 17:46:07 2015 -0500
+
+    Abstract out IO for battle and shop
+
+ battle.ml | 19 ++++---------------
+ io.ml     | 13 +++++++++++--
+ shop.ml   | 19 +++----------------
+ 3 files changed, 18 insertions(+), 33 deletions(-)
+
+commit d22be3a48a57c93cffc2af77da3fcbd03eb3ddc4
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Mon Nov 30 14:49:45 2015 -0500
+
+    added repl to shop
+
+ shop.ml | 119 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 115 insertions(+), 4 deletions(-)
+
+commit fa247cceff0beb7eedf158cd7d9d9f907f6d6768
+Author: NickPolosky <njp59@cornell.edu>
+Date:   Mon Nov 30 03:33:58 2015 -0500
+
+    Changes to battle to clean up gameplay and implement super naive AI. Game now supports entering a zone, entering battle, battling AI, winning/unlocking next battle.
+
+ battle.ml  | 40 ++++++++++++++++++++++++++++------------
+ fighter.ml |  7 +++++--
+ item.ml    | 50 ++++++++++++++++++++++++++++++++++++++++++++------
+ stats.ml   | 13 ++++++++++++-
+ 4 files changed, 89 insertions(+), 21 deletions(-)
+
+commit bfc654816b5007ebb94b96e88acf538d612b7a5c
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Mon Nov 30 01:05:25 2015 -0500
+
+    fixed the json files to reflect new structure of Fighter, Player, and Item
+
+ SavedGames/game1/Fighters/fighter0.json   | 4 ----
+ SavedGames/game1/Fighters/fighter1.json   | 5 +----
+ SavedGames/game1/Fighters/fighter2.json   | 5 +----
+ SavedGames/game1/Fighters/fighter3.json   | 7 ++-----
+ SavedGames/game1/Fighters/fighter4.json   | 7 ++-----
+ SavedGames/game1/Items/Body Armor.json    | 3 ++-
+ SavedGames/game1/Items/Bow.json           | 3 ++-
+ SavedGames/game1/Items/Health Potion.json | 3 ++-
+ SavedGames/game1/Items/Helmet.json        | 3 ++-
+ SavedGames/game1/Items/Knife.json         | 3 ++-
+ SavedGames/game1/Items/Sword.json         | 3 ++-
+ SavedGames/game1/Players/player0.json     | 9 +++++++--
+ 12 files changed, 25 insertions(+), 30 deletions(-)
+
+commit c68ef20145136a37a6ef4037b2037e9e78c29f53
+Author: NickPolosky <njp59@cornell.edu>
+Date:   Mon Nov 30 00:22:23 2015 -0500
+
+    Implemented get_user_action and fixed do_action. Added inventory and stats to player.
+
+ battle.ml  | 159 ++++++++++++++++++++++++++++++++++++++++++++++++++-----------
+ fighter.ml |   7 +--
+ item.ml    |  22 ++++++++-
+ player.ml  |   8 ++++
+ stats.ml   |  11 +++++
+ 5 files changed, 175 insertions(+), 32 deletions(-)
+
+commit 405259d8ee2b888d6e50cc175b757b7b49a0b5cb
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 07:50:29 2015 -0500
+
+    fixed some formatting and error handling
+
+ game.ml  | 13 +++++++++++--
+ world.ml | 34 ++++++++++++++++++++++------------
+ zone.ml  | 27 ++++++++++++++++++++-------
+ 3 files changed, 53 insertions(+), 21 deletions(-)
+
+commit 389e40e6cf1f9d9a9497220519229c71ba7ba2e0
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 07:20:23 2015 -0500
+
+    started implementing new game and saving
+
+ battle.ml  |  2 +-
+ fighter.ml |  2 +-
+ game.ml    | 30 +++++++++++++++++++-----------
+ item.ml    |  2 +-
+ player.ml  |  2 +-
+ shop.ml    |  2 +-
+ stats.ml   |  2 +-
+ world.ml   |  2 +-
+ zone.ml    |  2 +-
+ 9 files changed, 27 insertions(+), 19 deletions(-)
+
+commit 021851045ce55825a53e08a0a9791de54b8f16dd
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 06:34:47 2015 -0500
+
+    added save game
+
+ SavedGames/game1/Battles/battle1.json     | 12 ++++++++++++
+ SavedGames/game1/Battles/battle2.json     | 12 ++++++++++++
+ SavedGames/game1/Battles/battle3.json     | 12 ++++++++++++
+ SavedGames/game1/Battles/battle4.json     | 12 ++++++++++++
+ SavedGames/game1/Fighters/fighter0.json   | 12 ++++++++++++
+ SavedGames/game1/Fighters/fighter1.json   | 12 ++++++++++++
+ SavedGames/game1/Fighters/fighter2.json   | 12 ++++++++++++
+ SavedGames/game1/Fighters/fighter3.json   | 13 +++++++++++++
+ SavedGames/game1/Fighters/fighter4.json   | 14 ++++++++++++++
+ SavedGames/game1/Items/Body Armor.json    | 21 +++++++++++++++++++++
+ SavedGames/game1/Items/Bow.json           | 21 +++++++++++++++++++++
+ SavedGames/game1/Items/Health Potion.json | 21 +++++++++++++++++++++
+ SavedGames/game1/Items/Helmet.json        | 21 +++++++++++++++++++++
+ SavedGames/game1/Items/Knife.json         | 21 +++++++++++++++++++++
+ SavedGames/game1/Items/Sword.json         | 21 +++++++++++++++++++++
+ SavedGames/game1/Players/player0.json     |  6 ++++++
+ SavedGames/game1/Shops/shop1.json         |  7 +++++++
+ SavedGames/game1/Shops/shop2.json         |  9 +++++++++
+ SavedGames/game1/Stats/stats0.json        |  7 +++++++
+ SavedGames/game1/Stats/stats1.json        |  7 +++++++
+ SavedGames/game1/Stats/stats2.json        |  7 +++++++
+ SavedGames/game1/Stats/stats3.json        |  7 +++++++
+ SavedGames/game1/Stats/stats4.json        |  7 +++++++
+ SavedGames/game1/Worlds/world1.json       |  8 ++++++++
+ SavedGames/game1/Zones/zone1.json         | 10 ++++++++++
+ SavedGames/game1/Zones/zone2.json         | 10 ++++++++++
+ SavedGames/game1/game1.json               |  4 ++++
+ 27 files changed, 326 insertions(+)
+
+commit 1a72968e942ddbb97fd4ffbcb592d82190401505
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 06:33:27 2015 -0500
+
+    game runs and can load game successfully
+
+ InitGames/game1/Battles/battle1.json     |  2 ++
+ InitGames/game1/Battles/battle2.json     |  2 ++
+ InitGames/game1/Battles/battle3.json     |  2 ++
+ InitGames/game1/Battles/battle4.json     |  2 ++
+ InitGames/game1/Fighters/fighter0.json   |  7 ++++++-
+ InitGames/game1/Fighters/fighter1.json   |  7 ++++++-
+ InitGames/game1/Fighters/fighter2.json   |  7 ++++++-
+ InitGames/game1/Fighters/fighter3.json   |  7 ++++++-
+ InitGames/game1/Fighters/fighter4.json   |  7 ++++++-
+ InitGames/game1/Items/Body Armor.json    | 16 ++++++++++++++++
+ InitGames/game1/Items/Bow.json           | 16 ++++++++++++++++
+ InitGames/game1/Items/Health Potion.json | 16 ++++++++++++++++
+ InitGames/game1/Items/Helmet.json        | 16 ++++++++++++++++
+ InitGames/game1/Items/Knife.json         | 16 ++++++++++++++++
+ InitGames/game1/Items/Sword.json         | 16 ++++++++++++++++
+ InitGames/game1/Shops/shop2.json         |  2 +-
+ InitGames/game1/Worlds/world1.json       |  2 +-
+ InitGames/game1/game1.json               |  2 +-
+ game.ml                                  |  3 ++-
+ item.ml                                  |  6 +++---
+ player.ml                                |  2 +-
+ shop.ml                                  |  1 +
+ stats.ml                                 |  9 ++++++---
+ 23 files changed, 150 insertions(+), 16 deletions(-)
+
+commit 64ab6a1a17f784339dbaa301261f4688a927e19f
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 05:19:56 2015 -0500
+
+    put the json stuff in the individual modules, everything now compiles!
+
+ InitGames/game1/Battles/battle1.json     |   1 -
+ InitGames/game1/Battles/battle2.json     |   1 -
+ InitGames/game1/Battles/battle3.json     |   1 -
+ InitGames/game1/Battles/battle4.json     |   1 -
+ InitGames/game1/Items/Body Armor.json    |   1 -
+ InitGames/game1/Items/Bow.json           |   1 -
+ InitGames/game1/Items/Health Potion.json |   1 -
+ InitGames/game1/Items/Helmet.json        |   1 -
+ InitGames/game1/Items/Knife.json         |   1 -
+ InitGames/game1/Items/Sword.json         |   1 -
+ InitGames/game1/Worlds/world1.json       |   1 -
+ InitGames/game1/Zones/zone1.json         |   1 -
+ InitGames/game1/Zones/zone2.json         |   1 -
+ InitGames/game1/game1.json               |   1 -
+ battle.ml                                |  85 +++++++++++++++---
+ fighter.ml                               |  37 ++++++--
+ game.ml                                  |  46 +++++++---
+ interfaces/json.mli                      |  11 ---
+ item.ml                                  |  64 ++++++++++---
+ json.ml                                  | 148 -------------------------------
+ player.ml                                |  36 +++++++-
+ shop.ml                                  |  33 +++++--
+ stats.ml                                 |  50 ++++++++---
+ world.ml                                 |  44 +++++----
+ zone.ml                                  |  71 ++++++++++-----
+ 25 files changed, 358 insertions(+), 281 deletions(-)
+
+commit 16729d5d163c8e95965fa13610ff6251a53c40b6
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 02:18:38 2015 -0500
+
+    added example minimal json files for whole game
+
+ InitGames/game1/Battles/battle1.json     | 11 +++++++++++
+ InitGames/game1/Battles/battle2.json     | 11 +++++++++++
+ InitGames/game1/Battles/battle3.json     | 11 +++++++++++
+ InitGames/game1/Battles/battle4.json     | 11 +++++++++++
+ InitGames/game1/Fighters/fighter0.json   |  7 +++++++
+ InitGames/game1/Fighters/fighter1.json   |  7 +++++++
+ InitGames/game1/Fighters/fighter2.json   |  7 +++++++
+ InitGames/game1/Fighters/fighter3.json   |  8 ++++++++
+ InitGames/game1/Fighters/fighter4.json   |  9 +++++++++
+ InitGames/game1/Items/Body Armor.json    |  6 ++++++
+ InitGames/game1/Items/Bow.json           |  6 ++++++
+ InitGames/game1/Items/Health Potion.json |  6 ++++++
+ InitGames/game1/Items/Helmet.json        |  6 ++++++
+ InitGames/game1/Items/Knife.json         |  6 ++++++
+ InitGames/game1/Items/Sword.json         |  6 ++++++
+ InitGames/game1/Players/player0.json     |  6 ++++++
+ InitGames/game1/Shops/shop1.json         |  7 +++++++
+ InitGames/game1/Shops/shop2.json         |  9 +++++++++
+ InitGames/game1/Stats/stats0.json        |  7 +++++++
+ InitGames/game1/Stats/stats1.json        |  7 +++++++
+ InitGames/game1/Stats/stats2.json        |  7 +++++++
+ InitGames/game1/Stats/stats3.json        |  7 +++++++
+ InitGames/game1/Stats/stats4.json        |  7 +++++++
+ InitGames/game1/Worlds/world1.json       |  9 +++++++++
+ InitGames/game1/Zones/zone1.json         | 11 +++++++++++
+ InitGames/game1/Zones/zone2.json         | 11 +++++++++++
+ InitGames/game1/game1.json               |  5 +++++
+ 27 files changed, 211 insertions(+)
+
+commit 871316c56b7e8320ce8f75e7d0802b01715fd8eb
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sun Nov 29 02:17:36 2015 -0500
+
+    setup for one json file per record
+
+ fighter.ml |  2 +-
+ game.ml    | 43 ++++++++++++++++++++++-----------
+ item.ml    | 16 +++++++------
+ json.ml    | 81 +++++++++++++++++++++++++++++++++++---------------------------
+ 4 files changed, 85 insertions(+), 57 deletions(-)
+
+commit 467b0aed63f91e696a9068a717ff5ba59a8a4fee
+Author: Zach Z-V <zzv2@cornell.edu>
+Date:   Sat Nov 28 19:52:39 2015 -0500
+
+    implemented json, game, world, zone. hard to test until everything else compiles
+
+ game.ml              | 139 ++++++++++++++++++++++++++++++++++++++++
+ interfaces/game.mli  |   8 +++
+ interfaces/json.mli  |  14 ++---
+ interfaces/world.mli |  19 +++---
+ interfaces/zone.mli  |  18 +++---
+ json.ml              | 140 ++++++++++++++++++++++++++++++++++++++---
+ world.ml             | 154 ++++++++++++++++++++++++++++++++++++++++++---
+ zone.ml              | 175 ++++++++++++++++++++++++++++++++++++++++++++++++---
+ 8 files changed, 612 insertions(+), 55 deletions(-)
+
+commit 561de62df4e8b0b833bef53d6ea3af3979e547f7
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Nov 26 19:32:44 2015 -0500
+
+    improve organization of battle and item
+    
+    	- stats.ml created to avoid circular dependency
+    	  of fighter and item
+    	- item.ml simplified; get_effects needs to be implemented ASAP
+    	- simplified fighter; effects cannot have durations for now
+
+ battle.ml  | 53 ++++++++++++++++++++++++-----------------------------
+ fighter.ml | 19 +++++++------------
+ item.ml    | 53 ++++++++++++++++++++++-------------------------------
+ player.ml  |  6 ++----
+ stats.ml   | 16 ++++++++++++++++
+ 5 files changed, 71 insertions(+), 76 deletions(-)
+
+commit 6d0bb8a9c622bcb93dbc10324eb755dad00091b5
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Nov 26 02:37:44 2015 -0500
+
+    clarity in battle
+
+ battle.ml | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+commit ecfb265db3a4dda00784ada61a99605b112369c8
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Nov 26 02:34:00 2015 -0500
+
+    First steps for battle
+    
+    All mli files were moved to interfaces/
+    Feel free to move mli files back to the main
+    directory as you see fit.
+
+ .gitignore             |   1 +
+ README.md              |   2 --
+ UML.txt                |  34 ------------------
+ ai.ml                  |   4 +++
+ battle.ml              |  69 +++++++++++++++++++++++++++++++++++
+ battle.mli             |  29 ---------------
+ design/README.md       |   2 ++
+ design/battle.md       |   7 ++++
+ design/components.png  | Bin 0 -> 12620 bytes
+ design/design.md       |  96 +++++++++++++++++++++++++++++++++++++++++++++++++
+ design/design.pdf      | Bin 0 -> 206558 bytes
+ design/jobs.md         |  16 +++++++++
+ design/mit.md          |   1 +
+ design/modules.png     | Bin 0 -> 42371 bytes
+ fighter.ml             |  16 +++++++++
+ fighter.mli            |  19 ----------
+ game.mli               |   1 -
+ intelligence.ml        |  14 ++++++++
+ interfaces/ai.mli      |   4 +++
+ interfaces/battle.mli  |  20 +++++++++++
+ interfaces/fighter.mli |  13 +++++++
+ interfaces/io.mli      |   2 ++
+ interfaces/item.mli    |  45 +++++++++++++++++++++++
+ interfaces/json.mli    |  13 +++++++
+ interfaces/player.mli  |   9 +++++
+ interfaces/shop.mli    |   6 ++++
+ interfaces/world.mli   |  16 +++++++++
+ interfaces/zone.mli    |  15 ++++++++
+ io.ml                  |   2 ++
+ io.mli                 |   2 --
+ item.ml                |  45 +++++++++++++++++++++++
+ item.mli               |  48 -------------------------
+ jobs.md                |  16 ---------
+ json.ml                |  13 +++++++
+ json.mli               |  16 ---------
+ player.ml              |   9 +++++
+ player.mli             |  19 ----------
+ shop.ml                |  16 +++++++++
+ shop.mli               |  16 ---------
+ stats.mli              |   3 --
+ world.ml               |  16 +++++++++
+ world.mli              |  19 ----------
+ zone.ml                |  15 ++++++++
+ zone.mli               |  18 ----------
+ 44 files changed, 485 insertions(+), 242 deletions(-)
+
+commit def0ff93820963251c9fe13fb1f308986f3d56e4
+Merge: 4cda323 b81ee95
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Thu Nov 12 21:33:09 2015 -0500
+
+    item, player, shop
+
+commit 4cda3239fcdb102032a474627f708dd6f001b195
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Thu Nov 12 21:31:58 2015 -0500
+
+    player, shop, item
+
+ item.mli   | 53 +++++++++++++++++++++++++++++++++++++++++++----------
+ player.mli | 33 ++++++++++++++++++---------------
+ shop.mli   | 10 ++++++----
+ 3 files changed, 67 insertions(+), 29 deletions(-)
+
+commit b81ee951308950f5c7ac279040f4fbf3a0d6b007
+Author: Zach Zweig-Vinegar <zzv2@cornell.edu>
+Date:   Thu Nov 12 19:15:12 2015 -0500
+
+    added world, zone, and json mli
+
+ json.mli  | 16 ++++++++++++++++
+ world.mli | 15 ++++++++++++---
+ zone.mli  | 10 +++++++++-
+ 3 files changed, 37 insertions(+), 4 deletions(-)
+
+commit 241cc9f545f3cff89ef246eb04afd05fb7b0341f
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Nov 12 01:00:50 2015 -0500
+
+    architectin
+
+ battle.mli | 7 +------
+ item.mli   | 2 +-
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+commit 6caf0fbd68817da0db3bb89f2bdf4ae086844795
+Merge: c52c30f 50c8e75
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 9 21:35:45 2015 -0500
+
+    sync
+
+commit c52c30fe0c31d2e916924b3f7384f1e7210b1764
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 9 21:33:47 2015 -0500
+
+    sync
+
+ item.mli | 5 ++---
+ shop.mli | 8 ++++++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+commit 50c8e758bcc80bd8f02f383b57334aa2e16d9d45
+Author: fredcallaway <fredc@llaway.com>
+Date:   Mon Nov 9 21:29:20 2015 -0500
+
+    architectin'
+
+ .gitignore |  1 +
+ UML.txt    | 34 ++++++++++++++++++++++++++++++++++
+ battle.mli | 40 ++++++++++++++++++++++++++++++----------
+ game.mli   |  1 +
+ io.mli     |  2 ++
+ item.mli   |  8 +++++---
+ jobs.md    | 16 ++++++++++++++++
+ player.mli | 14 +++++---------
+ stats.mli  |  3 +++
+ world.mli  | 10 ++++++++++
+ zone.mli   | 10 ++++++++++
+ 11 files changed, 117 insertions(+), 22 deletions(-)
+
+commit 7d97f86432a4df3334613464ce3994522df2c917
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Mon Nov 9 19:21:09 2015 -0500
+
+    sync
+
+ item.mli | 4 ++--
+ shop.mli | 4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+commit 0aedfc6938f523968282d8205d5279bbf7f7dcf8
+Author: bwh58 <bwh58@cornell.edu>
+Date:   Thu Nov 5 20:33:41 2015 -0500
+
+    added item and shop
+
+ item.mli   | 22 ++++++++++++++++++++++
+ player.mli | 11 ++++++++++-
+ shop.mli   |  8 ++++++++
+ 3 files changed, 40 insertions(+), 1 deletion(-)
+
+commit 543eb8a0ba95a173e8d0f021b2d9143b0479ae6b
+Author: fredcallaway <fredc@llaway.com>
+Date:   Thu Nov 5 16:06:09 2015 -0500
+
+    battle and fighter mli
+
+ .gitignore  |  1 +
+ battle.mli  | 14 ++++++++++++++
+ fighter.mli | 19 +++++++++++++++++++
+ player.mli  | 11 +++++++++++
+ 4 files changed, 45 insertions(+)
+
+commit cb2889eae98e2ffb036b81019b9ee066bc4c2506
+Author: Fred Callaway <fredc@llaway.com>
+Date:   Thu Nov 5 13:30:27 2015 -0500
+
+    Initial commit
+
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
